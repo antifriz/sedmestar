@@ -23,7 +23,7 @@ public class Clause {
     }
 
     public boolean isSatisified(BitVector assignment) {
-        for (int index:mIndexes){
+/*       for (int index:mIndexes){
             if(index>0 && assignment.get(Math.abs(index)-1)) {
             return true;
             }
@@ -31,9 +31,9 @@ public class Clause {
                 return true;
             }
         }
-        return false;
-        /*
-        return Arrays.stream(mIndexes).allMatch(x -> x >= 0 ? assignment.get(x) : assignment.get(-x));*/
+        return false;*/
+
+        return Arrays.stream(mIndexes).anyMatch((int index) -> index > 0 && assignment.get(index - 1) || index < 0 && !assignment.get(-index - 1));
     }
 
     @Override
