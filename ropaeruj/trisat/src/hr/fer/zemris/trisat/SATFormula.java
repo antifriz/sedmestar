@@ -27,18 +27,7 @@ public class SATFormula {
     }
 
     public boolean isSatisfied(BitVector assignment){
-        /*for (Clause c :
-                mClauses) {
-            if (!c.isSatisified(assignment)) {
-                return false;
-            }
-        }
-        return true;*/
         return Arrays.stream(mClauses).allMatch(x->x.isSatisified(assignment));
-    }
-
-    public int numberOfSatisfiedClauses(BitVector assignment){
-        return (int) Arrays.stream(mClauses).filter(x->x.isSatisified(assignment)).count();
     }
 
     @Override

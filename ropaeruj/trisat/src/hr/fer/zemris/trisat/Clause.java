@@ -6,8 +6,6 @@ import java.util.Arrays;
  * Created by ivan on 10/9/15.
  */
 public class Clause {
-
-
     private final int[] mIndexes;
 
     public Clause(int[] indexes) {
@@ -23,16 +21,6 @@ public class Clause {
     }
 
     public boolean isSatisified(BitVector assignment) {
-/*       for (int index:mIndexes){
-            if(index>0 && assignment.get(Math.abs(index)-1)) {
-            return true;
-            }
-            if(index<0 && !assignment.get(Math.abs(index)-1)){
-                return true;
-            }
-        }
-        return false;*/
-
         return Arrays.stream(mIndexes).anyMatch((int index) -> index > 0 && assignment.get(index - 1) || index < 0 && !assignment.get(-index - 1));
     }
 

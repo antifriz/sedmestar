@@ -6,18 +6,21 @@ package hr.fer.zemris.trisat;
 public class Algorithm1 implements Algorithm {
 
     private SATFormula mSATFormula;
-    private SATProblemResults mSATProblemResults;
     private MutableBitVector mMutableBitVector;
+    private boolean mHasFoundResult;
 
     @Override
-    public SATProblemResults solveSATProblem(SATFormula formula) {
+    public void solveSATProblem(SATFormula formula) {
         mSATFormula = formula;
-        mSATProblemResults = new SATProblemResults();
 
         mMutableBitVector= new MutableBitVector(formula.getNumberOfVariables());
+
+        mHasFoundResult = false;
         run(formula.getNumberOfVariables());
 
-        return mSATProblemResults;
+        if(!mHasFoundResult){
+            System.out.println("Dokazivanje nije uspjelo");
+        }
     }
 
     private void run(int n) {
@@ -29,8 +32,7 @@ public class Algorithm1 implements Algorithm {
             mMutableBitVector.toggle(n1);
         } else {
             if(mSATFormula.isSatisfied(mMutableBitVector)){
-                mSATProblemResults.addResult(mMutableBitVector);
-
+                System.out.printf("Zadovoljivo: %s\n",mMutableBitVector);
             }
         }
     }

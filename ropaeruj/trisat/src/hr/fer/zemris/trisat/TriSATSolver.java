@@ -11,8 +11,8 @@ public class TriSATSolver {
         Algorithm algorithm = parser.getAlgorithm();
         SATFormula formula = parser.getSATFormula();
 
-        System.out.println("Using algorithm "+algorithm.getClass().getSimpleName());
-        System.out.println("Using formula:\n"+ formula);
+        //System.out.println("Using algorithm "+algorithm.getClass().getSimpleName());
+        //System.out.println("Using formula:\n"+ args2);
 
         algorithm.solveSATProblem(formula);
     }

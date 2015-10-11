@@ -5,5 +5,5 @@ package hr.fer.zemris.trisat;
  */
 public interface Algorithm {
 
-    SATProblemResults solveSATProblem(SATFormula formula);
+    void solveSATProblem(SATFormula formula);
 }

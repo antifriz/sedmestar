@@ -21,7 +21,7 @@ public class SATFormulaFactory {
             while (line != null) {
                 if (line.startsWith("p")) {
                     Scanner scanner = new Scanner(line.substring(6));
-                    System.out.println(line.substring(5));
+                    //System.out.println(line.substring(5));
                     variableNumber = scanner.nextInt();
                     clauseNumber = scanner.nextInt();
                     line = br.readLine();

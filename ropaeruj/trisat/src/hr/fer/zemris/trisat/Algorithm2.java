@@ -7,48 +7,42 @@ import java.util.*;
  */
 public class Algorithm2 implements Algorithm {
 
+    private static final int MAX_ITER_COUNT = 100000;
     private final Random mRandom;
-    private SATFormula mFormula;
+    private SATFormulaStats mStats;
 
     public Algorithm2() {
         mRandom = new Random();
     }
 
     @Override
-    public SATProblemResults solveSATProblem(SATFormula formula) {
+    public void solveSATProblem(SATFormula formula) {
 
-        mFormula = formula;
+        mStats = new SATFormulaStats(formula);
 
-        BitVector candidateBitVector = new BitVector(mRandom,mFormula.getNumberOfVariables());
+        BitVector candidateBitVector = new BitVector(mRandom,formula.getNumberOfVariables());
 
         int iterCount = 0;
         do {
             BitVector newCandidate= pickNewCandidate(candidateBitVector);
             if(newCandidate == candidateBitVector){
+                System.out.println("Dokazivanje nije uspjelo (zaglavljen u lokalnom minimumu)");
                 break;
             }
             candidateBitVector = newCandidate;
             iterCount++;
         } while (isStopConditionSatisfied(iterCount, candidateBitVector));
-
-
-        SATProblemResults results = new SATProblemResults();
-        results.addResult(candidateBitVector);
-        return results;
     }
 
     private boolean isStopConditionSatisfied(int iterCount, BitVector candidateBitVector) {
-        if (candidateBitVector == null) {
-            System.out.println("Stuck in local minima");
+        mStats.setAssignment(candidateBitVector,false);
+        System.out.printf("[Iter %6d] -> Satisfied: %4d/%4d Candidate: %s\n",iterCount,mStats.getNumberOfSatisfied(),mStats.getNumberOfClauses(),candidateBitVector);
+        if (iterCount >= MAX_ITER_COUNT) {
+            System.out.println("Dokazivanje nije uspjelo (premasen dozvoljeni broj iteracija)");
             return false;
         }
-        System.out.printf("[Iter %06d] -> Score: %2d Candidate: %s\n",iterCount,mFormula.numberOfSatisfiedClauses(candidateBitVector),candidateBitVector);
-        if (iterCount >= 100000) {
-            System.out.println("Iter count overflowed");
-            return false;
-        }
-        if (mFormula.isSatisfied(candidateBitVector)) {
-            System.out.println("Formula is satisfied");
+        if (mStats.isSatisfied()) {
+            System.out.printf("Zadovoljivo: %s\n",candidateBitVector);
             return false;
         }
         return true;
@@ -70,13 +64,8 @@ public class Algorithm2 implements Algorithm {
                 bestCandidates.add(neighbour);
                 bestFitnessSoFar = neighbourFitness;
             }
-//            System.out.printf("Score: %3s Best so far: %3s Candidate: %s\n",neighbourFitness,bestFitnessSoFar,candidate);
         }
-//        System.out.println("Chosen");
-//        for (BitVector candidate:
-//        bestCandidates) {
-//            System.out.printf("Score: %3s Candidate: %s\n",mFormula.numberOfSatisfiedClauses(candidate),candidate);
-//        }
+
         if (bestFitnessSoFar < parentFitness) {
             return null;
         }
@@ -84,7 +73,8 @@ public class Algorithm2 implements Algorithm {
     }
 
     private int calculateFitness(BitVector candidate) {
-        return mFormula.numberOfSatisfiedClauses(candidate);
+        mStats.setAssignment(candidate,false);
+        return mStats.getNumberOfSatisfied();
     }
 
 
