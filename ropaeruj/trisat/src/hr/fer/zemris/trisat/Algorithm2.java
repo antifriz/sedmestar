@@ -1,6 +1,8 @@
 package hr.fer.zemris.trisat;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
 
 /**
  * Created by ivan on 10/10/15.
@@ -20,12 +22,12 @@ public class Algorithm2 implements Algorithm {
 
         mStats = new SATFormulaStats(formula);
 
-        BitVector candidateBitVector = new BitVector(mRandom,formula.getNumberOfVariables());
+        BitVector candidateBitVector = new BitVector(mRandom, formula.getNumberOfVariables());
 
         int iterCount = 0;
         do {
-            BitVector newCandidate= pickNewCandidate(candidateBitVector);
-            if(newCandidate == candidateBitVector){
+            BitVector newCandidate = pickNewCandidate(candidateBitVector);
+            if (newCandidate == candidateBitVector) {
                 System.out.println("Dokazivanje nije uspjelo (zaglavljen u lokalnom minimumu)");
                 break;
             }
@@ -35,14 +37,14 @@ public class Algorithm2 implements Algorithm {
     }
 
     private boolean isStopConditionSatisfied(int iterCount, BitVector candidateBitVector) {
-        mStats.setAssignment(candidateBitVector,false);
-        System.out.printf("[Iter %6d] -> Satisfied: %4d/%4d Candidate: %s\n",iterCount,mStats.getNumberOfSatisfied(),mStats.getNumberOfClauses(),candidateBitVector);
+        mStats.setAssignment(candidateBitVector, false);
+        System.out.printf("[Iter %6d] -> Satisfied: %4d/%4d Candidate: %s\n", iterCount, mStats.getNumberOfSatisfied(), mStats.getNumberOfClauses(), candidateBitVector);
         if (iterCount >= MAX_ITER_COUNT) {
             System.out.println("Dokazivanje nije uspjelo (premasen dozvoljeni broj iteracija)");
             return false;
         }
         if (mStats.isSatisfied()) {
-            System.out.printf("Zadovoljivo: %s\n",candidateBitVector);
+            System.out.printf("Zadovoljivo: %s\n", candidateBitVector);
             return false;
         }
         return true;
@@ -55,7 +57,7 @@ public class Algorithm2 implements Algorithm {
         int parentFitness = calculateFitness(parent);
         int bestFitnessSoFar = parentFitness;
 
-        for(BitVector neighbour: generator){
+        for (BitVector neighbour : generator) {
             int neighbourFitness = calculateFitness(neighbour);
             if (neighbourFitness == bestFitnessSoFar) {
                 bestCandidates.add(neighbour);
@@ -73,7 +75,7 @@ public class Algorithm2 implements Algorithm {
     }
 
     private int calculateFitness(BitVector candidate) {
-        mStats.setAssignment(candidate,false);
+        mStats.setAssignment(candidate, false);
         return mStats.getNumberOfSatisfied();
     }
 
