@@ -25,6 +25,7 @@ public class SATFormulaFactory {
                     variableNumber = scanner.nextInt();
                     clauseNumber = scanner.nextInt();
                     line = br.readLine();
+                    scanner.close();
                     break;
                 }
 
@@ -57,7 +58,7 @@ public class SATFormulaFactory {
             }
             return null;
         } catch (IOException e) {
-            e.printStackTrace();
+        	System.err.println(e.getMessage());
             return null;
         }
     }

@@ -33,6 +33,7 @@ public class Algorithm1 implements Algorithm {
         } else {
             if(mSATFormula.isSatisfied(mMutableBitVector)){
                 System.out.printf("Zadovoljivo: %s\n",mMutableBitVector);
+                mHasFoundResult = true;
             }
         }
     }

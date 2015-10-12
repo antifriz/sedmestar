@@ -1,7 +1,5 @@
 package hr.fer.zemris.trisat;
 
-import javafx.util.Pair;
-
 import java.util.*;
 
 /**
@@ -46,23 +44,34 @@ public class Algorithm3 implements Algorithm {
         }
         return true;
     }
+    
+    private class BitVectorCorrectionBundle { 
+	  private final BitVector bitVector;
+	  private final double correction;
+	 
+	  public BitVectorCorrectionBundle(BitVector bitVector, double correction) {
+	    this.bitVector = bitVector;
+	    this.correction = correction;
+	  } 
+	} 
 
     private BitVector pickNewCandidate(BitVector parent) {
         BitVectorNGenerator generator = new BitVectorNGenerator(parent);
-        List<Pair<BitVector, Double>> candidates = new ArrayList<>();
+        List<BitVectorCorrectionBundle> candidates = new ArrayList<>();
 
+        
         for(BitVector candidate: generator){
             mStats.setAssignment(candidate,false);
             int numberOfSatisfied =  mStats.getNumberOfSatisfied();
             double percentageBonus = mStats.getPercentageBonus();
             double correction = numberOfSatisfied + percentageBonus;
-            candidates.add(new Pair<>(candidate, correction));
+            candidates.add(new BitVectorCorrectionBundle(candidate, correction));
         }
 
-        candidates.sort((x1,x2)->Double.compare(x2.getValue(),x1.getValue()));
+        candidates.sort((x1,x2)->Double.compare(x2.correction,x1.correction));
 
         candidates = candidates.subList(0,NUMBER_OF_BEST);
 
-        return candidates.subList(0,NUMBER_OF_BEST).get(mRandom.nextInt(candidates.size())).getKey();
+        return candidates.subList(0,NUMBER_OF_BEST).get(mRandom.nextInt(candidates.size())).bitVector;
     }
 }

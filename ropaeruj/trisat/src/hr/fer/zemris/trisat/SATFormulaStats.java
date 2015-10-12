@@ -1,7 +1,5 @@
 package hr.fer.zemris.trisat;
 
-import java.util.Arrays;
-
 /**
  * Created by ivan on 10/10/15.
  */
@@ -14,7 +12,6 @@ public class SATFormulaStats {
     private boolean mIsSatisfied;
     private double[] mPost;
     private double mPercentageBonus;
-    private int m;
 
 
     SATFormulaStats(SATFormula formula) {
