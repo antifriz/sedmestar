@@ -4,6 +4,8 @@ import java.util.Arrays;
 
 /**
  * Created by ivan on 10/9/15.
+ *
+ * CNF clause implementation that provides access to operations on it
  */
 public class Clause {
     private final int[] mIndexes;

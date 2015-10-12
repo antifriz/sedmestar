@@ -9,11 +9,18 @@ import java.util.Scanner;
 
 /**
  * Created by ivan on 10/10/15.
+ *
  */
 public class SATFormulaFactory {
+    /**
+     * creates SATFormula object from configuration file
+     *
+     * @param path path to serialized SAT-formula
+     * @return SATFormula
+     */
     static SATFormula createFromFile(String path) {
 
-        try (BufferedReader br = new BufferedReader((new FileReader(path)))) {
+        try (BufferedReader br = new BufferedReader(new FileReader(path))) {
             int variableNumber = 0;
             int clauseNumber = 0;
             String line = br.readLine();

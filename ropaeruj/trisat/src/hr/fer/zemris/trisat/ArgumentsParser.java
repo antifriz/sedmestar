@@ -2,6 +2,8 @@ package hr.fer.zemris.trisat;
 
 /**
  * Created by ivan on 10/10/15.
+ *
+ * Parser for algorithm and formula
  */
 public class ArgumentsParser {
 

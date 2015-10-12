@@ -4,6 +4,8 @@ import java.util.Arrays;
 
 /**
  * Created by ivan on 10/10/15.
+ *
+ * Class representing 3-SAT formula
  */
 public class SATFormula {
     private final int mNumberOfVariables;
@@ -34,7 +36,7 @@ public class SATFormula {
     public String toString(){
         StringBuilder sb = new StringBuilder();
         for (Clause clause : mClauses) {
-            sb.append(clause.toString());
+            sb.append(clause);
             sb.append("\n");
         }
         if(mClauses.length>0){

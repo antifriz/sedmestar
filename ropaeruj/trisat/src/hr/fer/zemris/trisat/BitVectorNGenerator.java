@@ -5,9 +5,11 @@ import java.util.NoSuchElementException;
 
 /**
  * Created by ivan on 10/10/15.
+ *
+ * Generator that generates neighbourhood for given BitVector
  */
 public class BitVectorNGenerator implements Iterable<MutableBitVector> {
-    private BitVector mAssignment;
+    private final BitVector mAssignment;
 
     public BitVectorNGenerator(BitVector assignment){
         mAssignment = assignment;

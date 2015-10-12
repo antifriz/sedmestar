@@ -5,6 +5,8 @@ import java.util.Random;
 
 /**
  * Created by ivan on 10/9/15.
+ *
+ * Simple bit vector class used to store bit vector and provide access to operations on it
  */
 public class BitVector {
     protected boolean[] mUnderlayingArray;

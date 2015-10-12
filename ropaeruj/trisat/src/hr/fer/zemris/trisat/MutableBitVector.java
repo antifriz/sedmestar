@@ -2,6 +2,10 @@ package hr.fer.zemris.trisat;
 
 /**
  * Created by ivan on 10/9/15.
+ *
+ * {@inheritDoc}
+ *
+ * BitVector implementation with mutable vector
  */
 public class MutableBitVector extends BitVector {
 

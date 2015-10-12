@@ -6,6 +6,8 @@ import java.util.Random;
 
 /**
  * Created by ivan on 10/10/15.
+ *
+ * Implementation with iterative algorithm that uses advanced fitness function.
  */
 public class Algorithm3 implements Algorithm {
     public static final int MAX_ITER_COUNT = 10000;
@@ -17,6 +19,9 @@ public class Algorithm3 implements Algorithm {
         mRandom = new Random();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void solveSATProblem(SATFormula formula) {
 
@@ -32,6 +37,14 @@ public class Algorithm3 implements Algorithm {
         } while (isStopConditionSatisfied(iterCount, candidateBitVector));
     }
 
+    /**
+     * Method that checks satisfaction of stop condition in main loop.
+     * Returns false if <code>MAX_ITER_COUNT</code> is exceeded or formula is satisfied
+     *
+     * @param iterCount          current iteration count
+     * @param candidateBitVector current vector
+     * @return whether stop condition is satisfied
+     */
     private boolean isStopConditionSatisfied(int iterCount, BitVector candidateBitVector) {
         mStats.setAssignment(candidateBitVector, false);
         System.out.printf("[Iter %6d] -> Satisfied: %4d/%4d Candidate: %s\n", iterCount, mStats.getNumberOfSatisfied(), mStats.getNumberOfClauses(), candidateBitVector);
@@ -47,9 +60,16 @@ public class Algorithm3 implements Algorithm {
         return true;
     }
 
+    /**
+     * Method for picking new candidate from neighbourhood for given parent vector based on fitness calculation.
+     * Fitness is calculated by combining number of satisfied clauses and calculated percentage bonus {@link SATFormulaStats}
+     *
+     * @param parent last candidate vector
+     * @return new candidate vector
+     */
     private BitVector pickNewCandidate(BitVector parent) {
         BitVectorNGenerator generator = new BitVectorNGenerator(parent);
-        List<Algorithm3.BitVectorCorrectionBundle> candidates = new ArrayList<>();
+        List<BitVectorCorrectionBundle> candidates = new ArrayList<>();
 
 
         for (BitVector candidate : generator) {
@@ -57,7 +77,7 @@ public class Algorithm3 implements Algorithm {
             int numberOfSatisfied = mStats.getNumberOfSatisfied();
             double percentageBonus = mStats.getPercentageBonus();
             double correction = numberOfSatisfied + percentageBonus;
-            candidates.add(new Algorithm3.BitVectorCorrectionBundle(candidate, correction));
+            candidates.add(new BitVectorCorrectionBundle(candidate, correction));
         }
 
         candidates.sort((x1, x2) -> Double.compare(x2.correction, x1.correction));
