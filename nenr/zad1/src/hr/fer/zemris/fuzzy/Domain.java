@@ -1,9 +1,6 @@
 package hr.fer.zemris.fuzzy;
 
-import javax.naming.OperationNotSupportedException;
-import java.util.Arrays;
 import java.util.Iterator;
-import java.util.jar.Pack200;
 
 /**
  * Created by ivan on 10/14/15.
@@ -11,6 +8,34 @@ import java.util.jar.Pack200;
 public abstract class Domain implements IDomain {
 
     public Domain() {
+    }
+
+    public static IDomain intRange(int first, int last) {
+        return new SimpleDomain(first, last);
+    }
+
+    public static Domain combine(IDomain first, IDomain second) {
+        int firstNumberOfComponents = first.getNumberOfComponents();
+        int secondNumberOfComponents = second.getNumberOfComponents();
+        SimpleDomain[] domains = new SimpleDomain[firstNumberOfComponents + secondNumberOfComponents];
+        for (int i = 0; i < first.getNumberOfComponents(); i++) {
+            IDomain comp = first.getComponent(i);
+            if (comp instanceof SimpleDomain) {
+                domains[i] = (SimpleDomain) comp;
+            } else {
+                throw new UnsupportedOperationException("In current implementation this cannot happen");
+            }
+        }
+        for (int i = 0; i < secondNumberOfComponents; i++) {
+            IDomain comp = second.getComponent(i);
+            if (comp instanceof SimpleDomain) {
+                domains[i + first.getNumberOfComponents()] = (SimpleDomain) comp;
+            } else {
+                throw new UnsupportedOperationException("In current implementation this cannot happen");
+            }
+        }
+
+        return new CompositeDomain(domains);
     }
 
     @Override
@@ -42,33 +67,5 @@ public abstract class Domain implements IDomain {
             throw new IndexOutOfBoundsException();
         }
         return de;
-    }
-
-    public static IDomain intRange(int first, int last) {
-        return new SimpleDomain(first, last);
-    }
-
-    public static Domain combine(IDomain first, IDomain second) {
-        int firstNumberOfComponents = first.getNumberOfComponents();
-        int secondNumberOfComponents = second.getNumberOfComponents();
-        SimpleDomain[] domains = new SimpleDomain[firstNumberOfComponents + secondNumberOfComponents];
-        for (int i = 0; i < first.getNumberOfComponents(); i++) {
-            IDomain comp = first.getComponent(i);
-            if (comp instanceof SimpleDomain) {
-                domains[i] = (SimpleDomain) comp;
-            } else {
-                throw new UnsupportedOperationException("In current implementation this cannot happen");
-            }
-        }
-        for (int i = 0; i < secondNumberOfComponents; i++) {
-            IDomain comp = second.getComponent(i);
-            if (comp instanceof SimpleDomain) {
-                domains[i + first.getNumberOfComponents()] = (SimpleDomain) comp;
-            } else {
-                throw new UnsupportedOperationException("In current implementation this cannot happen");
-            }
-        }
-
-        return new CompositeDomain(domains);
     }
 }

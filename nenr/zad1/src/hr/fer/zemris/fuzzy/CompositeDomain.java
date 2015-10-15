@@ -31,9 +31,9 @@ public class CompositeDomain extends Domain {
     @Override
     public Iterator<DomainElement> iterator() {
         return new Iterator<DomainElement>() {
-            int mSize = mDomains.length;
             private final Iterator<DomainElement>[] mIterators = Arrays.stream(mDomains).map(SimpleDomain::iterator).toArray(Iterator[]::new);
-            private final int[] mValues = Arrays.copyOf(Arrays.stream(mIterators).limit(mSize-1).mapToInt(x -> x.hasNext() ? x.next().getComponentValue(0) : 0).toArray(),mSize);
+            int mSize = mDomains.length;
+            private final int[] mValues = Arrays.copyOf(Arrays.stream(mIterators).limit(mSize - 1).mapToInt(x -> x.hasNext() ? x.next().getComponentValue(0) : 0).toArray(), mSize);
 
 
             @Override

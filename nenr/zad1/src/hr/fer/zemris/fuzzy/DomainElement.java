@@ -12,6 +12,10 @@ public class DomainElement {
         this.values = Arrays.copyOf(values, values.length);
     }
 
+    public static DomainElement of(int... values) {
+        return new DomainElement(values);
+    }
+
     int getNumberOfComponents() {
         return values.length;
     }
@@ -39,9 +43,5 @@ public class DomainElement {
     @Override
     public String toString() {
         return Arrays.toString(values);
-    }
-
-    public static DomainElement of(int... values) {
-        return new DomainElement(values);
     }
 }
