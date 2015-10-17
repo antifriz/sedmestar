@@ -20,6 +20,6 @@ public class CalculatedFuzzySet implements IFuzzySet {
 
     @Override
     public double getValueAt(DomainElement element) {
-        return 0;
+        return mFunction.valueAt(mDomain.indexOfElement(element));
     }
 }
