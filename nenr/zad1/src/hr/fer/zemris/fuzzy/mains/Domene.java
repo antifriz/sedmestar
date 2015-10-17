@@ -1,9 +1,14 @@
-package hr.fer.zemris.fuzzy;
+package hr.fer.zemris.fuzzy.mains;
+
+import hr.fer.zemris.fuzzy.Debug;
+import hr.fer.zemris.fuzzy.Domain;
+import hr.fer.zemris.fuzzy.DomainElement;
+import hr.fer.zemris.fuzzy.IDomain;
 
 /**
  * Created by ivan on 10/14/15.
  */
-public class Main {
+public class Domene {
     public static void main(String[] args) {
         IDomain d1 = Domain.intRange(0, 5); // {0,1,2,3,4}
         Debug.print(d1, "Elementi domene d1:");
