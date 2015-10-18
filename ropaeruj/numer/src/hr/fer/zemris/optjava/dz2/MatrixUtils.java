@@ -3,7 +3,6 @@ package hr.fer.zemris.optjava.dz2;
 import Jama.Matrix;
 
 import java.text.DecimalFormat;
-import java.util.Arrays;
 
 /**
  * Created by ivan on 10/18/15.
