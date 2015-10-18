@@ -26,7 +26,7 @@ public class MatrixUtils {
         assertIsColumnVector(currentOptimalPoint);
         StringBuilder sb = new StringBuilder();
         double[] arr = currentOptimalPoint.getRowPackedCopy();
-        DecimalFormat decimalFormat = new DecimalFormat(" 0.000000;-#");
+        DecimalFormat decimalFormat = new DecimalFormat(" 0.0000;-#");
         sb.append("[");
         for (int i = 0; i < arr.length; i++) {
             sb.append(decimalFormat.format(arr[i]));
@@ -38,7 +38,7 @@ public class MatrixUtils {
         return sb.toString();
     }
 
-    private static void assertIsColumnVector(Matrix matrix) {
+    public static void assertIsColumnVector(Matrix matrix) {
         assert matrix.getColumnDimension() == 1 : "Matrix must be column vector";
     }
 }

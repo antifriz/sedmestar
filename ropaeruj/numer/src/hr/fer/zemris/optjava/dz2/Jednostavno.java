@@ -15,13 +15,7 @@ public class Jednostavno {
         TrajectoryTask trajectoryTask = new TrajectoryTask() {
             @Override
             public Matrix solve(Matrix initialPoint, int maxIterCount) {
-                switch (argsParser.getAlgorithm()) {
-                    case NEWTON_METHOD:
-                        return NumOptAlgorithms.newtonMethod(initialPoint, argsParser.getFunction(), maxIterCount, trajectoryImage);
-                    case GRADIENT_DESCENT:
-                    default:
-                        return NumOptAlgorithms.gradientDescent(initialPoint, argsParser.getFunction(), maxIterCount, trajectoryImage);
-                }
+                return NumOptAlgorithms.runAlgorithm(initialPoint, argsParser.getFunction(), maxIterCount, trajectoryImage, argsParser.getAlgorithm());
             }
         };
         trajectoryImage.setFunction(argsParser.getFunction());
@@ -65,12 +59,12 @@ public class Jednostavno {
                     break;
             }
             switch (args[0].charAt(1)) {
-                case 'a':
-                    mAlgorithm = Algorithm.GRADIENT_DESCENT;
-                    break;
                 case 'b':
-                default:
                     mAlgorithm = Algorithm.NEWTON_METHOD;
+                    break;
+                case 'a':
+                default:
+                    mAlgorithm = Algorithm.GRADIENT_DESCENT;
                     break;
             }
         }

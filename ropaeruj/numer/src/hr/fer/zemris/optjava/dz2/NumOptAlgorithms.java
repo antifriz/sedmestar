@@ -12,6 +12,7 @@ import java.util.Arrays;
 public class NumOptAlgorithms {
 
     public static final double EQUALITY_RATE = Math.pow(10, -5);
+    public static final double EQUALITY_RATE_LAMBDA = Math.pow(10, -9);
 
     /**
      * gradient descent impl
@@ -20,8 +21,8 @@ public class NumOptAlgorithms {
      * @param maxIterCount maximum allowed iteration count
      * @return resulting minimum
      */
-    public static Matrix gradientDescent(Matrix initialPoint, IFunction function, int maxIterCount, OnStepListener listener) {
-        return algorithmsImpl(initialPoint, function, maxIterCount, listener, Algorithm.GRADIENT_DESCENT);
+    public static Matrix gradientDescent(Matrix initialSolution, IFunction function, int maxIterCount, OnStepListener listener) {
+        return runAlgorithm(initialSolution, function, maxIterCount, listener, Algorithm.GRADIENT_DESCENT);
     }
 
     private static boolean gradientIsConsideredZero(Matrix gradient) {
@@ -35,17 +36,17 @@ public class NumOptAlgorithms {
      * @param maxIterCount maximum allowed iteration count
      * @return resulting minimum
      */
-    public static Matrix newtonMethod(Matrix initialPoint, IHFunction function, int maxIterCount, OnStepListener listener) {
-        return algorithmsImpl(initialPoint, function, maxIterCount, listener, Algorithm.NEWTON_METHOD);
+    public static Matrix newtonMethod(Matrix initialSolution, IHFunction function, int maxIterCount, OnStepListener listener) {
+        return runAlgorithm(initialSolution, function, maxIterCount, listener, Algorithm.NEWTON_METHOD);
     }
 
     enum Algorithm {
         NEWTON_METHOD,
-        mAlgorithm, GRADIENT_DESCENT
+        GRADIENT_DESCENT
     }
 
-    private static Matrix algorithmsImpl(Matrix initialPoint, IFunction function, int maxIterCount, OnStepListener listener, Algorithm algorithm) {
-        Matrix currentOptimalPoint = initialPoint;
+    public static Matrix runAlgorithm(Matrix initialSolution, IFunction function, int maxIterCount, OnStepListener listener, Algorithm algorithm) {
+        Matrix currentOptimalPoint = initialSolution;
         System.out.printf("Starting algorithm %s with initial point: %s\n", algorithm.name(), MatrixUtils.prettyPrintVector(currentOptimalPoint));
         for (int i = 1; i <= maxIterCount; i++) {
             Matrix gradient = function.gradientAt(currentOptimalPoint);
@@ -91,7 +92,8 @@ public class NumOptAlgorithms {
             double lambdaMid = lambdaLower / 2 + lambdaUpper / 2;
             Matrix pointOfInterest = currentPoint.plus(searchDirection.times(lambdaMid));
             double derivation = getDerivationAlongLine(function, searchDirection, pointOfInterest);
-            if (Math.abs(derivation) < EQUALITY_RATE * EQUALITY_RATE) {
+            //System.out.printf("%9.7f %9.7f %9.7f %20.18f\n", lambdaLower,lambdaUpper,derivation,Math.abs(derivation));
+            if (Math.abs(derivation) < EQUALITY_RATE_LAMBDA) {
                 return lambdaMid;
             } else if (derivation > 0) {
                 lambdaUpper = lambdaMid;
