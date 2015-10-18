@@ -5,7 +5,6 @@ import hr.fer.zemris.optjava.dz2.NumOptAlgorithms.Algorithm;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.util.Arrays;
 import java.util.Scanner;
 
 /**
@@ -19,11 +18,11 @@ public class Sustav {
 
 
         int dimension = fileParser.getValueVector().getRowDimension();
-//        Matrix initialSolution = Matrix.random(dimension,1);
-        double [] values = new double[dimension];
-        Matrix initialSolution = new Matrix(values,1).transpose();
+        Matrix initialSolution = Matrix.random(dimension, 1);
+//        double[] values = new double[dimension];
+//        Matrix initialSolution = new Matrix(values, 1).transpose();
 
-        IHFunction function = new SystemIHFunction( fileParser.getSystemMatrix(),fileParser.getValueVector());
+        IHFunction function = new SystemIHFunction(fileParser.getSystemMatrix(), fileParser.getValueVector());
 
         NumOptAlgorithms.runAlgorithm(initialSolution, function, argsParser.getMaxIterCount(), null, argsParser.getAlgorithm());
     }
@@ -125,38 +124,22 @@ public class Sustav {
     }
 
     private static class SystemIHFunction implements IHFunction {
-        private final Matrix mIdentityMatrix;
-        private final Matrix mSumOfComponentsMatrix;
-        private Matrix mOnesRowVector;
-
-        private final int mDimension;
         private final Matrix mSystemMatrix;
         private Matrix mValueVector;
 
         public SystemIHFunction(Matrix systemMatrix, Matrix valueVector) {
             mSystemMatrix = systemMatrix;
             mValueVector = valueVector;
-            mDimension = mValueVector.getRowDimension();
-
-            double[] ones = new double[mDimension];
-            Arrays.fill(ones,1);
-            mOnesRowVector = new Matrix(ones,1);
-            mIdentityMatrix = Matrix.identity(mDimension,mDimension);
-            mSumOfComponentsMatrix = mIdentityMatrix.copy();
-            Matrix vectorSummer = mOnesRowVector.times(mSystemMatrix);
-            for (int i = 0; i < mDimension; i++) {
-                mSumOfComponentsMatrix.set(i,i,vectorSummer.get(0,i));
-            }
         }
 
         @Override
         public Matrix hessianAt(Matrix point) {
-            return null;
+            return mSystemMatrix.transpose().times(mSystemMatrix).times(2);
         }
 
         @Override
         public int numberOfVariables() {
-            return mDimension;
+            return mValueVector.getRowDimension();
         }
 
         @Override
@@ -169,11 +152,8 @@ public class Sustav {
         @Override
         public Matrix gradientAt(Matrix point) {
             Matrix calcValueVector = mSystemMatrix.times(point);
-//            System.out.println("calcvaluevector" + MatrixUtils.prettyPrintVector(calcValueVector));
             Matrix offsetVector = calcValueVector.minus(mValueVector);
-//            System.out.println("offsetvector" + MatrixUtils.prettyPrintVector(offsetVector));
             Matrix gradient = mSystemMatrix.transpose().times(offsetVector).times(2);
-//            System.out.println("gradient" + MatrixUtils.prettyPrintVector(gradient));
             MatrixUtils.assertIsColumnVector(gradient);
             return gradient;
         }

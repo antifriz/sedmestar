@@ -11,6 +11,7 @@ import java.util.Arrays;
  */
 public class NumOptAlgorithms {
 
+    // ovisno koliko precizni zelimo biti (preciznost ~ vrijeme)
     public static final double EQUALITY_RATE = Math.pow(10, -5);
     public static final double EQUALITY_RATE_LAMBDA = Math.pow(10, -9);
 
@@ -40,11 +41,6 @@ public class NumOptAlgorithms {
         return runAlgorithm(initialSolution, function, maxIterCount, listener, Algorithm.NEWTON_METHOD);
     }
 
-    enum Algorithm {
-        NEWTON_METHOD,
-        GRADIENT_DESCENT
-    }
-
     public static Matrix runAlgorithm(Matrix initialSolution, IFunction function, int maxIterCount, OnStepListener listener, Algorithm algorithm) {
         Matrix currentOptimalPoint = initialSolution;
         System.out.printf("Starting algorithm %s with initial point: %s\n", algorithm.name(), MatrixUtils.prettyPrintVector(currentOptimalPoint));
@@ -69,7 +65,7 @@ public class NumOptAlgorithms {
                     break;
             }
             double lambda = getLambdaByBisection(currentOptimalPoint, function, searchDirection);
-            System.out.printf("[%4d] best: %s gradient: %s direction: %s lambda: %f\n", i, MatrixUtils.prettyPrintVector(currentOptimalPoint), MatrixUtils.prettyPrintVector(gradient),MatrixUtils.prettyPrintVector(searchDirection),lambda);
+            System.out.printf("[%4d] best: %s gradient: %s direction: %s lambda: %f\n", i, MatrixUtils.prettyPrintVector(currentOptimalPoint), MatrixUtils.prettyPrintVector(gradient), MatrixUtils.prettyPrintVector(searchDirection), lambda);
             currentOptimalPoint = currentOptimalPoint.plus(searchDirection.times(lambda));
         }
         return currentOptimalPoint;
@@ -92,8 +88,7 @@ public class NumOptAlgorithms {
             double lambdaMid = lambdaLower / 2 + lambdaUpper / 2;
             Matrix pointOfInterest = currentPoint.plus(searchDirection.times(lambdaMid));
             double derivation = getDerivationAlongLine(function, searchDirection, pointOfInterest);
-            //System.out.printf("%9.7f %9.7f %9.7f %20.18f\n", lambdaLower,lambdaUpper,derivation,Math.abs(derivation));
-            if (Math.abs(derivation) < EQUALITY_RATE_LAMBDA) {
+            if (Math.abs(derivation) < EQUALITY_RATE_LAMBDA || lambdaLower >= lambdaMid || lambdaUpper <= lambdaMid) {
                 return lambdaMid;
             } else if (derivation > 0) {
                 lambdaUpper = lambdaMid;
@@ -112,5 +107,10 @@ public class NumOptAlgorithms {
 
         Matrix gradientOnLine = lineVector.transpose().times(gradient);
         return MatrixUtils.asScalar(gradientOnLine);
+    }
+
+    enum Algorithm {
+        NEWTON_METHOD,
+        GRADIENT_DESCENT
     }
 }

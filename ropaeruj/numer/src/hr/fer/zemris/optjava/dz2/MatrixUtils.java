@@ -25,7 +25,7 @@ public class MatrixUtils {
         assertIsColumnVector(currentOptimalPoint);
         StringBuilder sb = new StringBuilder();
         double[] arr = currentOptimalPoint.getRowPackedCopy();
-        DecimalFormat decimalFormat = new DecimalFormat(" 0.0000;-#");
+        DecimalFormat decimalFormat = new DecimalFormat(" 0.00000;-#");
         sb.append("[");
         for (int i = 0; i < arr.length; i++) {
             sb.append(decimalFormat.format(arr[i]));
