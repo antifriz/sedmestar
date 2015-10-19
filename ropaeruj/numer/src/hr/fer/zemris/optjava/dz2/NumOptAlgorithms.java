@@ -14,6 +14,7 @@ public class NumOptAlgorithms {
     // ovisno koliko precizni zelimo biti (preciznost ~ vrijeme)
     public static final double EQUALITY_RATE = Math.pow(10, -5);
     public static final double EQUALITY_RATE_LAMBDA = Math.pow(10, -9);
+    public static double upperBound = 1.0;
 
     /**
      * gradient descent impl
@@ -51,7 +52,7 @@ public class NumOptAlgorithms {
             }
 
             if (gradientIsConsideredZero(gradient)) {
-                System.out.printf("[%4d] best: %s gradient: %s\n", i, MatrixUtils.prettyPrintVector(currentOptimalPoint), MatrixUtils.prettyPrintVector(gradient));
+                System.out.printf("[%4d] best: %s gradient: %s error: %f\n", i, MatrixUtils.prettyPrintVector(currentOptimalPoint), MatrixUtils.prettyPrintVector(gradient), gradient.normF());
                 break;
             }
             Matrix searchDirection;
@@ -65,14 +66,15 @@ public class NumOptAlgorithms {
                     break;
             }
             double lambda = getLambdaByBisection(currentOptimalPoint, function, searchDirection);
-            System.out.printf("[%4d] best: %s gradient: %s direction: %s lambda: %f\n", i, MatrixUtils.prettyPrintVector(currentOptimalPoint), MatrixUtils.prettyPrintVector(gradient), MatrixUtils.prettyPrintVector(searchDirection), lambda);
+            System.out.printf("[%4d] best: %s gradient: %s %6.4f direction: %s lambda: %f\n", i, MatrixUtils.prettyPrintVector(currentOptimalPoint), MatrixUtils.prettyPrintVector(gradient), gradient.normF(), MatrixUtils.prettyPrintVector(searchDirection), lambda);
             currentOptimalPoint = currentOptimalPoint.plus(searchDirection.times(lambda));
         }
         return currentOptimalPoint;
     }
 
     private static double getLambdaByBisection(Matrix currentPoint, IFunction function, Matrix searchDirection) {
-        double lambdaLowerBound = 0.0, lambdaUpperBound = 1.0;
+        upperBound = 0.0001;
+        double lambdaLowerBound = 0.0, lambdaUpperBound = upperBound;
         while (true) {
             Matrix pointOfInterest = currentPoint.plus(searchDirection.times(lambdaUpperBound));
             double derivation = getDerivationAlongLine(function, searchDirection, pointOfInterest);
