@@ -8,6 +8,8 @@ import java.util.Scanner;
 
 /**
  * Created by ivan on 10/18/15.
+ *
+ * solution:  [ 7.00000;-3.00000; 2.00000; 1.00000; 3.00000]
  */
 public class Prijenosna {
     public static void main(String[] args) {
