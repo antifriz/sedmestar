@@ -24,6 +24,50 @@ public class TestMatrix {
     }
 
     @Test
+    public void zad2() throws IOException{
+
+        Matrix system = Matrix.load("matricazad2.txt");
+        Matrix rhs=  Matrix.load("vektorzad2.txt");
+
+        solveUsingBothMethods(system,rhs);
+    }
+
+    @Test
+    public void zad3() throws IOException{
+
+        Matrix system = Matrix.load("matricazad3.txt");
+        Matrix rhs=  Matrix.load("vektorzad2.txt");
+
+        solveUsingBothMethods(system,rhs);
+    }
+
+    @Test
+    public void zad4() throws IOException{
+
+        Matrix system = Matrix.load("matricazad4.txt");
+        Matrix rhs=  Matrix.load("vektorzad4.txt");
+
+        solveUsingBothMethods(system,rhs);
+    }
+
+    @Test
+    public void zad5() throws IOException{
+
+        Matrix system = Matrix.load("matricazad5.txt");
+        Matrix rhs=  Matrix.load("vektorzad5.txt");
+
+        solveUsingBothMethods(system,rhs);
+    }
+
+    @Test
+    public void zad6() throws IOException{
+
+        Matrix system = Matrix.load("matricazad6.txt");
+        Matrix rhs=  Matrix.load("vektorzad6.txt");
+
+        solveUsingBothMethods(system,rhs);
+    }
+
     public void testPrecision() {
         for (int i = 0; i < 1000; i++) {
             final int m = mRandom.nextInt(10) + 1;
@@ -43,12 +87,11 @@ public class TestMatrix {
         }
     }
 
-    @Test
     public void testIO() throws IOException {
         final String pathname = "mat.mat";
         for (int i = 1; i < 50; i++) {
             for (int j = 0; j < 10; j++) {
-                Matrix savedMatrix = Matrix.createRandomMatrix(mRandom,i,i);
+                Matrix savedMatrix = Matrix.createRandomMatrix(mRandom, i, i);
                 savedMatrix.save(pathname);
                 Matrix loadedMatrix = Matrix.load(pathname);
 
@@ -58,7 +101,18 @@ public class TestMatrix {
         Files.delete(new File(pathname).toPath());
     }
 
-    @Test
+    private static void solveUsingBothMethods(Matrix system, Matrix rhs){
+        for(LinAlgUtils.Method method : LinAlgUtils.Method.values()){
+            System.out.printf("Trying to solve with method %s\n",method.name());
+            try{
+                System.out.println(LinAlgUtils.solveSystem(system,rhs, method));
+            }catch (ArithmeticException e){
+                System.out.println(e.getMessage());
+            }
+        }
+    }
+
+
     public void testSupstituteForward() {
         for (int i = 1; i < 100; i++) {
             for (int j = 0; j < 10; j++) {
@@ -70,45 +124,70 @@ public class TestMatrix {
         }
     }
 
-    @Test
     public void testSupstituteBackward() {
         for (int i = 1; i < 100; i++) {
             for (int j = 0; j < 10; j++) {
-                Matrix upperTriangleMatrix = Matrix.createRandomUpperMatrix(mRandom, i);
-                Matrix columnMatrix = Matrix.createRandomMatrix(mRandom, i, 1);
-                Matrix result = upperTriangleMatrix.supstituteBackward(columnMatrix);
-                assertTrue(result.isColumnVector());
+                try {
+                    Matrix upperTriangleMatrix = Matrix.createRandomUpperMatrix(mRandom, i);
+                    Matrix columnMatrix = Matrix.createRandomMatrix(mRandom, i, 1);
+                    Matrix result = upperTriangleMatrix.supstituteBackward(columnMatrix);
+                    assertTrue(result.isColumnVector());
+                }catch (ArithmeticException e){
+
+                }
             }
         }
     }
 
-    @Test
-    public void testLUdecomposition() throws IOException{
-        Matrix system = Matrix.load("matricazad2.txt");
+    public void testLUDecomposition() throws IOException {
+        final int n = 100;
 
-        Matrix matrix = system.decomposeLU();
-        Matrix u = matrix.extractUpper();
-        Matrix l = matrix.extractLower();
+        int counter = 0;
+        for (int i = 1; i < n; i++) {
+            for (int j = 0; j < n-i; j++) {
+                Matrix system = Matrix.createRandomMatrix(mRandom, i, i);
+                try {
+                    Matrix matrix = system.decomposeLU();
+                    Matrix u = matrix.extractUpper();
+                    Matrix l = matrix.extractLower();
 
-        assertTrue(system.equals(l.times(u)));
-    }
-    @Test
-    public void testLUPdecomposition() throws IOException{
-        Matrix system = Matrix.load("matricazad2.txt");
-
-        Pair<Matrix,Matrix> pair = system.decomposeLUP();
-
-        Matrix matrix = pair.getKey();
-        Matrix transormation = pair.getValue();
-
-        Matrix u = matrix.extractUpper();
-        Matrix l = matrix.extractLower();
-
-        Matrix times = transormation.times(l.times(u));
-        assertTrue(system.equals(times));
+                    assertTrue(system.equals(l.times(u)));
+                } catch (ArithmeticException e) {
+                    counter++;
+                }
+            }
+        }
+        System.out.println("Zero divisions (%): "+counter/(double)(n*(n-1)/2));
     }
 
-    @Test
+    public void testLUPDecomposition() throws IOException {
+        final int n = 100;
+
+        int counter = 0;
+        for (int i = 1; i < n; i++) {
+            for (int j = 0; j < n-i; j++) {
+                Matrix system = Matrix.createRandomMatrix(mRandom, i, i);
+                try {
+                    Pair<Matrix, Matrix> pair = system.decomposeLUP();
+
+                    Matrix matrix = pair.getKey();
+                    Matrix transormation = pair.getValue();
+
+                    Matrix u = matrix.extractUpper();
+                    Matrix l = matrix.extractLower();
+
+                    Matrix times = l.times(u);
+                    Matrix times1 = transormation.times(system);
+                    assertTrue(times1.equals(times));
+                } catch (ArithmeticException e) {
+                    counter++;
+                }
+            }
+        }
+        System.out.println("Zero divisions (%): "+counter/(double)(n*(n-1)/2));
+
+    }
+
     public void testAdditionSubtraction() {
         for (int i = 0; i < 1000; i++) {
             Matrix firstMatrix = Matrix.createRandomMatrix(mRandom, 10, 10);
@@ -123,7 +202,6 @@ public class TestMatrix {
         }
     }
 
-    @Test
     public void testtimes() {
         for (int i = 0; i < 1000; i++) {
             final int m = mRandom.nextInt(10) + 1;

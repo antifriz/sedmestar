@@ -5,7 +5,6 @@ import javafx.util.Pair;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.Arrays;
 import java.util.Random;
 import java.util.Scanner;
 
@@ -13,7 +12,7 @@ import java.util.Scanner;
  * Created by ivan on 10/19/15.
  */
 public final class Matrix {
-    private static final double COMPARE_THRESH = Math.pow(10, -6);
+    private static final double COMPARE_THRESH = Math.pow(10, -9);
     private final double[][] mUnderlayingArray;
     private final int mRowDimension;
     private final int mColumnDimension;
@@ -38,39 +37,6 @@ public final class Matrix {
         mUnderlayingArray[i][j] = value;
     }
 
-
-    public int getRowDimension() {
-        return mRowDimension;
-    }
-
-    public int getColumnDimension() {
-        return mColumnDimension;
-    }
-
-    public Matrix getRow(int i) {
-        return null;
-    }
-
-    public Matrix getColumn(int j) {
-        return null;
-    }
-
-    public void setRow(int i, Matrix matrix) {
-
-    }
-
-    public void setColumn(int j, Matrix matrix) {
-
-    }
-
-    public void replaceColumns(int j1, int j2) {
-
-    }
-
-    public void replaceRows(int i1, int i2) {
-
-    }
-
     public boolean isRowVector() {
         return mRowDimension == 1;
     }
@@ -83,7 +49,7 @@ public final class Matrix {
         double[][] array = allocateZeroedArray(i, j);
         for (int i1 = 0; i1 < i; i1++) {
             for (int j1 = 0; j1 < j; j1++) {
-                array[i1][j1] = random.nextInt(20) - 10;
+                array[i1][j1] = random.nextInt(20) - 10 + random.nextGaussian();
             }
         }
         return new Matrix(array);
@@ -349,34 +315,35 @@ public final class Matrix {
         assert rhsVector.isColumnVector();
         assert isSquareMatrix();
         assert rhsVector.mRowDimension == mRowDimension;
+        int n = mRowDimension;
 
-        double outputVector[][] = Matrix.allocateZeroedArray(mRowDimension, 1);
-        for (int i = 0; i < mRowDimension; i++) {
-            outputVector[i][0] = rhsVector.get(i, 0);
-
-            for (int j = 0; j < i; j++) {
-                outputVector[i][0] -= get(i, j) * outputVector[j][0];
+        Matrix result = rhsVector.copy();
+        for (int i = 0; i < n - 1; i++) {
+            for (int j = i + 1; j < n; j++) {
+                result.mUnderlayingArray[j][0] -= mUnderlayingArray[j][i] * result.mUnderlayingArray[i][0];
             }
-            outputVector[i][0] /= get(i, i);
         }
-        return new Matrix(outputVector);
+        return result;
     }
 
-    public Matrix supstituteBackward(Matrix rhsVector) {
+    public Matrix supstituteBackward(Matrix rhsVector) throws ArithmeticException {
         assert rhsVector.isColumnVector();
         assert isSquareMatrix();
         assert rhsVector.mRowDimension == mRowDimension;
+        int n = mRowDimension;
 
-        double outputVector[][] = Matrix.allocateZeroedArray(mRowDimension, 1);
-        for (int i = mRowDimension - 1; i >= 0; i--) {
-            outputVector[i][0] = rhsVector.get(i, 0);
-
-            for (int j = mRowDimension - 1; j > i; j--) {
-                outputVector[i][0] -= get(i, j) * outputVector[j][0];
+        Matrix result = rhsVector.copy();
+        for (int i = n - 1; i > 0; i--) {
+            double pivot = mUnderlayingArray[i][i];
+            if (equals(0, pivot)) {
+                throw new ArithmeticException("Supstitute backward failed with zero division");
             }
-            outputVector[i][0] /= get(i, i);
+            result.mUnderlayingArray[i][0] /= pivot;
+            for (int j = 0; j < i - 1; j++) {
+                result.mUnderlayingArray[j][0] -= mUnderlayingArray[j][i] * result.mUnderlayingArray[i][0];
+            }
         }
-        return new Matrix(outputVector);
+        return result;
     }
 
     public Matrix decomposeLU() throws ArithmeticException {
@@ -497,20 +464,12 @@ public final class Matrix {
         if (mColumnDimension != matrix.mColumnDimension) return false;
 
         for (int i = 0; i < mRowDimension; i++) {
-            for (int j = 0; j < mRowDimension; j++) {
+            for (int j = 0; j < mColumnDimension; j++) {
                 if (!equals(mUnderlayingArray[i][j], matrix.mUnderlayingArray[i][j])) {
                     return false;
                 }
             }
         }
         return true;
-    }
-
-    @Override
-    public int hashCode() {
-        int result = Arrays.deepHashCode(mUnderlayingArray);
-        result = 31 * result + mRowDimension;
-        result = 31 * result + mColumnDimension;
-        return result;
     }
 }
