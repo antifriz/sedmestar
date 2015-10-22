@@ -4,8 +4,8 @@ package hr.fer.zemris.optjava.libopti;
  * Created by ivan on 10/22/15.
  */
 public abstract class BitvectorDecoder implements IDecoder<BitvectorSolution> {
-    protected double[] mMins;
-    protected double[] mMaxs;
+    protected final double[] mMins;
+    protected final double[] mMaxs;
     protected int[] mBits;
     protected int mN;
     int mTotalBits;

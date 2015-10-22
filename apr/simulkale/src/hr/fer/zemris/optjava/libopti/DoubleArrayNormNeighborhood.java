@@ -5,7 +5,7 @@ import java.util.Random;
 /**
  * Created by ivan on 10/22/15.
  */
-public class DoubleArrayNormNeighborhood implements INeighborhood<DoubleArraySolution> {
+public final class DoubleArrayNormNeighborhood implements INeighborhood<DoubleArraySolution> {
     private final double[] mDeltas;
     Random mRand;
 

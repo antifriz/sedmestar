@@ -5,7 +5,7 @@ import java.util.Random;
 /**
  * Created by ivan on 10/22/15.
  */
-public class BitvectorSolution extends SingleObjectiveSolution {
+public final class BitvectorSolution extends SingleObjectiveSolution {
     public byte[] mBytes;
 
     public BitvectorSolution(int n) {

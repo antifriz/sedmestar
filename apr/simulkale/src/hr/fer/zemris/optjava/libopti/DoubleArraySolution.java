@@ -5,7 +5,7 @@ import java.util.Random;
 /**
  * Created by ivan on 10/22/15.
  */
-public class DoubleArraySolution extends SingleObjectiveSolution {
+public final class DoubleArraySolution extends SingleObjectiveSolution {
     public double[] values;
 
     public DoubleArraySolution(int n) {
