@@ -12,22 +12,36 @@ import java.util.Random;
  */
 public class SimulatedAnnealing<T> implements IOptAlgorithm<T> {
 
-    private IDecoder<T> mTIDecoder;
-    private INeighborhood<T> mTINeighborhood;
-    private T mTStartWith;
-    private IFunction mIFunction;
-    private boolean mMinimize;
-    private Random mRandom;
+    private final IDecoder<T> mTIDecoder;
+    private final INeighborhood<T> mTINeighborhood;
+    private final T mTStartWith;
+    private final IFunction mIFunction;
+    private final boolean mMinimize;
+    private final Random mRandom;
+    private final ITempSchedule mTempSchedule;
 
-    public SimulatedAnnealing(IDecoder<T> tIDecoder, INeighborhood<T> tINeighborhood, IFunction IFunction, ITempSchedule schedule, boolean minimize) {
+    private T mCurrentBest;
+
+    public SimulatedAnnealing(IDecoder<T> tIDecoder, INeighborhood<T> tINeighborhood, T tStartWith, IFunction iFunction, ITempSchedule schedule, boolean minimize) {
         mTIDecoder = tIDecoder;
         mTINeighborhood = tINeighborhood;
-        mIFunction = IFunction;
+        mTStartWith = tStartWith;
+        mIFunction = iFunction;
         mMinimize = minimize;
+        mTempSchedule = schedule;
+        mRandom = new Random();
     }
 
     @Override
     public void run() {
+        mTempSchedule.reset();
 
+        T currentBest;
+
+        for (int i = 0; i < mTempSchedule.getOuterLoopCounter(); i++) {
+            for (int j = 0; j < mTempSchedule.getInnerLoopCounter(); j++) {
+
+            }
+        }
     }
 }

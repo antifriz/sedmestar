@@ -4,11 +4,11 @@ package hr.fer.zemris.optjava.dz3;
  * Created by ivan on 10/22/15.
  */
 public class GeometricTempSchedule implements ITempSchedule {
-    private double mAlpha;
-    private double mTInitial;
+    private final double mAlpha;
+    private final double mTInitial;
+    private final int mTInnerLimit;
+    private final int mTOuterLimit;
     private double mTCurrent;
-    private int mTInnerLimit;
-    private int mTOuterLimit;
 
     public GeometricTempSchedule(double alpha, double tInitial, int tInnerLimit, int tOuterLimit) {
         mAlpha = alpha;
@@ -18,17 +18,22 @@ public class GeometricTempSchedule implements ITempSchedule {
     }
 
     @Override
+    public final void reset() {
+        mTCurrent = mTInitial / mAlpha;
+    }
+
+    @Override
     public double getNextTemperature() {
-        return 0;
+        return mTCurrent *= mAlpha;
     }
 
     @Override
     public int getInnerLoopCounter() {
-        return 0;
+        return mTInnerLimit;
     }
 
     @Override
     public int getOuterLoopCounter() {
-        return 0;
+        return mTOuterLimit;
     }
 }
