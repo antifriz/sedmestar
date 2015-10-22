@@ -23,7 +23,9 @@ public class DoubleArraySolution extends SingleObjectiveSolution {
         return doubleArraySolution;
     }
 
-    public DoubleArraySolution randomize(Random random, double[] arr1, double[] arr2) {
-        throw new UnsupportedOperationException();
+    public void randomize(Random random, double[] lowerLimits, double[] upperLimits) {
+        for (int i = 0; i < values.length; i++) {
+            values[i] = lowerLimits[i] + (upperLimits[i] - lowerLimits[i]) * random.nextFloat();
+        }
     }
 }
