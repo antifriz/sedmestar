@@ -9,7 +9,7 @@ public final class BitvectorSolution extends SingleObjectiveSolution {
     public byte[] mBytes;
 
     public BitvectorSolution(int n) {
-        mBytes = new byte[(n + 7) / 8];
+        mBytes = new byte[(n + Byte.SIZE - 1) / Byte.SIZE];
     }
 
     public BitvectorSolution newLikeThis() {

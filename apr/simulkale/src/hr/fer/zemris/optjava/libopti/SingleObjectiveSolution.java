@@ -3,7 +3,7 @@ package hr.fer.zemris.optjava.libopti;
 /**
  * Created by ivan on 10/22/15.
  */
-public class SingleObjectiveSolution implements Comparable<SingleObjectiveSolution> {
+public abstract class SingleObjectiveSolution implements Comparable<SingleObjectiveSolution> {
     public double fitness;
     public double value;
 
