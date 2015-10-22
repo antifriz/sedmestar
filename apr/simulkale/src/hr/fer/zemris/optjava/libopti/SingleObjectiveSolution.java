@@ -16,6 +16,12 @@ public class SingleObjectiveSolution implements Comparable<SingleObjectiveSoluti
      */
     @Override
     public int compareTo(SingleObjectiveSolution other) {
-        return 0;
+        if (fitness < other.fitness) {
+            return -1;
+        } else if (fitness == other.fitness) {
+            return 0;
+        } else {
+            return 1;
+        }
     }
 }

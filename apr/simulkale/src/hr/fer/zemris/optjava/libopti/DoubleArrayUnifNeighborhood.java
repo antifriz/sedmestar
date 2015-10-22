@@ -1,7 +1,5 @@
 package hr.fer.zemris.optjava.libopti;
 
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
-
 import java.util.Random;
 
 /**
@@ -11,12 +9,16 @@ public class DoubleArrayUnifNeighborhood implements INeighborhood<DoubleArraySol
     private final double[] mDeltas;
     Random mRand;
 
-    DoubleArrayUnifNeighborhood(double[] deltas) {
+    public DoubleArrayUnifNeighborhood(double[] deltas) {
         mDeltas = deltas;
     }
 
     @Override
-    public DoubleArraySolution randomNeighbor(DoubleArraySolution o) {
-        throw new NotImplementedException();
+    public DoubleArraySolution randomNeighbor(DoubleArraySolution solution) {
+        DoubleArraySolution neighbor = solution.duplicate();
+        for (int i = 0; i < solution.values.length; i++) {
+            neighbor.values[i] += mDeltas[i] * 2 * mRand.nextFloat() - 1;
+        }
+        return neighbor;
     }
 }
