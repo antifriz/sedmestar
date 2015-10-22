@@ -7,7 +7,7 @@ import java.util.Iterator;
  * Created by ivan on 10/14/15.
  */
 public class CompositeDomain extends Domain {
-    private SimpleDomain[] mDomains;
+    private final SimpleDomain[] mDomains;
 
     public CompositeDomain(SimpleDomain... domains) {
         mDomains = Arrays.copyOf(domains, domains.length);
@@ -67,5 +67,10 @@ public class CompositeDomain extends Domain {
                 }
             }
         };
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        return obj instanceof CompositeDomain && Arrays.deepEquals(mDomains, ((CompositeDomain) obj).mDomains);
     }
 }

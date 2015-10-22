@@ -9,7 +9,7 @@ public class Debug {
             System.out.println(headingText);
         }
         for (DomainElement e : domain) {
-            System.out.println("Element domene: " + e);
+            System.out.printf("Element domene: %s\n", e);
         }
         System.out.println("Kardinalitet domene je: " + domain.getCardinality());
         System.out.println();
@@ -21,7 +21,8 @@ public class Debug {
         }
         IDomain domain = set.getDomain();
         for (DomainElement e : domain) {
-            System.out.printf("d(%s)=%6.4f\n", e.toString(), set.getValueAt(e));
+            String s = e.toString();
+            System.out.printf("d(%s)=%8.6f\n", s.substring(1, s.length() - 1), set.getValueAt(e));
         }
         System.out.println();
     }

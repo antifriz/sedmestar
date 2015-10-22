@@ -51,10 +51,10 @@ public class StandardFuzzySets {
                     return 0;
                 }
                 if (x < peak) {
-                    return (x - from) / (double) (to - from);
+                    return (x - from) / (double) (to - peak);
                 }
                 if (x < to) {
-                    return (to - x) / (double) (to - from);
+                    return (to - x) / (double) (to - peak);
                 }
                 return 0;
             }

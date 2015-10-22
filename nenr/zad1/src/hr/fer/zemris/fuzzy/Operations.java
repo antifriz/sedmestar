@@ -15,16 +15,16 @@ public class Operations {
     }
 
     public static IFuzzySet binaryOperation(IFuzzySet setA, IFuzzySet setB, IBinaryFunction function) {
-        IDomain combinedDomain = Domain.combine(setA.getDomain(), setB.getDomain());
-        return new CalculatedFuzzySet(combinedDomain, new IIntUnaryFunction() {
+        assert setA.getDomain().equals(setB.getDomain());
+        return new CalculatedFuzzySet(setA.getDomain(), new IIntUnaryFunction() {
 
             @Override
             public double valueAt(int x) {
                 return function.valueAt(
                         setA.getValueAt(
-                                setA.getDomain().elementForIndex(x / setB.getDomain().getCardinality())),
+                                setA.getDomain().elementForIndex(x)),
                         setB.getValueAt(
-                                setB.getDomain().elementForIndex(x % setB.getDomain().getCardinality())
+                                setB.getDomain().elementForIndex(x)
                         ));
             }
         });

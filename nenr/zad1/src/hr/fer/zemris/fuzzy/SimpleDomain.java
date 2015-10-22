@@ -7,8 +7,8 @@ import java.util.NoSuchElementException;
  * Created by ivan on 10/14/15.
  */
 public class SimpleDomain extends Domain {
-    private int first;
-    private int last;
+    private final int first;
+    private final int last;
 
     public SimpleDomain(int first, int last) {
         this.first = first;
@@ -56,5 +56,14 @@ public class SimpleDomain extends Domain {
 
     public int getLast() {
         return last;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj instanceof SimpleDomain) {
+            SimpleDomain other = (SimpleDomain) obj;
+            return other.first == first && other.last == last;
+        }
+        return false;
     }
 }
