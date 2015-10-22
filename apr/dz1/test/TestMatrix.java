@@ -1,4 +1,6 @@
+import hr.fer.zemris.apr.dz1.LinAlgUtils;
 import hr.fer.zemris.apr.dz1.Matrix;
+import javafx.util.Pair;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -33,10 +35,10 @@ public class TestMatrix {
             Matrix firstMatrix = Matrix.createRandomMatrix(mRandom, m, n);
             Matrix firstMatrixCopy = firstMatrix.copy();
 
-            Matrix result1 = firstMatrix.multiply(d).multiply(invd);
+            Matrix result1 = firstMatrix.times(d).times(invd);
             assertTrue(result1.equals(firstMatrixCopy));
 
-            Matrix result2 = firstMatrix.multiplyEquals(d).multiplyEquals(invd);
+            Matrix result2 = firstMatrix.timesEquals(d).timesEquals(invd);
             assertTrue(result2.equals(firstMatrixCopy));
         }
     }
@@ -81,6 +83,32 @@ public class TestMatrix {
     }
 
     @Test
+    public void testLUdecomposition() throws IOException{
+        Matrix system = Matrix.load("matricazad2.txt");
+
+        Matrix matrix = system.decomposeLU();
+        Matrix u = matrix.extractUpper();
+        Matrix l = matrix.extractLower();
+
+        assertTrue(system.equals(l.times(u)));
+    }
+    @Test
+    public void testLUPdecomposition() throws IOException{
+        Matrix system = Matrix.load("matricazad2.txt");
+
+        Pair<Matrix,Matrix> pair = system.decomposeLUP();
+
+        Matrix matrix = pair.getKey();
+        Matrix transormation = pair.getValue();
+
+        Matrix u = matrix.extractUpper();
+        Matrix l = matrix.extractLower();
+
+        Matrix times = transormation.times(l.times(u));
+        assertTrue(system.equals(times));
+    }
+
+    @Test
     public void testAdditionSubtraction() {
         for (int i = 0; i < 1000; i++) {
             Matrix firstMatrix = Matrix.createRandomMatrix(mRandom, 10, 10);
@@ -96,7 +124,7 @@ public class TestMatrix {
     }
 
     @Test
-    public void testMultiply() {
+    public void testtimes() {
         for (int i = 0; i < 1000; i++) {
             final int m = mRandom.nextInt(10) + 1;
             final int n = mRandom.nextInt(10) + 1;
@@ -109,13 +137,13 @@ public class TestMatrix {
             Matrix firstMatrixCopy = firstMatrix.copy();
             Matrix secondMatrix = Matrix.createRandomMatrix(mRandom, n, o);
 
-            Matrix result1 = firstMatrix.multiply(d).multiply(invd);
+            Matrix result1 = firstMatrix.times(d).times(invd);
             assertTrue(result1.equals(firstMatrixCopy));
 
-            Matrix result2 = firstMatrix.multiplyEquals(d).multiplyEquals(invd);
+            Matrix result2 = firstMatrix.timesEquals(d).timesEquals(invd);
             assertTrue(result2.equals(firstMatrixCopy));
 
-            Matrix result3 = firstMatrix.multiply(secondMatrix);
+            Matrix result3 = firstMatrix.times(secondMatrix);
         }
     }
 

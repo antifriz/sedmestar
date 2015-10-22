@@ -1,5 +1,7 @@
 package hr.fer.zemris.apr.dz1;
 
+import javafx.util.Pair;
+
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -78,7 +80,7 @@ public final class Matrix {
     }
 
     public static Matrix createRandomMatrix(Random random, int i, int j) {
-        double[][] array = allocateArray(i, j);
+        double[][] array = allocateZeroedArray(i, j);
         for (int i1 = 0; i1 < i; i1++) {
             for (int j1 = 0; j1 < j; j1++) {
                 array[i1][j1] = random.nextInt(20) - 10;
@@ -88,7 +90,7 @@ public final class Matrix {
     }
 
     public static Matrix createRandomLowerMatrix(Random random, int i) {
-        double[][] array = allocateArray(i, i);
+        double[][] array = allocateZeroedArray(i, i);
         for (int i1 = 0; i1 < i; i1++) {
             for (int j1 = 0; j1 <= i1; j1++) {
                 array[i1][j1] = random.nextInt(20) - 10;
@@ -98,7 +100,7 @@ public final class Matrix {
     }
 
     public static Matrix createRandomUpperMatrix(Random random, int i) {
-        double[][] array = allocateArray(i, i);
+        double[][] array = allocateZeroedArray(i, i);
         for (int i1 = 0; i1 < i; i1++) {
             for (int j1 = i1; j1 < i; j1++) {
                 array[i1][j1] = random.nextInt(20) - 10;
@@ -130,7 +132,7 @@ public final class Matrix {
         }
 
         try (Scanner input = new Scanner(file)) {
-            double[][] rawMatrix = allocateArray(rowCount, colCount);
+            double[][] rawMatrix = allocateZeroedArray(rowCount, colCount);
             int row = 0;
             while (input.hasNext()) {
                 String line = input.nextLine().replace("\t", " ").replace("  ", " ");
@@ -174,11 +176,11 @@ public final class Matrix {
         System.out.println(toString());
     }
 
-    private static double[][] allocateArray(int i, int j) {
+    private static double[][] allocateZeroedArray(int i, int j) {
         return new double[i][j];
     }
 
-    private static double[][] allocateArray(Matrix matrix) {
+    private static double[][] allocateZeroedArray(Matrix matrix) {
         return new double[matrix.mRowDimension][matrix.mColumnDimension];
     }
 
@@ -187,8 +189,8 @@ public final class Matrix {
         assert mColumnDimension == matrix.mColumnDimension;
     }
 
-    public Matrix multiply(double constant) {
-        double[][] resultArray = allocateArray(this);
+    public Matrix times(double constant) {
+        double[][] resultArray = allocateZeroedArray(this);
         for (int i = 0; i < mRowDimension; i++) {
             for (int j = 0; j < mColumnDimension; j++) {
                 resultArray[i][j] = mUnderlayingArray[i][j] * constant;
@@ -197,20 +199,20 @@ public final class Matrix {
         return new Matrix(resultArray);
     }
 
-    public Matrix multiply(Matrix other) {
+    public Matrix times(Matrix other) {
         assert mColumnDimension == other.mRowDimension;
-        double[][] resultArray = allocateArray(mRowDimension, other.mColumnDimension);
+        double[][] resultArray = allocateZeroedArray(mRowDimension, other.mColumnDimension);
         for (int i = 0; i < mRowDimension; i++) {
             for (int j = 0; j < other.mColumnDimension; j++) {
                 for (int k = 0; k < mColumnDimension; k++) {
-                    resultArray[i][j] = mUnderlayingArray[i][k] * other.mUnderlayingArray[k][j];
+                    resultArray[i][j] += mUnderlayingArray[i][k] * other.mUnderlayingArray[k][j];
                 }
             }
         }
         return new Matrix(resultArray);
     }
 
-    public Matrix multiplyEquals(double constant) {
+    public Matrix timesEquals(double constant) {
         for (int i = 0; i < mRowDimension; i++) {
             for (int j = 0; j < mColumnDimension; j++) {
                 mUnderlayingArray[i][j] *= constant;
@@ -220,7 +222,7 @@ public final class Matrix {
     }
 
     public Matrix plus(double constant) {
-        double[][] resultArray = allocateArray(this);
+        double[][] resultArray = allocateZeroedArray(this);
         for (int i = 0; i < mRowDimension; i++) {
             for (int j = 0; j < mColumnDimension; j++) {
                 resultArray[i][j] = mUnderlayingArray[i][j] + constant;
@@ -231,7 +233,7 @@ public final class Matrix {
 
     public Matrix plus(Matrix other) {
         assertSameSize(other);
-        double[][] resultArray = allocateArray(this);
+        double[][] resultArray = allocateZeroedArray(this);
         for (int i = 0; i < mRowDimension; i++) {
             for (int j = 0; j < mColumnDimension; j++) {
                 resultArray[i][j] = mUnderlayingArray[i][j] + other.mUnderlayingArray[i][j];
@@ -260,7 +262,7 @@ public final class Matrix {
     }
 
     public Matrix minus(double constant) {
-        double[][] resultArray = allocateArray(this);
+        double[][] resultArray = allocateZeroedArray(this);
         for (int i = 0; i < mRowDimension; i++) {
             for (int j = 0; j < mColumnDimension; j++) {
                 resultArray[i][j] = mUnderlayingArray[i][j] - constant;
@@ -271,7 +273,7 @@ public final class Matrix {
 
     public Matrix minus(Matrix other) {
         assertSameSize(other);
-        double[][] resultArray = allocateArray(this);
+        double[][] resultArray = allocateZeroedArray(this);
         for (int i = 0; i < mRowDimension; i++) {
             for (int j = 0; j < mColumnDimension; j++) {
                 resultArray[i][j] = mUnderlayingArray[i][j] - other.mUnderlayingArray[i][j];
@@ -305,7 +307,7 @@ public final class Matrix {
 
     public Matrix transpose() {
         if (isSquareMatrix()) {
-            double[][] resultArray = allocateArray(this);
+            double[][] resultArray = allocateZeroedArray(this);
             for (int i = 0; i < mRowDimension; i++) {
                 for (int j = 0; j < mColumnDimension; j++) {
                     resultArray[j][i] = mUnderlayingArray[i][j];
@@ -313,7 +315,7 @@ public final class Matrix {
             }
             return new Matrix(resultArray);
         } else {
-            double[][] resultArray = allocateArray(mColumnDimension, mRowDimension);
+            double[][] resultArray = allocateZeroedArray(mColumnDimension, mRowDimension);
             for (int i = 0; i < mRowDimension; i++) {
                 for (int j = 0; j < mColumnDimension; j++) {
                     resultArray[j][i] = mUnderlayingArray[i][j];
@@ -325,7 +327,7 @@ public final class Matrix {
 
     public Matrix transposeEquals() {
         if (isSquareMatrix()) {
-            double[][] resultArray = allocateArray(this);
+            double[][] resultArray = allocateZeroedArray(this);
             for (int i = 0; i < mRowDimension; i++) {
                 for (int j = i + 1; j < mColumnDimension; j++) {
                     double k = mUnderlayingArray[i][j];
@@ -339,33 +341,8 @@ public final class Matrix {
         }
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        Matrix matrix = (Matrix) o;
-
-        if (mColumnDimension != matrix.mColumnDimension || mRowDimension != matrix.mRowDimension) {
-            return false;
-        }
-        for (int i = 0; i < mRowDimension; i++) {
-            for (int j = 0; j < mColumnDimension; j++) {
-                if (!equals(mUnderlayingArray[i][j], matrix.mUnderlayingArray[i][j])) {
-                    return false;
-                }
-            }
-        }
-        return true;
-    }
-
-    private boolean equals(double d1, double d2) {
+    private static boolean equals(double d1, double d2) {
         return Math.abs(d1 - d2) < COMPARE_THRESH;
-    }
-
-    @Override
-    public int hashCode() {
-        return Arrays.deepHashCode(mUnderlayingArray);
     }
 
     public Matrix supstituteForward(Matrix rhsVector) {
@@ -373,7 +350,7 @@ public final class Matrix {
         assert isSquareMatrix();
         assert rhsVector.mRowDimension == mRowDimension;
 
-        double outputVector[][] = Matrix.allocateArray(mRowDimension, 1);
+        double outputVector[][] = Matrix.allocateZeroedArray(mRowDimension, 1);
         for (int i = 0; i < mRowDimension; i++) {
             outputVector[i][0] = rhsVector.get(i, 0);
 
@@ -390,7 +367,7 @@ public final class Matrix {
         assert isSquareMatrix();
         assert rhsVector.mRowDimension == mRowDimension;
 
-        double outputVector[][] = Matrix.allocateArray(mRowDimension, 1);
+        double outputVector[][] = Matrix.allocateZeroedArray(mRowDimension, 1);
         for (int i = mRowDimension - 1; i >= 0; i--) {
             outputVector[i][0] = rhsVector.get(i, 0);
 
@@ -402,55 +379,138 @@ public final class Matrix {
         return new Matrix(outputVector);
     }
 
-    public Matrix decomposeLU() {
+    public Matrix decomposeLU() throws ArithmeticException {
         assert isSquareMatrix();
         Matrix result = copy();
-        for (int i = 0; i < mRowDimension; i++) {
-            result.decomposeLU(i);
+
+        for (int i = 0; i < mRowDimension - 1; i++) {
+            decomposeLUstep(result.mUnderlayingArray, i, mRowDimension);
         }
         return result;
     }
 
-    private void decomposeLU(int step) {
-        double pivot = mUnderlayingArray[step][step];
-        for (int i = step+1; i < mRowDimension; i++) {
-            mUnderlayingArray[step][i] /= pivot;
+    private static void decomposeLUstep(double[][] A, int i, int n) {
+        if (equals(0, A[i][i])) {
+            throw new ArithmeticException("Matrix cannot be decomposed");
         }
-        for (int i = step+1; i < mRowDimension; i++) {
-            for (int j = step+1; j < mColumnDimension; j++) {
-                mUnderlayingArray[i][j] += mUnderlayingArray[i][step] + mUnderlayingArray[step][j];
+        for (int j = i + 1; j < n; j++) {
+            A[j][i] /= A[i][i];
+            for (int k = i + 1; k < n; k++) {
+                A[j][k] -= A[j][i] * A[i][k];
             }
         }
     }
 
-    public Matrix extractUpper(){
-        return null;
+    public static Matrix createIdentity(int n) {
+        Matrix result = new Matrix(allocateZeroedArray(n, n));
+        for (int i = 0; i < n; i++) {
+            result.mUnderlayingArray[i][i] = 1;
+        }
+        return result;
     }
 
-    public Matrix extractLower(){
-        return null;
-    }
-
-    public Matrix decomposeLUP() {
+    public Pair<Matrix, Matrix> decomposeLUP() throws ArithmeticException {
         assert isSquareMatrix();
         Matrix result = copy();
-        double[][] permutation = allocateArray(this);
-        for (int i = 0; i < mRowDimension; i++) {
-            double curMaxVal = mUnderlayingArray[i][i];
-            int curMaxIdx = i;
-            for (int j = i+1; j < mRowDimension; j++) {
-                if(curMaxVal<mUnderlayingArray[j][i]){
-                    curMaxVal = mUnderlayingArray[j][i];
-                    curMaxIdx = j;
+        double[][] A = result.mUnderlayingArray;
+        int n = mRowDimension;
+
+        Matrix permutationMatrix = Matrix.createIdentity(n);
+
+        for (int i = 0; i < n - 1; i++) {
+
+            int pivotIdx = i;
+            double pivotAbs = Math.abs(A[i][i]);
+            for (int j = i + 1; j < n; j++) {
+                double curAbs = Math.abs(A[j][i]);
+                if (curAbs > pivotAbs) {
+                    pivotAbs = curAbs;
+                    pivotIdx = j;
                 }
             }
-            permutation[i][curMaxIdx] =1;
-            result.decomposeLU(i);
+            result.swapRows(i, pivotIdx);
+            permutationMatrix.swapRows(i, pivotIdx);
+
+            decomposeLUstep(result.mUnderlayingArray, i, n);
         }
-        return result.multiply(new Matrix(permutation));
+        return new Pair<>(result, permutationMatrix);
+    }
+
+    private void swapValues(int i1, int j1, int i2, int j2) {
+        double k = mUnderlayingArray[i1][j1];
+        mUnderlayingArray[i1][j1] = mUnderlayingArray[i2][j2];
+        mUnderlayingArray[i2][j2] = k;
+    }
+
+    private void swapRows(int i1, int i2) {
+        if (i1 == i2) {
+            return;
+        }
+
+        for (int j = 0; j < mColumnDimension; j++) {
+            swapValues(i1, j, i2, j);
+        }
+    }
+
+
+    public Matrix extractUpper() {
+        assert isSquareMatrix();
+        Matrix result = copy();
+        for (int i = 0; i < mRowDimension; i++) {
+            for (int j = 0; j < i; j++) {
+                result.mUnderlayingArray[i][j] = 0;
+            }
+        }
+        return result;
+    }
+
+    public Matrix extractLower() {
+        assert isSquareMatrix();
+        Matrix result = copy();
+        for (int i = 0; i < mRowDimension; i++) {
+            for (int j = i + 1; j < mColumnDimension; j++) {
+                result.mUnderlayingArray[i][j] = 0;
+            }
+        }
+        for (int i = 0; i < mRowDimension; i++) {
+            result.mUnderlayingArray[i][i] = 1;
+        }
+        return result;
     }
 
     public Matrix copy() {
-        return new Matrix(Arrays.copyOf(mUnderlayingArray, mUnderlayingArray.length));
+        double[][] copyOfArray = allocateZeroedArray(this);
+        for (int i = 0; i < mRowDimension; i++) {
+            System.arraycopy(mUnderlayingArray[i], 0, copyOfArray[i], 0, mColumnDimension);
+        }
+        return new Matrix(copyOfArray);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Matrix matrix = (Matrix) o;
+
+        if (mRowDimension != matrix.mRowDimension) return false;
+        if (mColumnDimension != matrix.mColumnDimension) return false;
+
+        for (int i = 0; i < mRowDimension; i++) {
+            for (int j = 0; j < mRowDimension; j++) {
+                if (!equals(mUnderlayingArray[i][j], matrix.mUnderlayingArray[i][j])) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = Arrays.deepHashCode(mUnderlayingArray);
+        result = 31 * result + mRowDimension;
+        result = 31 * result + mColumnDimension;
+        return result;
     }
 }
