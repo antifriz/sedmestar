@@ -72,9 +72,10 @@ public class SimulatedAnnealing<T extends SingleObjectiveSolution> implements IO
         return mCurrentBest;
     }
 
-    private void calculateFitness(T current) {
-        double v = mIFunction.valueAt(mTIDecoder.decode(current));
-        current.value = mMinimize ? -v : v;
+    private void calculateFitness(T solution) {
+        double v = mIFunction.valueAt(mTIDecoder.decode(solution));
+        solution.value = v;
+        solution.fitness = mMinimize ? -v : v;
     }
 
     private boolean willAccept(T current, T neighbor) {

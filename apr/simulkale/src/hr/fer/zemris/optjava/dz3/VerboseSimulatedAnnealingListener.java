@@ -18,11 +18,11 @@ public class VerboseSimulatedAnnealingListener<T extends SingleObjectiveSolution
 
     @Override
     public void onSolutionChanged(T oldSolution, T newSolution, long progress) {
-
     }
 
     @Override
     public void onBestChanged(T oldBest, T newBest, long progress) {
+        //System.out.printf("%f -> %f\n",oldBest.value,newBest.value);
 
     }
 
