@@ -11,6 +11,7 @@ public final class DoubleArrayUnifNeighborhood implements INeighborhood<DoubleAr
 
     public DoubleArrayUnifNeighborhood(double[] deltas) {
         mDeltas = deltas;
+        mRand = new Random();
     }
 
     @Override
