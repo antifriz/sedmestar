@@ -29,6 +29,7 @@ public class SimulatedAnnealing<T extends SingleObjectiveSolution> implements IO
         mTempSchedule = schedule;
         mTListener = tListener;
         mRandom = new Random();
+        mCurrentBest = mTStartWith;
     }
 
     @Override
