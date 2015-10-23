@@ -1,5 +1,6 @@
 package hr.fer.zemris.optjava.libopti;
 
+import java.util.Arrays;
 import java.util.Random;
 
 /**
@@ -10,7 +11,7 @@ public final class DoubleArrayUnifNeighborhood implements INeighborhood<DoubleAr
     Random mRand;
 
     public DoubleArrayUnifNeighborhood(double[] deltas) {
-        mDeltas = deltas;
+        mDeltas = Arrays.copyOf(deltas, deltas.length);
         mRand = new Random();
     }
 
