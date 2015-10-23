@@ -9,7 +9,7 @@ public final class DoubleArraySolution extends SingleObjectiveSolution {
     public double[] values;
 
     public DoubleArraySolution(int n) {
-        values = new double[values.length];
+        values = new double[n];
     }
 
     public DoubleArraySolution newLikeThis() {
