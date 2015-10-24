@@ -9,6 +9,7 @@ import java.util.Random;
 public final class DoubleArrayUnifNeighborhood implements INeighborhood<DoubleArraySolution> {
     private final double[] mDeltas;
     Random mRand;
+    private double mFactor = 1;
 
     public DoubleArrayUnifNeighborhood(double[] deltas) {
         mDeltas = Arrays.copyOf(deltas, deltas.length);
@@ -19,8 +20,13 @@ public final class DoubleArrayUnifNeighborhood implements INeighborhood<DoubleAr
     public DoubleArraySolution randomNeighbor(DoubleArraySolution solution) {
         DoubleArraySolution neighbor = solution.duplicate();
         for (int i = 0; i < solution.values.length; i++) {
-            neighbor.values[i] += mDeltas[i] * 2 * mRand.nextFloat() - 1;
+            neighbor.values[i] += mDeltas[i] * 2 * mRand.nextFloat() * mFactor - 1;
         }
         return neighbor;
+    }
+
+    @Override
+    public void setFactor(double factor) {
+        mFactor = factor;
     }
 }

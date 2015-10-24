@@ -5,4 +5,6 @@ package hr.fer.zemris.optjava.libopti;
  */
 public interface INeighborhood<T extends SingleObjectiveSolution> {
     T randomNeighbor(T solution);
+
+    void setFactor(double factor);
 }

@@ -1,5 +1,6 @@
 package hr.fer.zemris.optjava.libopti;
 
+import java.util.Arrays;
 import java.util.Random;
 
 /**
@@ -24,5 +25,10 @@ public final class BitvectorSolution extends SingleObjectiveSolution {
 
     public void randomize(Random random) {
         random.nextBytes(mBytes);
+    }
+
+    @Override
+    public String toString() {
+        return Arrays.toString(mBytes);
     }
 }

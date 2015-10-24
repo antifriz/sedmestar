@@ -7,7 +7,7 @@ import java.util.Random;
 /**
  * Created by ivan on 10/22/15.
  */
-public class SimulatedAnnealing<T extends SingleObjectiveSolution> implements IOptAlgorithm<T, ISimulatedAnnealingListener<T>> {
+public class SimulatedAnnealing<T extends SingleObjectiveSolution> implements IOptAlgorithm<T> {
 
     private final IDecoder<T> mTIDecoder;
     private final INeighborhood<T> mTINeighborhood;
@@ -16,20 +16,18 @@ public class SimulatedAnnealing<T extends SingleObjectiveSolution> implements IO
     private final boolean mMinimize;
     private final Random mRandom;
     private final ITempSchedule mTempSchedule;
-    private final ISimulatedAnnealingListener<T> mTListener;
+    public boolean mWillLog;
+    private T mBest;
 
-    private T mCurrentBest;
 
-    public SimulatedAnnealing(IDecoder<T> tIDecoder, INeighborhood<T> tINeighborhood, T tStartWith, IFunction iFunction, ITempSchedule schedule, boolean minimize, ISimulatedAnnealingListener<T> tListener) {
+    public SimulatedAnnealing(IDecoder<T> tIDecoder, INeighborhood<T> tINeighborhood, T tStartWith, IFunction iFunction, ITempSchedule schedule, boolean minimize) {
         mTIDecoder = tIDecoder;
         mTINeighborhood = tINeighborhood;
         mTStartWith = tStartWith;
         mIFunction = iFunction;
         mMinimize = minimize;
         mTempSchedule = schedule;
-        mTListener = tListener;
         mRandom = new Random();
-        mCurrentBest = mTStartWith;
     }
 
     @Override
@@ -37,64 +35,62 @@ public class SimulatedAnnealing<T extends SingleObjectiveSolution> implements IO
         mTempSchedule.reset();
 
         T current = mTStartWith;
-        mTListener.onSolutionChanged(null, current, 0);
+        T currentBest = mTStartWith;
         calculateFitness(current);
-        updateBest(current);
 
+
+        double nextTemperature = mTempSchedule.getNextTemperature();
+        double initalTemperature = nextTemperature;
         for (int i = 0; i < mTempSchedule.getOuterLoopCounter(); i++) {
 
-            mTListener.onOuterStepStarted(current, i);
+            if (i == mTempSchedule.getOuterLoopCounter() / 20 && mRandom.nextBoolean()) {
+                current = currentBest;
+            }
+
+            mTINeighborhood.setFactor(nextTemperature / initalTemperature);
+
+            if (mWillLog) {
+                System.out.printf("[%5d - %8.6f] %f | %s || %f | %s\n", i, nextTemperature, Math.sqrt(currentBest.value), currentBest, Math.sqrt(current.value), current);
+            }
 
             for (int j = 0; j < mTempSchedule.getInnerLoopCounter(); j++) {
 
-                mTListener.onStepStarted(current, j);
-
                 T neighbor = mTINeighborhood.randomNeighbor(current);
                 calculateFitness(neighbor);
-                if (willAccept(current, neighbor)) {
-
-                    mTListener.onSolutionChanged(current, neighbor, j);
+                if (neighbor.compareTo(current) >= 0 || willAcceptWorse(current, nextTemperature, neighbor)) {
 
                     current = neighbor;
-                    updateBest(current);
+                    if (current.compareTo(currentBest) >= 0) {
+                        if (mWillLog) {
+
+                            System.out.printf("        %f -> %f | %s\n", Math.sqrt(currentBest.value), Math.sqrt(current.value), current.toString());
+                        }
+                        currentBest = current;
+
+                        if (currentBest.value < 0.01) {
+                            mBest = currentBest;
+                            return;
+                        }
+                    }
                 }
-
-                mTListener.onStepStopped(current, j);
-
             }
-
-            mTListener.onOuterStepStopped(current, i);
-
+            nextTemperature = mTempSchedule.getNextTemperature();
         }
+
+        mBest = currentBest;
     }
 
-    public T getCurrentBest() {
-        return mCurrentBest;
+    private boolean willAcceptWorse(T current, double nextTemperature, T neighbor) {
+        return mRandom.nextDouble() < Math.exp((neighbor.fitness - current.fitness) / nextTemperature);
+    }
+
+    public T getBest() {
+        return mBest;
     }
 
     private void calculateFitness(T solution) {
         double v = mIFunction.valueAt(mTIDecoder.decode(solution));
         solution.value = v;
         solution.fitness = mMinimize ? -v : v;
-    }
-
-    private boolean willAccept(T current, T neighbor) {
-        return isBetter(neighbor, current) || willAcceptWorse();
-    }
-
-    private boolean isBetter(T first, T second) {
-        return first.compareTo(second) >= 0;
-    }
-
-
-    private boolean willAcceptWorse() {
-        return mRandom.nextDouble() < mTempSchedule.getNextTemperature();
-    }
-
-    private void updateBest(T current) {
-        if (current.compareTo(mCurrentBest) >= 0) {
-            mTListener.onBestChanged(mCurrentBest, current, 0);
-            mCurrentBest = current;
-        }
     }
 }

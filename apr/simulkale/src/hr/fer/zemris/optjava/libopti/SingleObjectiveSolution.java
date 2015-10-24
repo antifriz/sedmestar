@@ -24,4 +24,7 @@ public abstract class SingleObjectiveSolution implements Comparable<SingleObject
             return 1;
         }
     }
+
+    @Override
+    public abstract String toString();
 }
