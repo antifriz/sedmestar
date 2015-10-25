@@ -18,6 +18,19 @@ import static org.junit.Assert.assertTrue;
 public class TestMatrix {
     private Random mRandom;
 
+    private static void solveUsingBothMethods(Matrix system, Matrix rhs) {
+        for (LinAlgUtils.Method method : LinAlgUtils.Method.values()) {
+            System.out.printf("Trying to solve with method %s\n", method.name());
+            try {
+                Matrix result = LinAlgUtils.solveSystem(system, rhs, method);
+                System.out.println("Result:");
+                System.out.println(result);
+            } catch (ArithmeticException e) {
+                System.out.println(e.getMessage());
+            }
+        }
+    }
+
     @Before
     public void setUp() {
         mRandom = new Random(42);
@@ -100,18 +113,6 @@ public class TestMatrix {
         }
         Files.delete(new File(pathname).toPath());
     }
-
-    private static void solveUsingBothMethods(Matrix system, Matrix rhs){
-        for(LinAlgUtils.Method method : LinAlgUtils.Method.values()){
-            System.out.printf("Trying to solve with method %s\n",method.name());
-            try{
-                System.out.println(LinAlgUtils.solveSystem(system,rhs, method));
-            }catch (ArithmeticException e){
-                System.out.println(e.getMessage());
-            }
-        }
-    }
-
 
     public void testSupstituteForward() {
         for (int i = 1; i < 100; i++) {

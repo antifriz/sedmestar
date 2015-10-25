@@ -25,26 +25,6 @@ public final class Matrix {
         mColumnDimension = underlayingArray[0].length;
     }
 
-    public double get(int i, int j) {
-        assert i < mRowDimension;
-        assert j < mColumnDimension;
-        return mUnderlayingArray[i][j];
-    }
-
-    public void set(int i, int j, double value) {
-        assert i < mRowDimension;
-        assert j < mColumnDimension;
-        mUnderlayingArray[i][j] = value;
-    }
-
-    public boolean isRowVector() {
-        return mRowDimension == 1;
-    }
-
-    public boolean isColumnVector() {
-        return mColumnDimension == 1;
-    }
-
     public static Matrix createRandomMatrix(Random random, int i, int j) {
         double[][] array = allocateZeroedArray(i, j);
         for (int i1 = 0; i1 < i; i1++) {
@@ -74,7 +54,6 @@ public final class Matrix {
         }
         return new Matrix(array);
     }
-
 
     public static Matrix load(String filePath) throws IOException {
         File file = new File(filePath);
@@ -118,6 +97,58 @@ public final class Matrix {
         }
     }
 
+    private static double[][] allocateZeroedArray(int i, int j) {
+        return new double[i][j];
+    }
+
+    private static double[][] allocateZeroedArray(Matrix matrix) {
+        return new double[matrix.mRowDimension][matrix.mColumnDimension];
+    }
+
+    private static boolean equals(double d1, double d2) {
+        return Math.abs(d1 - d2) < COMPARE_THRESH;
+    }
+
+    private static void decomposeLUstep(double[][] A, int i, int n) {
+        if (equals(0, A[i][i])) {
+            throw new ArithmeticException("Matrix cannot be decomposed");
+        }
+        for (int j = i + 1; j < n; j++) {
+            A[j][i] /= A[i][i];
+            for (int k = i + 1; k < n; k++) {
+                A[j][k] -= A[j][i] * A[i][k];
+            }
+        }
+    }
+
+    public static Matrix createIdentity(int n) {
+        Matrix result = new Matrix(allocateZeroedArray(n, n));
+        for (int i = 0; i < n; i++) {
+            result.mUnderlayingArray[i][i] = 1;
+        }
+        return result;
+    }
+
+    public double get(int i, int j) {
+        assert i < mRowDimension;
+        assert j < mColumnDimension;
+        return mUnderlayingArray[i][j];
+    }
+
+    public void set(int i, int j, double value) {
+        assert i < mRowDimension;
+        assert j < mColumnDimension;
+        mUnderlayingArray[i][j] = value;
+    }
+
+    public boolean isRowVector() {
+        return mRowDimension == 1;
+    }
+
+    public boolean isColumnVector() {
+        return mColumnDimension == 1;
+    }
+
     public void save(String filePath) throws IOException {
         try (PrintWriter writer = new PrintWriter(filePath, "UTF-8")) {
             writer.write(toString());
@@ -140,14 +171,6 @@ public final class Matrix {
 
     public void print() {
         System.out.println(toString());
-    }
-
-    private static double[][] allocateZeroedArray(int i, int j) {
-        return new double[i][j];
-    }
-
-    private static double[][] allocateZeroedArray(Matrix matrix) {
-        return new double[matrix.mRowDimension][matrix.mColumnDimension];
     }
 
     private void assertSameSize(Matrix matrix) {
@@ -307,10 +330,6 @@ public final class Matrix {
         }
     }
 
-    private static boolean equals(double d1, double d2) {
-        return Math.abs(d1 - d2) < COMPARE_THRESH;
-    }
-
     public Matrix supstituteForward(Matrix rhsVector) {
         assert rhsVector.isColumnVector();
         assert isSquareMatrix();
@@ -333,13 +352,13 @@ public final class Matrix {
         int n = mRowDimension;
 
         Matrix result = rhsVector.copy();
-        for (int i = n - 1; i > 0; i--) {
+        for (int i = n - 1; i >= 0; i--) {
             double pivot = mUnderlayingArray[i][i];
             if (equals(0, pivot)) {
                 throw new ArithmeticException("Supstitute backward failed with zero division");
             }
             result.mUnderlayingArray[i][0] /= pivot;
-            for (int j = 0; j < i - 1; j++) {
+            for (int j = 0; j < i; j++) {
                 result.mUnderlayingArray[j][0] -= mUnderlayingArray[j][i] * result.mUnderlayingArray[i][0];
             }
         }
@@ -352,26 +371,6 @@ public final class Matrix {
 
         for (int i = 0; i < mRowDimension - 1; i++) {
             decomposeLUstep(result.mUnderlayingArray, i, mRowDimension);
-        }
-        return result;
-    }
-
-    private static void decomposeLUstep(double[][] A, int i, int n) {
-        if (equals(0, A[i][i])) {
-            throw new ArithmeticException("Matrix cannot be decomposed");
-        }
-        for (int j = i + 1; j < n; j++) {
-            A[j][i] /= A[i][i];
-            for (int k = i + 1; k < n; k++) {
-                A[j][k] -= A[j][i] * A[i][k];
-            }
-        }
-    }
-
-    public static Matrix createIdentity(int n) {
-        Matrix result = new Matrix(allocateZeroedArray(n, n));
-        for (int i = 0; i < n; i++) {
-            result.mUnderlayingArray[i][i] = 1;
         }
         return result;
     }
