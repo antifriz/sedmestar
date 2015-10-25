@@ -16,8 +16,8 @@ public class RegresijaSustava {
     public static void main(String[] args) {
 
         int initial = 1000;
-        int outer = 100;
-        int inner = 100;
+        int outer = 1000;
+        int inner = 1000;
         double deltas = 1;
         double alpha = getAlpha(initial, outer);
 
@@ -71,7 +71,7 @@ public class RegresijaSustava {
             );
             simulatedAnnealing.mWillLog = true;
             simulatedAnnealing.run();
-            System.out.printf("END: %s @ %f\n", simulatedAnnealing.getBest(), Math.sqrt(simulatedAnnealing.getBest().value));
+            System.out.printf("END: %s @ %f\n", decoder.toString(simulatedAnnealing.getBest()), Math.sqrt(simulatedAnnealing.getBest().value));
         } else {
             int[] bits = new int[RegresijaSustava.DIM];
             Arrays.fill(bits, argsParser.getBitsPerVariable());
