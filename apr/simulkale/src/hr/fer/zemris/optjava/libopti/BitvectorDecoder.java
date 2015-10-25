@@ -10,8 +10,7 @@ public abstract class BitvectorDecoder implements IDecoder<BitvectorSolution> {
     protected final double[] mMaxs;
     protected final int[] mBits;
     protected final int mN;
-    private final int[] mBucketFrom;
-    private final int[] mBucketTo;
+    private final int[] mOffsets;
     int mTotalBits;
 
     protected BitvectorDecoder(double[] mins, double[] maxs, int[] bits, int n) {
@@ -22,36 +21,30 @@ public abstract class BitvectorDecoder implements IDecoder<BitvectorSolution> {
         mMins = Arrays.copyOf(mins, mins.length);
         mMaxs = Arrays.copyOf(maxs, maxs.length);
         mBits = Arrays.copyOf(bits, bits.length);
+        mOffsets = new int[mBits.length];
         mN = n;
         int bitCount = 0;
-        for (int bit : bits) {
+        for (int i = 0; i < bits.length; i++) {
+            int bit = bits[i];
+            mOffsets[i] = bitCount;
             bitCount += bit;
         }
         mTotalBits = bitCount;
-
-        mBucketFrom = new int[n];
-        mBucketTo = new int[n];
-        mBucketTo[0] = mBits[0];
-        mBucketFrom[0] = 0;
-        for (int i = 1; i < n; i++) {
-            int dim = bits[i];
-            if (dim > Double.SIZE) {
-                throw new IllegalArgumentException("Every bitvector dimension must not be larger than " + Double.SIZE + " bits");
-            }
-            mBucketTo[i] = mBucketTo[i - 1] + (dim + 7) >> 3;
-            if (i + 1 < n) {
-                mBucketFrom[i + 1] = mBucketTo[i];
-            }
-        }
     }
 
+
     protected final long getRawBits(byte[] bytes, int componentIdx) {
+        int from = mOffsets[componentIdx];
+        int to = from + mBits[componentIdx];
         long rawBits = 0;
-        for (int i = mBucketFrom[componentIdx]; i < mBucketTo[componentIdx]; i++) {
-            rawBits <<= Byte.SIZE;
-            rawBits += bytes[i];
+        for (int i = from; i < to; i++) {
+            rawBits <<= 1;
+            int bucket = i / Byte.SIZE;
+            int shift = Byte.SIZE - 1 - (i % Byte.SIZE);
+            byte bucketVal = bytes[(bucket)];
+            int val = bucketVal >> shift;
+            rawBits += val & 1;
         }
-        rawBits &= 0x1 >> Byte.SIZE - mBits[componentIdx];
         return rawBits;
     }
 

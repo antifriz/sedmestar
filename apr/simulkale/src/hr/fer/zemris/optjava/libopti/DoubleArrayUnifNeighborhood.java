@@ -8,19 +8,19 @@ import java.util.Random;
  */
 public final class DoubleArrayUnifNeighborhood implements INeighborhood<DoubleArraySolution> {
     private final double[] mDeltas;
-    Random mRand;
+    Random mRandom;
     private double mFactor = 1;
 
-    public DoubleArrayUnifNeighborhood(double[] deltas) {
+    public DoubleArrayUnifNeighborhood(double[] deltas, Random random) {
         mDeltas = Arrays.copyOf(deltas, deltas.length);
-        mRand = new Random();
+        mRandom = random;
     }
 
     @Override
     public DoubleArraySolution randomNeighbor(DoubleArraySolution solution) {
         DoubleArraySolution neighbor = solution.duplicate();
         for (int i = 0; i < solution.values.length; i++) {
-            neighbor.values[i] += mDeltas[i] * 2 * mRand.nextFloat() * mFactor - 1;
+            neighbor.values[i] += mDeltas[i] * 2 * mRandom.nextFloat() * mFactor - 1;
         }
         return neighbor;
     }

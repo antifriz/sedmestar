@@ -1,16 +1,19 @@
 package hr.fer.zemris.optjava.libopti;
 
-import java.util.Arrays;
 import java.util.Random;
 
 /**
  * Created by ivan on 10/22/15.
  */
 public final class BitvectorSolution extends SingleObjectiveSolution {
-    public byte[] mBytes;
+    public final byte[] mBytes;
 
-    public BitvectorSolution(int n) {
-        mBytes = new byte[(n + Byte.SIZE - 1) / Byte.SIZE];
+    private BitvectorSolution(int byteCount) {
+        mBytes = new byte[byteCount];
+    }
+
+    public static BitvectorSolution create(int bitCount) {
+        return new BitvectorSolution((bitCount + 7) >> 3);
     }
 
     public BitvectorSolution newLikeThis() {
@@ -25,10 +28,5 @@ public final class BitvectorSolution extends SingleObjectiveSolution {
 
     public void randomize(Random random) {
         random.nextBytes(mBytes);
-    }
-
-    @Override
-    public String toString() {
-        return Arrays.toString(mBytes);
     }
 }

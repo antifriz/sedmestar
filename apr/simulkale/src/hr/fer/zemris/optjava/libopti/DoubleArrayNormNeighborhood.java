@@ -7,19 +7,19 @@ import java.util.Random;
  */
 public final class DoubleArrayNormNeighborhood implements INeighborhood<DoubleArraySolution> {
     private final double[] mDeltas;
-    Random mRand;
+    Random mRandom;
     private double mFactor = 1;
 
-    public DoubleArrayNormNeighborhood(double[] deltas) {
+    public DoubleArrayNormNeighborhood(double[] deltas, Random random) {
         mDeltas = deltas;
-        mRand = new Random();
+        mRandom = random;
     }
 
     @Override
     public DoubleArraySolution randomNeighbor(DoubleArraySolution solution) {
         DoubleArraySolution neighbor = solution.duplicate();
         for (int i = 0; i < solution.values.length; i++) {
-            neighbor.values[i] += mDeltas[i] * mRand.nextGaussian() * mFactor;
+            neighbor.values[i] += mDeltas[i] * mRandom.nextGaussian() * mFactor;
         }
         return neighbor;
     }

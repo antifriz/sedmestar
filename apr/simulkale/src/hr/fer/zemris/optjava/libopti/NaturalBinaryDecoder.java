@@ -6,7 +6,7 @@ package hr.fer.zemris.optjava.libopti;
  */
 public final class NaturalBinaryDecoder extends BitvectorDecoder {
 
-    private NaturalBinaryDecoder(double[] mins, double[] maxs, int[] bits, int n) {
+    public NaturalBinaryDecoder(double[] mins, double[] maxs, int[] bits, int n) {
         super(mins, maxs, bits, n);
     }
 

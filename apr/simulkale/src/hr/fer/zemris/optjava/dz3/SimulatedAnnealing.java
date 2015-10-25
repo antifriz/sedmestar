@@ -43,14 +43,10 @@ public class SimulatedAnnealing<T extends SingleObjectiveSolution> implements IO
         double initalTemperature = nextTemperature;
         for (int i = 0; i < mTempSchedule.getOuterLoopCounter(); i++) {
 
-            if (i == mTempSchedule.getOuterLoopCounter() / 20 && mRandom.nextBoolean()) {
-                current = currentBest;
-            }
-
             mTINeighborhood.setFactor(nextTemperature / initalTemperature);
 
             if (mWillLog) {
-                System.out.printf("[%5d - %8.6f] %f | %s || %f | %s\n", i, nextTemperature, Math.sqrt(currentBest.value), currentBest, Math.sqrt(current.value), current);
+                System.out.printf("[%5d - %8.6f] %f | %s || %f | %s\n", i, nextTemperature, Math.sqrt(currentBest.value), toString(currentBest), Math.sqrt(current.value), toString(current));
             }
 
             for (int j = 0; j < mTempSchedule.getInnerLoopCounter(); j++) {
@@ -63,14 +59,9 @@ public class SimulatedAnnealing<T extends SingleObjectiveSolution> implements IO
                     if (current.compareTo(currentBest) >= 0) {
                         if (mWillLog) {
 
-                            System.out.printf("        %f -> %f | %s\n", Math.sqrt(currentBest.value), Math.sqrt(current.value), current.toString());
+                            System.out.printf("        %f -> %f | %s\n", Math.sqrt(currentBest.value), Math.sqrt(current.value), toString(currentBest));
                         }
                         currentBest = current;
-
-                        if (currentBest.value < 0.01) {
-                            mBest = currentBest;
-                            return;
-                        }
                     }
                 }
             }
@@ -89,8 +80,20 @@ public class SimulatedAnnealing<T extends SingleObjectiveSolution> implements IO
     }
 
     private void calculateFitness(T solution) {
-        double v = mIFunction.valueAt(mTIDecoder.decode(solution));
+        double v = valueAt(solution);
         solution.value = v;
         solution.fitness = mMinimize ? -v : v;
+    }
+
+    private double[] decode(T solution) {
+        return mTIDecoder.decode(solution);
+    }
+
+    private double valueAt(T solution) {
+        return mIFunction.valueAt(decode(solution));
+    }
+
+    private String toString(T solution) {
+        return mTIDecoder.toString(solution);
     }
 }
