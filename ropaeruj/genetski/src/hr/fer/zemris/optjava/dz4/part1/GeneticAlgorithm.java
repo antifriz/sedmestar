@@ -9,6 +9,9 @@ import java.util.Random;
 
 /**
  * Created by ivan on 10/31/15.
+ *
+ * preporucam set parametara: 02-zad-prijenosna.txt 100 0 2000 tournament:7 1
+ *
  */
 public class GeneticAlgorithm {
 
@@ -67,7 +70,7 @@ public class GeneticAlgorithm {
             iterCount++;
 
             if (isFinished(iterCount, currentPopulation, argsParser)) {
-                System.out.printf("Ended with %d iterations, error %f -> %s\n",iterCount-1,currentPopulation[0].value,decoder.toString(currentPopulation[0]));
+                System.out.printf("Ended with %d iterations, error %f -> %s\n",iterCount-1,currentPopulation[0].fitness,decoder.toString(currentPopulation[0]));
                 return decoder.decode(currentPopulation[0]);
             }
 
@@ -120,18 +123,13 @@ public class GeneticAlgorithm {
     }
 
     private static boolean isFinished(int iterCount, DoubleArraySolution[] currentPopulation, ArgsParser argsParser) {
-        return iterCount > argsParser.getMaxIterCount() || Math.sqrt(currentPopulation[0].value) < argsParser.getDesiredError();
+        return iterCount > argsParser.getMaxIterCount() || currentPopulation[0].value < argsParser.getDesiredError();
     }
 
     private static void print(IDecoder<DoubleArraySolution> decoder, DoubleArraySolution[] currentPopulation, int iterCount) {
-        if (iterCount % 100 == 0) {
-            System.out.printf("[%6d]", iterCount);
-            for (DoubleArraySolution aCurrentPopulation : currentPopulation) {
-                System.out.printf("%s %f ", decoder.toString(aCurrentPopulation), Math.sqrt(aCurrentPopulation.value));
-                break;
-            }
-            System.out.println();
-        }
+        System.out.printf("[%6d]", iterCount);
+        System.out.printf("%s %f ", decoder.toString(currentPopulation[0]), currentPopulation[0].fitness);
+        System.out.println();
     }
 
     private static void elitism(DoubleArraySolution[] currentPopulation) {
