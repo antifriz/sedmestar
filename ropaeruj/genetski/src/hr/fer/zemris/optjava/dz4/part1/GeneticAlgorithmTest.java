@@ -11,7 +11,7 @@ public class GeneticAlgorithmTest {
 
     @Test
     public void testMain() {
-            GeneticAlgorithm.main("02-zad-prijenosna.txt 100 20 100000 rouletteWheel 0.11".split(" "));
+            GeneticAlgorithm.main("02-zad-prijenosna.txt 100 0 2000 tournament:10 1".split(" "));
 
 
     }

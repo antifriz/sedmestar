@@ -42,10 +42,11 @@ public class GeneticAlgorithm {
 
         ISolutionFactory<DoubleArraySolution> solutionFactory = new DoubleArraySolutionFactory(DIM, random, lower, upper);
 
-        DoubleArraySolution solution = geneticAlgorithm(argsParser, function, random, solutionFactory);
+        geneticAlgorithm(argsParser, function, random, solutionFactory);
+
     }
 
-    private static DoubleArraySolution geneticAlgorithm(ArgsParser argsParser, IFunction function, Random random, ISolutionFactory<DoubleArraySolution> solutionFactory) {
+    private static double[] geneticAlgorithm(ArgsParser argsParser, IFunction function, Random random, ISolutionFactory<DoubleArraySolution> solutionFactory) {
         IDecoder<DoubleArraySolution> decoder = new PassThroughDecoder();
 
         DoubleArraySolution[] currentPopulation = solutionFactory.newRandomizedArray(argsParser.getPopulationCount());
@@ -55,7 +56,7 @@ public class GeneticAlgorithm {
         return geneticAlgorithmLoop(argsParser, function, random, decoder, currentPopulation, nextPopulation);
     }
 
-    private static DoubleArraySolution geneticAlgorithmLoop(ArgsParser argsParser, IFunction function, Random random, IDecoder<DoubleArraySolution> decoder, DoubleArraySolution[] currentPopulation, DoubleArraySolution[] nextPopulation) {
+    private static double[] geneticAlgorithmLoop(ArgsParser argsParser, IFunction function, Random random, IDecoder<DoubleArraySolution> decoder, DoubleArraySolution[] currentPopulation, DoubleArraySolution[] nextPopulation) {
         int iterCount = 0;
         while (true) {
             elitism(currentPopulation);
@@ -66,13 +67,14 @@ public class GeneticAlgorithm {
             iterCount++;
 
             if (isFinished(iterCount, currentPopulation, argsParser)) {
-                return currentPopulation[0];
+                System.out.printf("Ended with %d iterations, error %f -> %s\n",iterCount-1,currentPopulation[0].value,decoder.toString(currentPopulation[0]));
+                return decoder.decode(currentPopulation[0]);
             }
 
             if (argsParser.isRouletteWheel()) {
-                nextPopulationUsingRouletteWheelSelection(argsParser, random, currentPopulation, nextPopulation);
+                nextPopulationUsingRouletteWheelSelection(iterCount, argsParser, random, currentPopulation, nextPopulation);
             } else {
-                nextPopulationUsingKTournament(argsParser, random, currentPopulation, nextPopulation);
+                nextPopulationUsingKTournament(iterCount, argsParser, random, currentPopulation, nextPopulation);
             }
 
             DoubleArraySolution[] k = currentPopulation;
@@ -83,49 +85,49 @@ public class GeneticAlgorithm {
         }
     }
 
-    private static void nextPopulationUsingRouletteWheelSelection(ArgsParser argsParser, Random random, DoubleArraySolution[] currentPopulation, DoubleArraySolution[] nextPopulation) {
+    private static void nextPopulationUsingRouletteWheelSelection(int iterCount, ArgsParser argsParser, Random random, DoubleArraySolution[] currentPopulation, DoubleArraySolution[] nextPopulation) {
         for (int i = 1; i < nextPopulation.length; i++) {
             DoubleArraySolution mama = rouletteWheelSelection(currentPopulation, random);
             DoubleArraySolution papa = rouletteWheelSelection(currentPopulation, random);
 
-            tweakChild(argsParser, random, nextPopulation, i, mama, papa);
+            tweakChild(iterCount, argsParser, random, nextPopulation, i, mama, papa);
         }
     }
 
-    private static void tweakChild(ArgsParser argsParser, Random random, DoubleArraySolution[] nextPopulation, int i, DoubleArraySolution mama, DoubleArraySolution papa) {
+    private static void tweakChild(int iterCount, ArgsParser argsParser, Random random, DoubleArraySolution[] nextPopulation, int i, DoubleArraySolution mama, DoubleArraySolution papa) {
         DoubleArraySolution child = mama.newLikeThis();
         for (int j = 0; j < child.values.length; j++) {
             double min = Math.min(mama.values[j], papa.values[j]);
             double max = Math.max(mama.values[j], papa.values[j]);
-            child.values[j] = min + (max - min) * random.nextDouble() + random.nextGaussian() * argsParser.getSigma();
+            child.values[j] = min + (max - min) * random.nextDouble() + random.nextGaussian() * argsParser.getSigma() * Math.pow(1-iterCount/(double)argsParser.getMaxIterCount(),10);
         }
         nextPopulation[i] = child;
     }
 
-    private static void nextPopulationUsingKTournament(ArgsParser argsParser, Random random, DoubleArraySolution[] currentPopulation, DoubleArraySolution[] nextPopulation) {
+    private static void nextPopulationUsingKTournament(int iterCount, ArgsParser argsParser, Random random, DoubleArraySolution[] currentPopulation, DoubleArraySolution[] nextPopulation) {
         for (int i = 1; i < nextPopulation.length; i++) {
             DoubleArraySolution[] candidates = new DoubleArraySolution[argsParser.getTournamentN()];
             for (int j = 0; j < argsParser.getTournamentN(); j++) {
-                candidates[i] = currentPopulation[random.nextInt(currentPopulation.length)];
+                candidates[j] = currentPopulation[random.nextInt(currentPopulation.length)];
             }
             Arrays.sort(candidates, Collections.<DoubleArraySolution>reverseOrder());
 
             DoubleArraySolution mama = candidates[0];
             DoubleArraySolution papa = candidates[1];
 
-            tweakChild(argsParser, random, nextPopulation, i, mama, papa);
+            tweakChild(iterCount, argsParser, random, nextPopulation, i, mama, papa);
         }
     }
 
     private static boolean isFinished(int iterCount, DoubleArraySolution[] currentPopulation, ArgsParser argsParser) {
-        return iterCount > argsParser.getMaxIterCount() || currentPopulation[0].value < argsParser.getDesiredError();
+        return iterCount > argsParser.getMaxIterCount() || Math.sqrt(currentPopulation[0].value) < argsParser.getDesiredError();
     }
 
     private static void print(IDecoder<DoubleArraySolution> decoder, DoubleArraySolution[] currentPopulation, int iterCount) {
         if (iterCount % 100 == 0) {
             System.out.printf("[%6d]", iterCount);
             for (DoubleArraySolution aCurrentPopulation : currentPopulation) {
-                System.out.printf("%s %f ", decoder.toString(aCurrentPopulation), aCurrentPopulation.value);
+                System.out.printf("%s %f ", decoder.toString(aCurrentPopulation), Math.sqrt(aCurrentPopulation.value));
                 break;
             }
             System.out.println();

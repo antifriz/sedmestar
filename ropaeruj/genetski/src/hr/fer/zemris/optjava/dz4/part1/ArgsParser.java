@@ -15,8 +15,8 @@ public class ArgsParser {
 
     public ArgsParser(String[] args) {
         if (args.length != 6) {
-            System.err.printf("Parameters: path_to_data population_count desired_error max_iter_count (rouletteWheel|tournament:n) sigma");
-            System.exit(0);
+            System.err.println("Parameters: path_to_data population_count desired_error max_iter_count (rouletteWheel|tournament:n) sigma");
+            System.exit(1);
         }
         mFileName = args[0];
 
@@ -35,6 +35,10 @@ public class ArgsParser {
             mIsRouletteWheel = false;
             String parts[] = type.split(":");
             mTournamentN = Integer.valueOf(parts[1]);
+            if (mTournamentN < 2) {
+                System.err.println("tournament N must be >=2");
+                System.exit(1);
+            }
         }
 
         mSigma = Double.valueOf(args[5]);
