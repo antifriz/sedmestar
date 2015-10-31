@@ -5,7 +5,7 @@ import java.util.Random;
 /**
  * Created by ivan on 10/25/15.
  */
-public class BitvectorNeighborhood implements INeighborhood<BitvectorSolution> {
+public final class BitvectorNeighborhood implements INeighborhood<BitvectorSolution> {
     private final int mBitCount;
     private final Random mRandom;
     private double mFactor;

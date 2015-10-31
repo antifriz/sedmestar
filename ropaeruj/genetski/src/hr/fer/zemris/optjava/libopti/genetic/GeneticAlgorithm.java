@@ -1,13 +1,8 @@
 package hr.fer.zemris.optjava.libopti.genetic;
 
-import hr.fer.zemris.optjava.libopti.IDecoder;
-import hr.fer.zemris.optjava.libopti.IFunction;
-import hr.fer.zemris.optjava.libopti.IOptAlgorithm;
-import hr.fer.zemris.optjava.libopti.SingleObjectiveSolution;
-import sun.plugin.dom.exception.InvalidStateException;
+import hr.fer.zemris.optjava.libopti.*;
 
 import java.util.Arrays;
-import java.util.Random;
 
 /**
  * Created by ivan on 10/31/15.
@@ -18,40 +13,31 @@ public abstract class GeneticAlgorithm<T extends SingleObjectiveSolution> implem
     protected int mPopulationSize;
     private IFunction mFunction;
     private IDecoder<T> mDecoder;
+    private IStopCondition<T> mStopCondition;
+    private boolean mMinimize;
+    protected final ISolutionFactory<T> mSolutionFactory;
 
-    public GeneticAlgorithm(T[] initialPopulation, IFunction function, IDecoder<T> decoder) {
+    public GeneticAlgorithm(ISolutionFactory<T> solutionFactory, int populationSize, IFunction function, IDecoder<T> decoder, IStopCondition<T> stopCondition, boolean minimize) {
+        mSolutionFactory = solutionFactory;
+        mPopulationSize = populationSize;
         mFunction = function;
         mDecoder = decoder;
-        mCurrentPopulation = Arrays.copyOf(initialPopulation, initialPopulation.length);
-        mPopulationSize = mCurrentPopulation.length;
+        mStopCondition = stopCondition;
+
+        mMinimize = minimize;
     }
 
     @Override
     public final void run() {
+        mCurrentPopulation = mSolutionFactory.newRandomizedArray(mPopulationSize);
 
-        while (true) {
+        for (int i = 0; ; i++) {
             evaluate();
-            if (isStopConditionSatisfied()) {
+            if (mStopCondition.isSatisfied(i, mCurrentPopulation)) {
                 break;
             }
             updatePopulation();
         }
-    }
-
-    public T rouletteWheelSelection(T[] array, Random rand){
-        assert Arrays.stream(array).allMatch(x->x.fitness>=0);
-
-        double sum = Arrays.stream(array).mapToDouble(x->x.fitness).sum();
-        double roulletePick = rand.nextDouble()*sum;
-
-        double it = 0;
-        for (T anArray : array) {
-            it += anArray.fitness;
-            if (it > roulletePick) {
-                return anArray;
-            }
-        }
-        throw new InvalidStateException("");
     }
 
     private void evaluate() {
@@ -59,10 +45,11 @@ public abstract class GeneticAlgorithm<T extends SingleObjectiveSolution> implem
     }
 
     protected final void evaluate(T solution) {
-        solution.fitness = mFunction.valueAt(mDecoder.decode(solution));
+        solution.value = mFunction.valueAt(mDecoder.decode(solution));
+        solution.fitness = mMinimize ? -solution.value : solution.value;
+        Arrays.sort(mCurrentPopulation);
     }
 
     protected abstract void updatePopulation();
 
-    public abstract boolean isStopConditionSatisfied();
 }

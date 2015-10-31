@@ -2,9 +2,8 @@ package hr.fer.zemris.optjava.libopti.genetic;
 
 import hr.fer.zemris.optjava.libopti.IDecoder;
 import hr.fer.zemris.optjava.libopti.IFunction;
+import hr.fer.zemris.optjava.libopti.ISolutionFactory;
 import hr.fer.zemris.optjava.libopti.SingleObjectiveSolution;
-
-import java.util.Arrays;
 
 /**
  * Created by ivan on 10/31/15.
@@ -13,49 +12,34 @@ public abstract class GenerativeGeneticAlgorithm<T extends SingleObjectiveSoluti
 
     private T[] mNextPopulation;
 
-    private ISelector<T> mSelector;
-    private ICrossoverer<T> mCrossoverer;
-    private IMutator<T> mMutator;
-
     private int mElitismCount;
 
-    public GenerativeGeneticAlgorithm(T[] initialPopulation, IFunction function, IDecoder<T> decoder) {
-        super(initialPopulation, function, decoder);
-        mNextPopulation = Arrays.copyOf(initialPopulation, initialPopulation.length);
+    public GenerativeGeneticAlgorithm(ISolutionFactory<T> solutionFactory, int populationSize, IFunction function, IDecoder<T> decoder, IStopCondition<T> stopCondition, boolean minimize, int elitismCount) {
+        super(solutionFactory, populationSize, function, decoder, stopCondition, minimize);
+        mElitismCount = elitismCount;
+
+        mNextPopulation = solutionFactory.newArray(populationSize);
     }
+
 
     @Override
-    protected void updatePopulation() {
+    protected final void updatePopulation() {
         promoteBest();
 
-        for (int i = mElitismCount; ; ) {
-            T[] parents = mSelector.selection(mCurrentPopulation);
-            assert parents.length == 2;
-            T[] children = mCrossoverer.crossover(parents);
+        for (int i = mElitismCount; i < mNextPopulation.length; ) {
 
-            assert children.length == 2;
-
-            mMutator.mutate(children);
-
-            if (i == mNextPopulation.length) {
-                break;
-            }
-            mNextPopulation[i++] = children[0];
-            if (i == mNextPopulation.length) {
-                break;
-            }
-            mNextPopulation[i++] = children[1];
+            mNextPopulation[i] = createChild();
         }
+        T[] k = mCurrentPopulation;
+        mCurrentPopulation = mNextPopulation;
+        mNextPopulation = k;
     }
+
+    protected abstract T createChild();
 
     private void promoteBest() {
-        if (mElitismCount != 0) {
-            Arrays.sort(mCurrentPopulation, (a, b) -> Double.compare(a.fitness, b.fitness));
-
-            System.arraycopy(mCurrentPopulation, 0, mNextPopulation, 0, mElitismCount);
-            //mNextPopulation[0] = Arrays.stream(mCurrentPopulation).max((a, b) -> Double.compare(a.fitness, b.fitness)).get();
+        for (int i = 0; i < mElitismCount; i++) {
+            mNextPopulation[i] = mSolutionFactory.duplicate(mCurrentPopulation[i]);
         }
     }
-
-
 }
