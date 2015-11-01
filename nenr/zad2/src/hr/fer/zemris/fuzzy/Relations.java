@@ -26,19 +26,10 @@ public class Relations {
 
         MutableFuzzySet set = new MutableFuzzySet(new CompositeDomain(U, W));
 
-        IBinaryFunction or = Operations.zadehOr();
-        IBinaryFunction and = Operations.zadehAnd();
-
-        for (DomainElement u : U) {
-            for (DomainElement w : W) {
-                double value = 0;
-                for (DomainElement v : V) {
-                    value = or.valueAt(value, and.valueAt(relation1.getValueAt(new DomainElement(u.getComponentValue(0), v.getComponentValue(0))), relation2.getValueAt(new DomainElement(v.getComponentValue(0), w.getComponentValue(0)))));
-                }
-
-                set.set(DomainElement.of(u.getComponentValue(0), w.getComponentValue(0)), value);
-            }
-        }
+        stream(U).forEach(u -> stream(W).forEach(w -> set.set(DomainElement.of(u.getComponentValue(0), w.getComponentValue(0)),
+                stream(V)
+                        .mapToDouble(v -> Operations.zadehAnd().valueAt(relation1.getValueAt(new DomainElement(u.getComponentValue(0), v.getComponentValue(0))), relation2.getValueAt(new DomainElement(v.getComponentValue(0), w.getComponentValue(0)))))
+                        .reduce(Operations.zadehOr()::valueAt).getAsDouble())));
 
         return set;
     }
