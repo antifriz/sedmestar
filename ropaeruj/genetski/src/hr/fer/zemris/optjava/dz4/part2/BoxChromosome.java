@@ -13,6 +13,7 @@ public class BoxChromosome extends ArrayList<BoxFragment> implements Comparable<
     public double mFitness;
     private int mHeight;
     private PriorityQueue<Stick> mMissing = new PriorityQueue<>(Collections.<Stick>reverseOrder());
+    private int mStickSize;
 
     public BoxChromosome(int height) {
         mHeight = height;
@@ -22,20 +23,19 @@ public class BoxChromosome extends ArrayList<BoxFragment> implements Comparable<
     public String toString() {
         StringBuilder sb = new StringBuilder();
         for (BoxFragment fragment : this) {
-            sb.append(fragment);
+            sb.append('\u2588');
+            String str = fragment.toString();
+            sb.append(str);
+            for (int i = str.length(); i < mHeight; i++) {
+                sb.append(' ');
+            }
+            sb.append('\u2588');
             sb.append(System.lineSeparator());
         }
         return sb.toString();
     }
 
-    public void randomize(Stick[] sticks, Random random) {
-        for (int i = sticks.length - 1; i > 0; i--) {
-            int index = random.nextInt(i + 1);
-            Stick a = sticks[index];
-            sticks[index] = sticks[i];
-            sticks[i] = a;
-        }
-
+    public void fill(List<Stick> sticks, Random random) {
         int curHeight = 0;
         add(new BoxFragment());
         for (Stick stick : sticks) {
@@ -47,12 +47,15 @@ public class BoxChromosome extends ArrayList<BoxFragment> implements Comparable<
             curHeight += stick.height;
             get(size() - 1).add(stick);
         }
+        mStickSize = sticks.size();
+
+        assert mStickSize == stream().mapToInt(ArrayList::size).sum();
 
     }
 
     @Override
     public int compareTo(BoxChromosome o) {
-        return 0;
+        return Double.compare(mFitness, o.mFitness);
     }
 
     public void evaluateSelf() {
@@ -69,21 +72,23 @@ public class BoxChromosome extends ArrayList<BoxFragment> implements Comparable<
     public BoxChromosome duplicate() {
         BoxChromosome boxChromosome = new BoxChromosome(mHeight);
         boxChromosome.addAll(stream().map(BoxFragment::new).collect(Collectors.toList()));
+boxChromosome.mStickSize = mStickSize;
         return boxChromosome;
     }
 
-    public int size() {
-        return size();
-    }
-
-
     public List<BoxFragment> rip(int crossoverStartPoint, int crossoverEndPoint) {
         mMissing.clear();
-        List<BoxFragment> subList = subList(crossoverStartPoint, crossoverEndPoint + 1);
+        List<BoxFragment> subList = new ArrayList<>(subList(crossoverStartPoint, crossoverEndPoint + 1));
+
+
         for (int i = crossoverEndPoint; i >= crossoverStartPoint; i--) {
             mMissing.addAll(get(i));
             remove(i);
         }
+
+        subList.iterator();
+        assert stream().mapToInt(ArrayList::size).sum() + mMissing.size() == mStickSize;
+
         return subList;
     }
 
@@ -91,25 +96,50 @@ public class BoxChromosome extends ArrayList<BoxFragment> implements Comparable<
     public void insert(List<BoxFragment> toBeInserted, int crossoverStartPoint) {
 
         List<Stick> toBeInsertedFlatten = new ArrayList<>();
-        toBeInserted.forEach(toBeInsertedFlatten::addAll);
+        toBeInserted.iterator();
 
-        forEach(x ->
-        {
-            for (int i = 0; i < x.size(); ) {
-                if (toBeInsertedFlatten.contains(x.get(i))) {
-                    x.remove(i);
+        for (BoxFragment fragment : toBeInserted) {
+            toBeInsertedFlatten.addAll(fragment);
+        }
+
+        int c = 0;
+        for (BoxFragment fragment : this) {
+            for (int i = 0; i < fragment.size(); ) {
+                if (toBeInsertedFlatten.contains(fragment.get(i))) {
+                    fragment.remove(i);
+                    c++;
                 } else {
                     i++;
                 }
             }
-        });
-
+        }
         addAll(crossoverStartPoint, toBeInserted);
 
+        Iterator<BoxFragment> it = iterator();
+        while (it.hasNext()){
+            if(it.next().isEmpty()){
+                it.remove();
+            }
+        }
+
+
+
+        mMissing.removeAll(toBeInsertedFlatten);
+
+        int sum = stream().mapToInt(ArrayList::size).sum();
+        int size = mMissing.size();
+        if (sum + size != mStickSize) {
+            assert false;
+        }
+
         fillMissing();
+
     }
 
     private void fillMissing() {
+        assert stream().mapToInt(ArrayList::size).sum() + mMissing.size() == mStickSize;
+
+
         while (!mMissing.isEmpty()) {
             Stick stick = mMissing.poll();
 
@@ -128,6 +158,8 @@ public class BoxChromosome extends ArrayList<BoxFragment> implements Comparable<
                 add(sticks);
             }
         }
+        assert stream().mapToInt(ArrayList::size).sum() == mStickSize;
+
     }
 
     public void mutate(Random random) {
@@ -142,4 +174,6 @@ public class BoxChromosome extends ArrayList<BoxFragment> implements Comparable<
 
         fillMissing();
     }
+
+
 }

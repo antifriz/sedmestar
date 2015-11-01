@@ -1,6 +1,5 @@
 package hr.fer.zemris.optjava.dz4.part2;
 
-import hr.fer.zemris.optjava.dz4.part1.GeneticAlgorithm;
 import org.junit.Test;
 
 /**
@@ -10,6 +9,10 @@ public class BoxFillingTest {
 
     @Test
     public void testMain() {
-            BoxFilling.main("problem-20-10-1.dat 5 10 10 true 100 10".split(" "));
+        for (int i = 10; i <= 50; i += 20) {
+            for (int j = 1; j <= 5; j++) {
+                BoxFilling.main(String.format("problem-20-%d-%d.dat 5 10 10 true 100 10", i, j).split(" "));
+            }
+        }
     }
 }

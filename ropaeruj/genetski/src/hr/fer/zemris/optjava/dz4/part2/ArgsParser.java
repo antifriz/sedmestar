@@ -15,7 +15,7 @@ public class ArgsParser {
 
     public ArgsParser(String[] args) {
         boolean isOk = true;
-        if (args.length != 6) {
+        if (args.length != 7) {
             isOk = false;
         }
         mFileName = args[0];
@@ -37,7 +37,7 @@ public class ArgsParser {
         mSatisfiableContainerSize = Integer.valueOf(args[6]);
 
         if (!isOk) {
-            System.err.println("Parameters: path_to_data population_count desired_error max_iter_count (rouletteWheel|tournament:n) sigma");
+            System.err.println("Parameters: paht_to_data population_count n m p max_iter_count acceptable_box_size");
             System.exit(1);
         }
     }

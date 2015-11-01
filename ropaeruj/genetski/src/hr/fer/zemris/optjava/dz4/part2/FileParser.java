@@ -23,9 +23,10 @@ class FileParser {
         try (Scanner input = new Scanner(file)) {
             String line = input.nextLine().replace(" ", "");
             line = line.substring(1, line.length() - 1);
-            String[] idxs = line.split(",");
-            for (int col = 0; col < idxs.length; col++) {
-                sticks.add(new Stick(Integer.valueOf(idxs[col])));
+            String[] vals = line.split(",");
+            for (int i = 0; i < vals.length; i++) {
+                String val = vals[i];
+                sticks.add(new Stick(Integer.valueOf(val), i));
             }
         } catch (FileNotFoundException e) {
             e.printStackTrace();
