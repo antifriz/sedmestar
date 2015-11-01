@@ -1,17 +1,14 @@
 package hr.fer.zemris.optjava.dz4.part1;
 
 
-import hr.fer.zemris.optjava.libopti.*;
-
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Random;
 
 /**
  * Created by ivan on 10/31/15.
- *
+ * <p>
  * preporucam set parametara: 02-zad-prijenosna.txt 100 0 2000 tournament:7 1
- *
  */
 public class GeneticAlgorithm {
 
@@ -43,35 +40,34 @@ public class GeneticAlgorithm {
         double[] upper = new double[DIM];
         Arrays.fill(upper, UPPER_LIMITS);
 
-        ISolutionFactory<DoubleArraySolution> solutionFactory = new DoubleArraySolutionFactory(DIM, random, lower, upper);
+        ChromosomeFactory solutionFactory = new ChromosomeFactory(DIM, random, lower, upper);
 
         geneticAlgorithm(argsParser, function, random, solutionFactory);
 
     }
 
-    private static double[] geneticAlgorithm(ArgsParser argsParser, IFunction function, Random random, ISolutionFactory<DoubleArraySolution> solutionFactory) {
-        IDecoder<DoubleArraySolution> decoder = new PassThroughDecoder();
+    private static void geneticAlgorithm(ArgsParser argsParser, IFunction function, Random random, ChromosomeFactory solutionFactory) {
 
-        DoubleArraySolution[] currentPopulation = solutionFactory.newRandomizedArray(argsParser.getPopulationCount());
-        DoubleArraySolution[] nextPopulation = new DoubleArraySolution[currentPopulation.length];
-        evaluate(function, decoder, currentPopulation);
+        Chromosome[] currentPopulation = solutionFactory.newRandomizedArray(argsParser.getPopulationCount());
+        Chromosome[] nextPopulation = new Chromosome[currentPopulation.length];
+        evaluate(function, currentPopulation);
 
-        return geneticAlgorithmLoop(argsParser, function, random, decoder, currentPopulation, nextPopulation);
+        geneticAlgorithmLoop(argsParser, function, random, currentPopulation, nextPopulation);
     }
 
-    private static double[] geneticAlgorithmLoop(ArgsParser argsParser, IFunction function, Random random, IDecoder<DoubleArraySolution> decoder, DoubleArraySolution[] currentPopulation, DoubleArraySolution[] nextPopulation) {
+    private static void geneticAlgorithmLoop(ArgsParser argsParser, IFunction function, Random random, Chromosome[] currentPopulation, Chromosome[] nextPopulation) {
         int iterCount = 0;
         while (true) {
             elitism(currentPopulation);
             nextPopulation[0] = currentPopulation[0];
 
-            print(decoder, currentPopulation, iterCount);
+            print(currentPopulation, iterCount);
 
             iterCount++;
 
             if (isFinished(iterCount, currentPopulation, argsParser)) {
-                System.out.printf("Ended with %d iterations, error %f -> %s\n",iterCount-1,currentPopulation[0].fitness,decoder.toString(currentPopulation[0]));
-                return decoder.decode(currentPopulation[0]);
+                System.out.printf("Ended with %d iterations, error %f -> %s\n", iterCount - 1, currentPopulation[0].fitness, currentPopulation[0]);
+                return ;
             }
 
             if (argsParser.isRouletteWheel()) {
@@ -80,59 +76,59 @@ public class GeneticAlgorithm {
                 nextPopulationUsingKTournament(iterCount, argsParser, random, currentPopulation, nextPopulation);
             }
 
-            DoubleArraySolution[] k = currentPopulation;
+            Chromosome[] k = currentPopulation;
             currentPopulation = nextPopulation;
             nextPopulation = k;
 
-            evaluate(function, decoder, currentPopulation);
+            evaluate(function, currentPopulation);
         }
     }
 
-    private static void nextPopulationUsingRouletteWheelSelection(int iterCount, ArgsParser argsParser, Random random, DoubleArraySolution[] currentPopulation, DoubleArraySolution[] nextPopulation) {
+    private static void nextPopulationUsingRouletteWheelSelection(int iterCount, ArgsParser argsParser, Random random, Chromosome[] currentPopulation, Chromosome[] nextPopulation) {
         for (int i = 1; i < nextPopulation.length; i++) {
-            DoubleArraySolution mama = rouletteWheelSelection(currentPopulation, random);
-            DoubleArraySolution papa = rouletteWheelSelection(currentPopulation, random);
+            Chromosome mama = rouletteWheelSelection(currentPopulation, random);
+            Chromosome papa = rouletteWheelSelection(currentPopulation, random);
 
             tweakChild(iterCount, argsParser, random, nextPopulation, i, mama, papa);
         }
     }
 
-    private static void tweakChild(int iterCount, ArgsParser argsParser, Random random, DoubleArraySolution[] nextPopulation, int i, DoubleArraySolution mama, DoubleArraySolution papa) {
-        DoubleArraySolution child = mama.newLikeThis();
+    private static void tweakChild(int iterCount, ArgsParser argsParser, Random random, Chromosome[] nextPopulation, int i, Chromosome mama, Chromosome papa) {
+        Chromosome child = mama.newLikeThis();
         for (int j = 0; j < child.values.length; j++) {
             double min = Math.min(mama.values[j], papa.values[j]);
             double max = Math.max(mama.values[j], papa.values[j]);
-            child.values[j] = min + (max - min) * random.nextDouble() + random.nextGaussian() * argsParser.getSigma() * Math.pow(1-iterCount/(double)argsParser.getMaxIterCount(),10);
+            child.values[j] = min + (max - min) * random.nextDouble() + random.nextGaussian() * argsParser.getSigma() * Math.pow(1 - iterCount / (double) argsParser.getMaxIterCount(), 10);
         }
         nextPopulation[i] = child;
     }
 
-    private static void nextPopulationUsingKTournament(int iterCount, ArgsParser argsParser, Random random, DoubleArraySolution[] currentPopulation, DoubleArraySolution[] nextPopulation) {
+    private static void nextPopulationUsingKTournament(int iterCount, ArgsParser argsParser, Random random, Chromosome[] currentPopulation, Chromosome[] nextPopulation) {
         for (int i = 1; i < nextPopulation.length; i++) {
-            DoubleArraySolution[] candidates = new DoubleArraySolution[argsParser.getTournamentN()];
+            Chromosome[] candidates = new Chromosome[argsParser.getTournamentN()];
             for (int j = 0; j < argsParser.getTournamentN(); j++) {
                 candidates[j] = currentPopulation[random.nextInt(currentPopulation.length)];
             }
-            Arrays.sort(candidates, Collections.<DoubleArraySolution>reverseOrder());
+            Arrays.sort(candidates, Collections.<Chromosome>reverseOrder());
 
-            DoubleArraySolution mama = candidates[0];
-            DoubleArraySolution papa = candidates[1];
+            Chromosome mama = candidates[0];
+            Chromosome papa = candidates[1];
 
             tweakChild(iterCount, argsParser, random, nextPopulation, i, mama, papa);
         }
     }
 
-    private static boolean isFinished(int iterCount, DoubleArraySolution[] currentPopulation, ArgsParser argsParser) {
+    private static boolean isFinished(int iterCount, Chromosome[] currentPopulation, ArgsParser argsParser) {
         return iterCount > argsParser.getMaxIterCount() || currentPopulation[0].value < argsParser.getDesiredError();
     }
 
-    private static void print(IDecoder<DoubleArraySolution> decoder, DoubleArraySolution[] currentPopulation, int iterCount) {
+    private static void print(Chromosome[] currentPopulation, int iterCount) {
         System.out.printf("[%6d]", iterCount);
-        System.out.printf("%s %f ", decoder.toString(currentPopulation[0]), currentPopulation[0].fitness);
+        System.out.printf("%s %f ", currentPopulation[0], currentPopulation[0].fitness);
         System.out.println();
     }
 
-    private static void elitism(DoubleArraySolution[] currentPopulation) {
+    private static void elitism(Chromosome[] currentPopulation) {
         double maxFitness = currentPopulation[0].fitness;
         int maxFitnessIndex = 0;
         for (int i = 1; i < currentPopulation.length; i++) {
@@ -141,7 +137,7 @@ public class GeneticAlgorithm {
                 maxFitnessIndex = i;
             }
         }
-        DoubleArraySolution s = currentPopulation[0];
+        Chromosome s = currentPopulation[0];
         currentPopulation[0] = currentPopulation[maxFitnessIndex];
         currentPopulation[maxFitnessIndex] = s;
     }
@@ -150,20 +146,20 @@ public class GeneticAlgorithm {
         return Math.min(Math.exp(v), MAX_EXP);
     }
 
-    private static void evaluate(IFunction function, IDecoder<DoubleArraySolution> decoder, DoubleArraySolution[] population) {
-        Arrays.stream(population).parallel().forEach(x -> evaluate(x, function, decoder));
+    private static void evaluate(IFunction function,  Chromosome[] population) {
+        Arrays.stream(population).parallel().forEach(x -> evaluate(x, function));
     }
 
 
-    private static void evaluate(DoubleArraySolution solution, IFunction function, IDecoder<DoubleArraySolution> decoder) {
-        solution.value = function.valueAt(decoder.decode(solution));
+    private static void evaluate(Chromosome solution, IFunction function) {
+        solution.value = function.valueAt(solution.values);
         solution.fitness = -solution.value;
     }
 
-    private static DoubleArraySolution rouletteWheelSelection(DoubleArraySolution[] array, Random random) {
+    private static Chromosome rouletteWheelSelection(Chromosome[] array, Random random) {
         double minimal = Double.MAX_VALUE;
         double sum = 0;
-        for (DoubleArraySolution anArray : array) {
+        for (Chromosome anArray : array) {
             sum += anArray.fitness;
             minimal = Math.min(minimal, anArray.fitness);
         }
@@ -172,7 +168,7 @@ public class GeneticAlgorithm {
         double roulletePick = random.nextDouble() * sum;
 
         double it = 0;
-        for (DoubleArraySolution a : array) {
+        for (Chromosome a : array) {
             it += a.fitness - minimal;
             if (it > roulletePick) {
                 return a;

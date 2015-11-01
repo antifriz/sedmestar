@@ -7,7 +7,7 @@ import java.util.Scanner;
 /**
  * Created by ivan on 10/23/15.
  */
-class FileParser {
+final class FileParser {
 
     double[][] systemMatrix;
     double[] valueVector;

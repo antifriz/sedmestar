@@ -11,8 +11,7 @@ public class GeneticAlgorithmTest {
 
     @Test
     public void testMain() {
-            GeneticAlgorithm.main("02-zad-prijenosna.txt 100 0 2000 tournament:7 1".split(" "));
-
+            GeneticAlgorithm.main("02-zad-prijenosna.txt 150 0 3000 tournament:10 1".split(" "));
 
     }
 }

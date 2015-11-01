@@ -4,7 +4,7 @@ package hr.fer.zemris.optjava.dz4.part1;
 /**
  * Created by ivan on 10/23/15.
  */
-public class ArgsParser {
+final class ArgsParser {
     private final String mFileName;
     private final int mTournamentN;
     private final boolean mIsRouletteWheel;
