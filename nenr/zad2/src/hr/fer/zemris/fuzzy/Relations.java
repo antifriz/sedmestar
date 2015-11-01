@@ -1,59 +1,22 @@
 package hr.fer.zemris.fuzzy;
 
+import java.util.stream.Stream;
+import java.util.stream.StreamSupport;
+
 /**
  * Created by ivan on 10/25/15.
  */
 public class Relations {
     public static boolean isSymmetric(IFuzzySet relation) {
-        if (isUTimesURelation(relation)) {
-            for (DomainElement de : relation.getDomain()) {
-                if (relation.getValueAt(de) != relation.getValueAt(new DomainElement(de.getComponentValue(1), de.getComponentValue(0)))) {
-                    return false;
-                }
-            }
-            return true;
-        } else {
-            return false;
-        }
+        return isUTimesURelation(relation) && stream(relation.getDomain()).allMatch(de -> relation.getValueAt(de) == relation.getValueAt(new DomainElement(de.getComponentValue(1), de.getComponentValue(0))));
     }
 
     public static boolean isReflexive(IFuzzySet relation) {
-        if (isUTimesURelation(relation)) {
-            for (DomainElement de : relation.getDomain()) {
-                DomainElement element = new DomainElement(de.getComponentValue(1), de.getComponentValue(0));
-                if (element.getComponentValue(0) == element.getComponentValue(1)) {
-                    if (relation.getValueAt(element) != 1) {
-                        return false;
-                    }
-                }
-            }
-            return true;
-        } else {
-            return false;
-        }
+        return isUTimesURelation(relation) && stream(relation.getDomain().getComponent(0)).allMatch(x -> relation.getValueAt(new DomainElement(x.getComponentValue(0), x.getComponentValue(0))) == 1);
     }
 
     public static boolean isMaxMinTransitive(IFuzzySet relation) {
-        if (isUTimesURelation(relation)) {
-            IBinaryFunction or = Operations.zadehOr();
-            IBinaryFunction and = Operations.zadehAnd();
-            IDomain domain = relation.getDomain().getComponent(0);
-            for (DomainElement x : domain) {
-                for (DomainElement z : domain) {
-                    DomainElement xz = new DomainElement(x.getComponentValue(0), z.getComponentValue(0));
-                    double normValue = 0;
-                    for (DomainElement y : domain) {
-                        normValue = or.valueAt(normValue, and.valueAt(relation.getValueAt(new DomainElement(x.getComponentValue(0), y.getComponentValue(0))), relation.getValueAt(new DomainElement(y.getComponentValue(0), z.getComponentValue(0)))));
-                    }
-                    if (relation.getValueAt(xz) < normValue) {
-                        return false;
-                    }
-                }
-            }
-            return true;
-        } else {
-            return false;
-        }
+        return isUTimesURelation(relation) && stream(relation.getDomain().getComponent(0)).allMatch(x -> stream(relation.getDomain().getComponent(0)).allMatch(z -> relation.getValueAt(new DomainElement(x.getComponentValue(0), z.getComponentValue(0))) >= stream(relation.getDomain().getComponent(0)).mapToDouble(item -> Operations.zadehAnd().valueAt(relation.getValueAt(new DomainElement(x.getComponentValue(0), item.getComponentValue(0))), relation.getValueAt(new DomainElement(item.getComponentValue(0), z.getComponentValue(0))))).reduce(Operations.zadehOr()::valueAt).getAsDouble()));
     }
 
     public static IFuzzySet compositionOfBinaryRelations(IFuzzySet relation1, IFuzzySet relation2) {
@@ -61,7 +24,7 @@ public class Relations {
         SimpleDomain V = (SimpleDomain) relation1.getDomain().getComponent(1);
         SimpleDomain W = (SimpleDomain) relation2.getDomain().getComponent(1);
 
-        MutableFuzzySet set = new MutableFuzzySet(new CompositeDomain(U,W));
+        MutableFuzzySet set = new MutableFuzzySet(new CompositeDomain(U, W));
 
         IBinaryFunction or = Operations.zadehOr();
         IBinaryFunction and = Operations.zadehAnd();
@@ -70,10 +33,10 @@ public class Relations {
             for (DomainElement w : W) {
                 double value = 0;
                 for (DomainElement v : V) {
-                    value = or.valueAt(value,and.valueAt(relation1.getValueAt(new DomainElement(u.getComponentValue(0),v.getComponentValue(0))),relation2.getValueAt(new DomainElement(v.getComponentValue(0),w.getComponentValue(0)))));
+                    value = or.valueAt(value, and.valueAt(relation1.getValueAt(new DomainElement(u.getComponentValue(0), v.getComponentValue(0))), relation2.getValueAt(new DomainElement(v.getComponentValue(0), w.getComponentValue(0)))));
                 }
 
-                set.set(DomainElement.of(u.getComponentValue(0),w.getComponentValue(0)),value);
+                set.set(DomainElement.of(u.getComponentValue(0), w.getComponentValue(0)), value);
             }
         }
 
@@ -85,14 +48,10 @@ public class Relations {
     }
 
     public static boolean isUTimesURelation(IFuzzySet relation) {
-        if (relation.getDomain().getNumberOfComponents() == 2) {
-            if (relation.getDomain().getComponent(0).equals(relation.getDomain().getComponent(1))) {
-                return true;
-            } else {
-                return false;
-            }
-        } else {
-            return false;
-        }
+        return relation.getDomain().getNumberOfComponents() == 2 && relation.getDomain().getComponent(0).equals(relation.getDomain().getComponent(1));
+    }
+
+    private static <T> Stream<T> stream(Iterable<T> iterable) {
+        return StreamSupport.stream(iterable.spliterator(), true);
     }
 }
