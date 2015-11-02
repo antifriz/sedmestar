@@ -9,7 +9,6 @@ import java.util.Random;
 final class Chromosome implements Comparable<Chromosome> {
     public double[] values;
     public double fitness;
-    public double value;
 
     public Chromosome(int n) {
         values = new double[n];
@@ -18,12 +17,6 @@ final class Chromosome implements Comparable<Chromosome> {
     public Chromosome newLikeThis() {
         return new Chromosome(values.length);
 
-    }
-
-    public Chromosome duplicate() {
-        Chromosome chromosome = newLikeThis();
-        System.arraycopy(values, 0, chromosome.values, 0, values.length);
-        return chromosome;
     }
 
     public void randomize(Random random, double[] lowerLimits, double[] upperLimits) {
@@ -69,4 +62,6 @@ final class Chromosome implements Comparable<Chromosome> {
         }
 
     }
+
+
 }

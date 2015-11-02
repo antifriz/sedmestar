@@ -8,7 +8,7 @@ import java.util.Random;
 /**
  * Created by ivan on 10/31/15.
  * <p>
- * preporucam set parametara: 02-zad-prijenosna.txt 100 0 2000 tournament:7 1
+ * preporucam set parametara: 02-zad-prijenosna.txt 100 0 2000 tournament:10 1
  */
 public class GeneticAlgorithm {
 
@@ -40,19 +40,16 @@ public class GeneticAlgorithm {
         double[] upper = new double[DIM];
         Arrays.fill(upper, UPPER_LIMITS);
 
-        ChromosomeFactory solutionFactory = new ChromosomeFactory(DIM, random, lower, upper);
-
-        geneticAlgorithm(argsParser, function, random, solutionFactory);
-
-    }
-
-    private static void geneticAlgorithm(ArgsParser argsParser, IFunction function, Random random, ChromosomeFactory solutionFactory) {
-
-        Chromosome[] currentPopulation = solutionFactory.newRandomizedArray(argsParser.getPopulationCount());
+        Chromosome[] currentPopulation = new Chromosome[argsParser.getPopulationCount()];
+        for (int i = 0; i < currentPopulation.length; i++) {
+            currentPopulation[i] = new Chromosome(DIM);
+            currentPopulation[i].randomize(random, lower, upper);
+        }
         Chromosome[] nextPopulation = new Chromosome[currentPopulation.length];
         evaluate(function, currentPopulation);
 
         geneticAlgorithmLoop(argsParser, function, random, currentPopulation, nextPopulation);
+
     }
 
     private static void geneticAlgorithmLoop(ArgsParser argsParser, IFunction function, Random random, Chromosome[] currentPopulation, Chromosome[] nextPopulation) {
@@ -67,7 +64,7 @@ public class GeneticAlgorithm {
 
             if (isFinished(iterCount, currentPopulation, argsParser)) {
                 System.out.printf("Ended with %d iterations, error %f -> %s\n", iterCount - 1, currentPopulation[0].fitness, currentPopulation[0]);
-                return ;
+                return;
             }
 
             if (argsParser.isRouletteWheel()) {
@@ -119,7 +116,7 @@ public class GeneticAlgorithm {
     }
 
     private static boolean isFinished(int iterCount, Chromosome[] currentPopulation, ArgsParser argsParser) {
-        return iterCount > argsParser.getMaxIterCount() || currentPopulation[0].value < argsParser.getDesiredError();
+        return iterCount > argsParser.getMaxIterCount() || -currentPopulation[0].fitness < argsParser.getDesiredError();
     }
 
     private static void print(Chromosome[] currentPopulation, int iterCount) {
@@ -146,14 +143,13 @@ public class GeneticAlgorithm {
         return Math.min(Math.exp(v), MAX_EXP);
     }
 
-    private static void evaluate(IFunction function,  Chromosome[] population) {
+    private static void evaluate(IFunction function, Chromosome[] population) {
         Arrays.stream(population).parallel().forEach(x -> evaluate(x, function));
     }
 
 
     private static void evaluate(Chromosome solution, IFunction function) {
-        solution.value = function.valueAt(solution.values);
-        solution.fitness = -solution.value;
+        solution.fitness = -function.valueAt(solution.values);
     }
 
     private static Chromosome rouletteWheelSelection(Chromosome[] array, Random random) {
