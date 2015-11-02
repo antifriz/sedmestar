@@ -8,7 +8,7 @@ import java.util.Random;
 /**
  * Created by ivan on 10/31/15.
  * <p>
- * preporucam set parametara: 02-zad-prijenosna.txt 100 0 2000 tournament:10 1
+ * preporucam set parametara: 02-zad-prijenosna.txt 100 0 10000 tournament:10 1
  * za dovoljno veliki max_iter_count skoro svaki put ce naci optimum uz err == 0
  */
 public class GeneticAlgorithm {
