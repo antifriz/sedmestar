@@ -9,6 +9,7 @@ import java.util.Random;
  * Created by ivan on 10/31/15.
  * <p>
  * preporucam set parametara: 02-zad-prijenosna.txt 100 0 2000 tournament:10 1
+ * za dovoljno veliki max_iter_count skoro svaki put ce naci optimum uz err == 0
  */
 public class GeneticAlgorithm {
 
@@ -144,12 +145,7 @@ public class GeneticAlgorithm {
     }
 
     private static void evaluate(IFunction function, Chromosome[] population) {
-        Arrays.stream(population).parallel().forEach(x -> evaluate(x, function));
-    }
-
-
-    private static void evaluate(Chromosome solution, IFunction function) {
-        solution.fitness = -function.valueAt(solution.values);
+        Arrays.stream(population).parallel().forEach(solution -> solution.fitness = -function.valueAt(solution.values));
     }
 
     private static Chromosome rouletteWheelSelection(Chromosome[] array, Random random) {
