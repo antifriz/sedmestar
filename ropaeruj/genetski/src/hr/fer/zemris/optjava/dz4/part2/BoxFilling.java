@@ -13,13 +13,6 @@ import java.util.Random;
  */
 public class BoxFilling {
 
-    public static final int DIM = 6;
-    private static final double LOWER_LIMITS = -10;
-    private static final double UPPER_LIMITS = 10;
-    public static final double MAX_EXP = Math.pow(10, 50);
-    private static final boolean VERBOSE = false;
-
-
     public static void main(String[] args) {
 
         ArgsParser argsParser = new ArgsParser(args);
@@ -32,8 +25,8 @@ public class BoxFilling {
 
         for (int i = 0; i < population.length; i++) {
             population[i] = new BoxChromosome(fileParser.height);
-            //Collections.shuffle(fileParser.sticks);
-            population[i].fill(fileParser.sticks, random);
+            Collections.shuffle(fileParser.sticks);
+            population[i].fill(fileParser.sticks);
         }
 
         evaluate(population);
@@ -52,15 +45,8 @@ public class BoxFilling {
             BoxChromosome mama = selectBetter(population, random, argsParser.getN());
             BoxChromosome papa = selectBetter(population, random, argsParser.getN());
 
-            if(VERBOSE) print(mama,"mama");
-            if(VERBOSE) print(papa,"papa");
-
             BoxChromosome mamaCpy = mama.duplicate();
             BoxChromosome papaCpy = papa.duplicate();
-
-            if(VERBOSE) print(mamaCpy,"mamaCpy");
-            if(VERBOSE) print(papaCpy,"papaCpy");
-
 
             int pointA = random.nextInt(mama.size());
             int pointB = random.nextInt(mama.size());
@@ -76,28 +62,16 @@ public class BoxFilling {
 
             List<BoxFragment> poppedFromPapa = papaCpy.rip(papaCrossoverStartPoint, papaCrossoverEndPoint);
 
-
-            if(VERBOSE) print(mamaCpy,"mamaCpy after rip");
-            if(VERBOSE) print(papaCpy,"papaCpy after rip");
-
             mamaCpy.insert(poppedFromPapa, mamaCrossoverStartPoint);
             papaCpy.insert(poppedFromMama, papaCrossoverStartPoint);
 
-            if(VERBOSE) print(mamaCpy,"mamaCpy after insert");
-            if(VERBOSE) print(papaCpy,"papaCpy after insert");
-
             mamaCpy.mutate(random);
             papaCpy.mutate(random);
-
-            if(VERBOSE) print(mamaCpy,"mamaCpy after mutation");
-            if(VERBOSE) print(papaCpy,"papaCpy after mutation");
 
             mamaCpy.evaluateSelf();
             papaCpy.evaluateSelf();
 
             BoxChromosome child = mamaCpy.mFitness > papaCpy.mFitness ? mamaCpy : papaCpy;
-
-            if(VERBOSE) print(child,"child after mutation");
 
             insertChild(child, population, random, argsParser.getM());
         }

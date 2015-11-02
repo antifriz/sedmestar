@@ -6,14 +6,13 @@ import java.util.stream.Collectors;
 /**
  * Created by ivan on 11/1/15.
  */
-public class BoxChromosome extends ArrayList<BoxFragment> implements Comparable<BoxChromosome> {
+final class BoxChromosome extends ArrayList<BoxFragment> implements Comparable<BoxChromosome> {
 
     private static final double CONSTANT_K = 1;
     public static final double MUTATION_FACTOR = 0.05;
     public double mFitness;
     private int mHeight;
     private PriorityQueue<Stick> mMissing = new PriorityQueue<>(Collections.<Stick>reverseOrder());
-    private int mStickSize;
 
     public BoxChromosome(int height) {
         mHeight = height;
@@ -35,7 +34,7 @@ public class BoxChromosome extends ArrayList<BoxFragment> implements Comparable<
         return sb.toString();
     }
 
-    public void fill(List<Stick> sticks, Random random) {
+    public void fill(List<Stick> sticks) {
         int curHeight = 0;
         add(new BoxFragment());
         for (Stick stick : sticks) {
@@ -47,10 +46,6 @@ public class BoxChromosome extends ArrayList<BoxFragment> implements Comparable<
             curHeight += stick.height;
             get(size() - 1).add(stick);
         }
-        mStickSize = sticks.size();
-
-        assert mStickSize == stream().mapToInt(ArrayList::size).sum();
-
     }
 
     @Override
@@ -72,7 +67,6 @@ public class BoxChromosome extends ArrayList<BoxFragment> implements Comparable<
     public BoxChromosome duplicate() {
         BoxChromosome boxChromosome = new BoxChromosome(mHeight);
         boxChromosome.addAll(stream().map(BoxFragment::new).collect(Collectors.toList()));
-boxChromosome.mStickSize = mStickSize;
         return boxChromosome;
     }
 
@@ -87,8 +81,6 @@ boxChromosome.mStickSize = mStickSize;
         }
 
         subList.iterator();
-        assert stream().mapToInt(ArrayList::size).sum() + mMissing.size() == mStickSize;
-
         return subList;
     }
 
@@ -98,16 +90,12 @@ boxChromosome.mStickSize = mStickSize;
         List<Stick> toBeInsertedFlatten = new ArrayList<>();
         toBeInserted.iterator();
 
-        for (BoxFragment fragment : toBeInserted) {
-            toBeInsertedFlatten.addAll(fragment);
-        }
+        toBeInserted.forEach(toBeInsertedFlatten::addAll);
 
-        int c = 0;
         for (BoxFragment fragment : this) {
             for (int i = 0; i < fragment.size(); ) {
                 if (toBeInsertedFlatten.contains(fragment.get(i))) {
                     fragment.remove(i);
-                    c++;
                 } else {
                     i++;
                 }
@@ -126,20 +114,11 @@ boxChromosome.mStickSize = mStickSize;
 
         mMissing.removeAll(toBeInsertedFlatten);
 
-        int sum = stream().mapToInt(ArrayList::size).sum();
-        int size = mMissing.size();
-        if (sum + size != mStickSize) {
-            assert false;
-        }
-
         fillMissing();
 
     }
 
     private void fillMissing() {
-        assert stream().mapToInt(ArrayList::size).sum() + mMissing.size() == mStickSize;
-
-
         while (!mMissing.isEmpty()) {
             Stick stick = mMissing.poll();
 
@@ -158,8 +137,6 @@ boxChromosome.mStickSize = mStickSize;
                 add(sticks);
             }
         }
-        assert stream().mapToInt(ArrayList::size).sum() == mStickSize;
-
     }
 
     public void mutate(Random random) {

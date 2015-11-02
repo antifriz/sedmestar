@@ -5,7 +5,7 @@ import java.util.*;
 /**
  * Created by ivan on 11/1/15.
  */
-public class BoxFragment extends ArrayList<Stick> {
+final class BoxFragment extends ArrayList<Stick> {
 
     public static final char FIRST = '\u2591';
     public static final char SECOND = '\u2592';
