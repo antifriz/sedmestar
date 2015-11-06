@@ -4,48 +4,43 @@ import java.util.*;
 
 public class GeneticAlgorithm {
 
-    public static final int DIM_SIZE = 100;
+    public static final double MUTATION_FACTOR = 0.00;
+    public static final double MAX_EFFORT = 1000;
+    public static final int MIN_SIZE = 2;
+    public static final int MAX_SIZE = 1000;
+    public static double COMP_FACTOR = 0;
+    public static final int K_TOURNAMENT_CONSTANT = 2;
 
     public static void main(String[] args) {
-        // write your code here
-        run();
+
+        run(Integer.valueOf(args[0]));
     }
 
-    private static void run() {
-
-
-        final double maxEffort = 200000;
-        final int minSize = 2;
-        final int maxSize = 10000;
-
+    private static boolean run(Integer dimSize) {
         final Random random = new Random();
 
-        double compFactor = 1;
+        Set<BitvectorChromosome> oldPopulation = new HashSet<>();
 
-        Comparator<BitvectorChromosome> bitvectorChromosomeComparator = (o1, o2) -> {
-            if (Arrays.equals(o1.values, o2.values)) {
-                return 0;
-            }
-            return Double.compare(o2.fitness, o1.fitness);
-        };
-        Set<BitvectorChromosome> oldPopulation = new TreeSet<>(bitvectorChromosomeComparator);
-
-        for (int i = 0; i < maxSize; i++) {
-            BitvectorChromosome bitvectorChromosome = BitvectorChromosome.create(DIM_SIZE);
+        for (int i = 0; i < MAX_SIZE; i++) {
+            BitvectorChromosome bitvectorChromosome = BitvectorChromosome.create(dimSize);
             bitvectorChromosome.randomize(random);
             oldPopulation.add(bitvectorChromosome);
+            calculateScore(bitvectorChromosome);
         }
 
 
-        Set<BitvectorChromosome> succPopulation = new TreeSet<>(bitvectorChromosomeComparator);
+        Set<BitvectorChromosome> succPopulation = new HashSet<>();
 
         while (true) {
+
             succPopulation.clear();
 
-            for (int effort = 0; succPopulation.size() < maxSize; effort++) {
-                if (effort == maxEffort) {
-                    if (succPopulation.size() < minSize) {
-                        return;
+            for (int effort = 0; succPopulation.size() < MAX_SIZE; effort++) {
+                if (effort == MAX_EFFORT) {
+                    if (succPopulation.size() < MIN_SIZE) {
+                        double first = succPopulation.stream().mapToDouble(x -> x.fitness).max().orElse(0);
+                        double second = oldPopulation.stream().mapToDouble(x->x.fitness).max().orElse(0);
+                        return Math.max(first,second) == 1;
                     }
                     break;
                 }
@@ -55,13 +50,16 @@ public class GeneticAlgorithm {
 
                 BitvectorChromosome child = createChild(mama, papa, random);
 
-                child.mutate(random, 0.05);
+                //child.mutate(random, MUTATION_FACTOR); //MUTATION_FACTOR == 0
 
-                if (isChildBetter(mama, papa, child, compFactor)) {
+                if (isChildBetter(mama, papa, child, COMP_FACTOR)) {
                     succPopulation.add(child);
                 }
+
             }
-            System.out.printf("%d %f\n", succPopulation.size(), succPopulation.iterator().next().fitness);
+            int size = succPopulation.size();
+            double someFitness = succPopulation.iterator().next().fitness;
+            System.out.printf("%5d %s %4.2f %s\n", size, ProgressBarBuilder.progress(size, MAX_SIZE, 20), someFitness, ProgressBarBuilder.progress(someFitness, 1, 20));
 
             Set<BitvectorChromosome> k = oldPopulation;
             oldPopulation = succPopulation;
@@ -74,6 +72,8 @@ public class GeneticAlgorithm {
 
         double minimal = Math.min(mama.fitness, papa.fitness);
         double maximal = Math.max(mama.fitness, papa.fitness);
+
+        //System.out.printf("%f + %f -> %f",minimal,maximal,child.fitness);
 
         return child.fitness > minimal + (maximal - minimal) * compFactor;
     }
@@ -115,26 +115,20 @@ public class GeneticAlgorithm {
     }
 
     private static BitvectorChromosome kTournamentSelection(Set<BitvectorChromosome> oldPopulation, Random random) {
-        double sum = 0;
-        for (BitvectorChromosome chromosome : oldPopulation) {
-            sum += chromosome.fitness;
+        BitvectorChromosome[] bitvectorChromosomes = new BitvectorChromosome[K_TOURNAMENT_CONSTANT];
+        for (int i = 0; i < K_TOURNAMENT_CONSTANT; i++) {
+            bitvectorChromosomes[i] = randomSelection(oldPopulation,random);
+            calculateScore(bitvectorChromosomes[i]);
         }
-
-        //double sum = oldPopulation.parallelStream().mapToDouble(x -> x.fitness).sum();
-
-        if (sum == 0) {
-            return randomSelection(oldPopulation, random);
-        }
-        //double tmpSum = sum;
-        double picker = random.nextDouble() * sum;
-
-        for (BitvectorChromosome chromosome : oldPopulation) {
-            sum -= chromosome.fitness;
-            if (sum <= picker) {
-                return chromosome;
+        double maximal = bitvectorChromosomes[0].fitness;
+        int idx=0;
+        for (int i = 1; i < K_TOURNAMENT_CONSTANT; i++) {
+            if(maximal<bitvectorChromosomes[i].fitness){
+                idx = i;
+                maximal = bitvectorChromosomes[i].fitness;
             }
         }
-        throw new RuntimeException();
+        return bitvectorChromosomes[idx];
     }
 
     private static BitvectorChromosome randomSelection(Set<BitvectorChromosome> oldPopulation, Random random) {

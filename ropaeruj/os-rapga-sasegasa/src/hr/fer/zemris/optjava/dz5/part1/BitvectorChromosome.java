@@ -1,5 +1,6 @@
 package hr.fer.zemris.optjava.dz5.part1;
 
+import java.util.Arrays;
 import java.util.Random;
 
 /**
@@ -38,5 +39,32 @@ public class BitvectorChromosome {
             }
             values[i] ^= b;
         }
+    }
+
+    @Override
+    public String toString() {
+        int cnt=0;
+        for (int i = 0; i < bits; i++) {
+            if ((values[i >>> 3] & (1 << (i & 0x7))) != 0) {
+                cnt++;
+            }
+        }
+        return Integer.toString(cnt);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        BitvectorChromosome that = (BitvectorChromosome) o;
+
+        return Arrays.equals(values, that.values);
+
+    }
+
+    @Override
+    public int hashCode() {
+        return Arrays.hashCode(values);
     }
 }
