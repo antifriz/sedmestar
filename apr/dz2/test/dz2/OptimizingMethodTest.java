@@ -1,7 +1,6 @@
 package dz2;
 
 import hr.fer.zemris.apr.dz2.*;
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
@@ -35,11 +34,11 @@ public class OptimizingMethodTest {
     public static Collection params() {
         List<Object[]> objects = new ArrayList<>();
 
-        int[] dims = new int[]{1, 2, 3, 5};
+        int[] dims = new int[]{1, 2, 3, 5, 10};
         IOptimizingMethod[] methods = new IOptimizingMethod[]{new NelderMeadSimplex(), new HookeJevesMethod()};
         for (IOptimizingMethod method : methods) {
-            for (int d : dims) {
-                for (int i = 0; i < Functions.size(); i++) {
+            for (int i = 0; i < Functions.size(); i++) {
+                for (int d : dims) {
                     IFunctionToOptimize iFunctionToOptimize = Functions.get(i);
                     if (iFunctionToOptimize.dimension(d) == d) {
                         objects.add(new Object[]{method.getClass().getSimpleName(), i, d, iFunctionToOptimize, method});
@@ -49,12 +48,6 @@ public class OptimizingMethodTest {
         }
         return objects;
     }
-//
-//    @Before
-//    public void setUp() throws Exception {
-//        System.out.printf("Dimension: %d Precision: %f Method: %s Function %s\n", dimension, precision, method.getClass().getSimpleName(), function.getClass().getSimpleName());
-//
-//    }
 
     @Test
     public void testOptimization() {
