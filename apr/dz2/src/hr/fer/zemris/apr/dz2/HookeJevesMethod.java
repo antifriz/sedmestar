@@ -4,7 +4,7 @@ package hr.fer.zemris.apr.dz2;
  * Created by ivan on 11/8/15.
  */
 public class HookeJevesMethod implements IOptimizingMethod {
-    private double dx = 0.5;
+    private double initialDx = 0.5;
     private double precision = Config.PRECISION_6;
 
     @Override
@@ -12,6 +12,7 @@ public class HookeJevesMethod implements IOptimizingMethod {
         Point p = initialPoint.copy();
         Point b = initialPoint.copy();
         int i = 0;
+        double dx = initialDx;
         do {
             Point n = explore(p, dx, f);
             int precision = 5;
@@ -20,17 +21,13 @@ public class HookeJevesMethod implements IOptimizingMethod {
                 p = n.multiply(2).minus(b);
                 b = n;
             } else {
-                dx = tweak(dx);
+                dx/=2;
                 p = b;
             }
             i++;
-        } while (Math.sqrt(p.minus(b).sumOfSquares()) < precision);
+        } while (dx > precision);
         printPoint(b,f,String.format("====================\nNumber of iterations: %d\nBest",i),5);
         return b;
-    }
-
-    private double tweak(double dx) {
-        return dx;
     }
 
     private Point explore(Point x, double dx, IFunction f) {
