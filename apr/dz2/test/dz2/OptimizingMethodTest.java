@@ -32,7 +32,7 @@ public class OptimizingMethodTest {
 
 
     @Parameterized.Parameters(name = "{0} func:{1} dim:{2}")
-    public static Collection primeNumbers() {
+    public static Collection params() {
         List<Object[]> objects = new ArrayList<>();
 
         int[] dims = new int[]{1, 2, 3, 5};

@@ -27,11 +27,11 @@ public class NelderMeadSimplex implements IOptimizingMethod {
         int i =0;
         while (true) {
             final Point centroid = PointUtils.centroid(d, getHighest(d));
-            printPoint(centroid, f, "Centroid");
+            printPoint(centroid, f, "Centroid",5);
 
             if (Math.sqrt(d.stream().mapToDouble(x -> Math.pow(f.valueAt(x) - f.valueAt(centroid), 2)).sum()) <= d.size() * epsilon) {
                 Point best = f.valueAt(centroid) < getLowestValue(d, f) ? centroid : getLowest(d);
-                printPoint(best,f,String.format("====================\nNumber of iterations: %d\nBest",i));
+                printPoint(best,f,String.format("====================\nNumber of iterations: %d\nBest",i),5);
                 return best;
             }
 
@@ -69,12 +69,8 @@ public class NelderMeadSimplex implements IOptimizingMethod {
     private void printSimplex(List<Point> d, IFunction f) {
         System.out.println("Simplex:");
         for (Point p : d) {
-            printPoint(p, f, "");
+            printPoint(p, f, "",5);
         }
-    }
-
-    private PrintStream printPoint(Point p, IFunction f, String title) {
-        return System.out.printf("%s: %s -> %f\n", title, p.toString(5), f.valueAt(p));
     }
 
     private void shrinkSimplex(IFunction f, List<Point> d) {

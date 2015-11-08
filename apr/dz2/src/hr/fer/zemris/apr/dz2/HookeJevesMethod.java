@@ -4,16 +4,18 @@ package hr.fer.zemris.apr.dz2;
  * Created by ivan on 11/8/15.
  */
 public class HookeJevesMethod implements IOptimizingMethod {
-    private double dx = 1;
+    private double dx = 0.5;
     private double precision = Config.PRECISION_6;
 
     @Override
     public Point findMinimum(IFunction f, Point initialPoint) {
         Point p = initialPoint.copy();
         Point b = initialPoint.copy();
-
+        int i = 0;
         do {
             Point n = explore(p, dx, f);
+            int precision = 5;
+            System.out.printf("%s %s %s\n", pointToString(b, f, precision), pointToString(p, f, precision), pointToString(n, f, precision));
             if (f.valueAt(n) < f.valueAt(b)) {
                 p = n.multiply(2).minus(b);
                 b = n;
@@ -21,12 +23,14 @@ public class HookeJevesMethod implements IOptimizingMethod {
                 dx = tweak(dx);
                 p = b;
             }
+            i++;
         } while (Math.sqrt(p.minus(b).sumOfSquares()) < precision);
+        printPoint(b,f,String.format("====================\nNumber of iterations: %d\nBest",i),5);
         return b;
     }
 
     private double tweak(double dx) {
-        return dx / 2;
+        return dx;
     }
 
     private Point explore(Point x, double dx, IFunction f) {
