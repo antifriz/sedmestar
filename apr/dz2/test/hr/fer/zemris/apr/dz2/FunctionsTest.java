@@ -1,4 +1,4 @@
-package dz2;
+package hr.fer.zemris.apr.dz2;
 
 import hr.fer.zemris.apr.dz2.Config;
 import hr.fer.zemris.apr.dz2.Functions;

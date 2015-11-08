@@ -118,4 +118,5 @@ public class Functions {
     public static int size() {
         return functions.length;
     }
+
 }

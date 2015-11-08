@@ -30,4 +30,9 @@ public class PointUtils {
     public static Point centroid(Collection<Point> d, Point without) {
         return d.stream().reduce(Point::plus).get().minus(without).multiply(1.0 / (d.size() - 1));
     }
+
+    public static double deviation(Point p1, Point p2) {
+        assert p1.getDimension() == p2.getDimension();
+        return Math.sqrt(p1.minus(p2).sumOfSquares()) / p1.getDimension();
+    }
 }

@@ -1,8 +1,8 @@
 package hr.fer.zemris.apr.dz2;
 
-import java.io.PrintStream;
 import java.util.Collections;
 import java.util.List;
+import java.util.concurrent.ThreadLocalRandom;
 
 /**
  * Created by ivan on 11/8/15.
@@ -16,23 +16,34 @@ public class NelderMeadSimplex implements IOptimizingMethod {
     public double sigma = 0.5;
     public double simplexT = 1;
 
+    boolean verbose = false;
+
+    int lastIterationCount;
+    long timeout = 0;
+
     public Point findMinimum(IFunction f, Point initialPoint) {
 
-        System.out.printf("Initial point: %s\n====================\n", initialPoint);
+        if (verbose) System.out.printf("Initial point: %s\n====================\n", initialPoint);
 
         List<Point> d = PointUtils.constructSimplex(initialPoint, simplexT);
 
         notifyUpdate(d, f);
 
-        int i =0;
+        long timeStart = System.currentTimeMillis();
+        int i = 0;
         while (true) {
             final Point centroid = PointUtils.centroid(d, getHighest(d));
-            printPoint(centroid, f, "Centroid",5);
+            if (verbose) printPoint(centroid, f, "Centroid", 5);
 
             if (Math.sqrt(d.stream().mapToDouble(x -> Math.pow(f.valueAt(x) - f.valueAt(centroid), 2)).sum()) <= d.size() * epsilon) {
                 Point best = f.valueAt(centroid) < getLowestValue(d, f) ? centroid : getLowest(d);
-                printPoint(best,f,String.format("====================\nNumber of iterations: %d\nBest",i),5);
+                if (verbose)
+                    printPoint(best, f, String.format("====================\nNumber of iterations: %d\nBest", i + 1), 5);
+                lastIterationCount = i + 1;
                 return best;
+            }
+            if(timeout>0 && System.currentTimeMillis() - timeStart > timeout){
+                throw new RuntimeException("timeout");
             }
 
             Point reflection = getHighest(d).reflect(centroid, alpha);
@@ -69,7 +80,7 @@ public class NelderMeadSimplex implements IOptimizingMethod {
     private void printSimplex(List<Point> d, IFunction f) {
         System.out.println("Simplex:");
         for (Point p : d) {
-            printPoint(p, f, "",5);
+            printPoint(p, f, "", 5);
         }
     }
 

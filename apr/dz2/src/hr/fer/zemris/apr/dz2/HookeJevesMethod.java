@@ -7,6 +7,10 @@ public class HookeJevesMethod implements IOptimizingMethod {
     private double initialDx = 0.5;
     private double precision = Config.PRECISION_6;
 
+    boolean verbose = false;
+
+    int lastIterationCount;
+
     @Override
     public Point findMinimum(IFunction f, Point initialPoint) {
         Point p = initialPoint.copy();
@@ -16,17 +20,19 @@ public class HookeJevesMethod implements IOptimizingMethod {
         do {
             Point n = explore(p, dx, f);
             int precision = 5;
-            System.out.printf("%s %s %s\n", pointToString(b, f, precision), pointToString(p, f, precision), pointToString(n, f, precision));
+            if (verbose)
+                System.out.printf("%s %s %s\n", pointToString(b, f, precision), pointToString(p, f, precision), pointToString(n, f, precision));
             if (f.valueAt(n) < f.valueAt(b)) {
                 p = n.multiply(2).minus(b);
                 b = n;
             } else {
-                dx/=2;
+                dx /= 2;
                 p = b;
             }
             i++;
         } while (dx > precision);
-        printPoint(b,f,String.format("====================\nNumber of iterations: %d\nBest",i),5);
+        if (verbose) printPoint(b, f, String.format("====================\nNumber of iterations: %d\nBest", i), 5);
+        lastIterationCount = i;
         return b;
     }
 

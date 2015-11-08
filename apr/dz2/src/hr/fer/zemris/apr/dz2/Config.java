@@ -6,4 +6,5 @@ package hr.fer.zemris.apr.dz2;
 public class Config {
     public static double PRECISION_9 = Math.pow(10,-9);
     public static double PRECISION_6 = Math.pow(10,-6);
+    public static double PRECISION_3 = Math.pow(10,-3);
 }

@@ -1,4 +1,4 @@
-package dz2;
+package hr.fer.zemris.apr.dz2;
 
 import hr.fer.zemris.apr.dz2.*;
 import org.junit.Test;
@@ -34,7 +34,7 @@ public class OptimizingMethodTest {
     public static Collection params() {
         List<Object[]> objects = new ArrayList<>();
 
-        int[] dims = new int[]{1, 2, 3, 5, 10};
+        int[] dims = new int[]{1, 2, 3, 5, 10,20,50,100};
         IOptimizingMethod[] methods = new IOptimizingMethod[]{new NelderMeadSimplex(), new HookeJevesMethod()};
         for (IOptimizingMethod method : methods) {
             for (int i = 0; i < Functions.size(); i++) {
