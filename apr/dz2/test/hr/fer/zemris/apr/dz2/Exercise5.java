@@ -2,39 +2,46 @@ package hr.fer.zemris.apr.dz2;
 
 import org.junit.Test;
 
+import java.util.concurrent.ThreadLocalRandom;
+
 /**
  * Created by ivan on 11/8/15.
  */
 public class Exercise5 {
 
-    private final int simplexStep;
-
-    public Exercise5(Integer simplexStep) {
-        this.simplexStep = simplexStep;
-    }
-
     @Test
     public void testA() {
-        run(Point.of(0.5, 0.5));
+        int counter = 0;
+        int n = 1000;
+        for (int i = 0; i < n; i++) {
+            ThreadLocalRandom random = ThreadLocalRandom.current();
+            Point of = Point.of(random.nextDouble(-50, 50), random.nextDouble(-50, 50));
+            if(run(of)){
+                counter++;
+            }
+        }
+        System.out.println(counter/(double)n*100+"%");
     }
 
-    private void run(Point startingPoint) {
-        AbstractFunctionToOptimize function = Functions.get(5);
+    private boolean run(Point startingPoint) {
+        AbstractFunctionToOptimize function = Functions.get(4);
 
         NelderMeadSimplex simplex = new NelderMeadSimplex();
         simplex.verbose=false;
-        simplex.simplexT=simplexStep;
-        simplex.timeout = 1000;
-        Point ps = simplex.findMinimum(function, startingPoint);
+        simplex.timeout= 1000;
+        simplex.simplexT=50;
+        Point ps;
+        try{
+            ps = simplex.findMinimum(function, startingPoint);
 
 
         int dimension = startingPoint.getDimension();
-        System.out.printf("NMS: %5d %s %6.4f", simplex.lastIterationCount, ps, PointUtils.deviation(ps, function.minimumAt(dimension)));
-        org.junit.Assert.assertEquals(function.minimumValue(),function.valueAt(ps),0.1);
+        //System.out.printf("NMS: %5d %s %6.4f\n", simplex.lastIterationCount, ps, PointUtils.deviation(ps, function.minimumAt(dimension)));
+        return Math.abs(function.minimumValue()-function.valueAt(ps))<=0.0001;
+        }
+        catch (Throwable e){
+            return false;
+        }
     }
 
-    @Test
-    public void testB() {
-        run(Point.of(20, 20));
-    }
 }
