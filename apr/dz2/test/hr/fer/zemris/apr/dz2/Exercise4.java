@@ -36,7 +36,7 @@ public class Exercise4 {
     }
 
     private void run(Point startingPoint) {
-        IFunctionToOptimize function = Functions.get(3);
+        AbstractFunctionToOptimize function = Functions.get(3);
 
         NelderMeadSimplex simplex = new NelderMeadSimplex();
         simplex.verbose=false;
@@ -47,7 +47,7 @@ public class Exercise4 {
 
         int dimension = startingPoint.getDimension();
         System.out.printf("NMS: %5d %s %6.4f", simplex.lastIterationCount, ps, PointUtils.deviation(ps, function.minimumAt(dimension)));
-        org.junit.Assert.assertEquals(function.minimumValue(),function.valueAt(ps),0.1);
+        org.junit.Assert.assertEquals(function.minimumValue(),function.valueAt(ps),Config.PRECISION_6);
     }
 
     @Test

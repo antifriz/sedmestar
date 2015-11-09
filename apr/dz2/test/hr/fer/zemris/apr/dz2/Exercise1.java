@@ -1,6 +1,5 @@
 package hr.fer.zemris.apr.dz2;
 
-import hr.fer.zemris.apr.dz2.*;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
@@ -18,6 +17,12 @@ import static org.junit.Assert.assertEquals;
 public class Exercise1 {
 
     private final int initial;
+    private AbstractFunction1D mFunction1d = new AbstractFunction1D() {
+        @Override
+        double internalValueAt(double x) {
+            return (x - 3) * (x - 3);
+        }
+    };
 
     public Exercise1(Integer initial) {
         this.initial = initial;
@@ -38,27 +43,39 @@ public class Exercise1 {
 
         GoldenSectionMethod goldenSectionMethod = new GoldenSectionMethod();
 
-        IFunction1D function1d = x -> (x - 3) * (x - 3);
-
-        double optima = goldenSectionMethod.findOptima(function1d, 1, initial, false);
+        double optima = goldenSectionMethod.findOptima(mFunction1d, 1, initial, false);
+        System.out.println(mFunction1d.callCount);
         assertEquals(optima, 3, Config.PRECISION_6);
     }
 
     @Test
-    public void testNMS(){
-        IFunction1D function1d = x -> (x - 3) * (x - 3);
-        IFunction function = point -> function1d.valueAt(point.get(0));
-
+    public void testNMS() {
         NelderMeadSimplex simplex = new NelderMeadSimplex();
-        assertEquals(simplex.findMinimum(function, Point.of(initial)).get(0), 3, Config.PRECISION_3);
+        //simplex.verbose= true;
+        runMulti(simplex);
     }
-    @Test
-    public void testHJM(){
-        IFunction1D function1d = x -> (x - 3) * (x - 3);
-        IFunction function = point -> function1d.valueAt(point.get(0));
 
+    @Test
+    public void testHJM() {
         HookeJevesMethod hooke = new HookeJevesMethod();
-        hooke.findMinimum(function, Point.of(initial));
-        assertEquals(hooke.findMinimum(function, Point.of(initial)).get(0), 3, Config.PRECISION_3);
+//        hooke.verbose= true;
+
+        runMulti(hooke);
     }
+
+    private void runMulti(IOptimizingMethod method) {
+        AbstractFunction function = new AbstractFunction() {
+            @Override
+            protected double internalValueAt(Point point) {
+                return mFunction1d.valueAt(point.get(0));
+            }
+        };
+
+        Point minimum = method.findMinimum(function, Point.of(initial));
+
+        System.out.println(function.callCount);
+
+        assertEquals(minimum.get(0), 3, Config.PRECISION_6);
+    }
+
 }

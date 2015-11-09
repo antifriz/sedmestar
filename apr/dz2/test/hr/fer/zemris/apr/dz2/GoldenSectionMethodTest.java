@@ -1,7 +1,5 @@
 package hr.fer.zemris.apr.dz2;
 
-import hr.fer.zemris.apr.dz2.GoldenSectionMethod;
-import hr.fer.zemris.apr.dz2.IFunction1D;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
@@ -16,7 +14,12 @@ public class GoldenSectionMethodTest {
 
         GoldenSectionMethod goldenSectionMethod = new GoldenSectionMethod();
 
-        IFunction1D function = x -> (x - 3) * (x - 3);
+        AbstractFunction1D function = new AbstractFunction1D() {
+            @Override
+            double internalValueAt(double x) {
+                return (x - 3) * (x - 3);
+            }
+        };
 
         for (double h = 1; h < 20; h++) {
             for (int point = -20; point < 20; point++) {

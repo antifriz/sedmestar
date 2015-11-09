@@ -6,10 +6,10 @@ package hr.fer.zemris.apr.dz2;
  */
 public class Functions {
 
-    private static IFunctionToOptimize[] functions = new IFunctionToOptimize[]{
-            new IFunctionToOptimize() {
+    private static AbstractFunctionToOptimize[] functions = new AbstractFunctionToOptimize[]{
+            new AbstractFunctionToOptimize() {
                 @Override
-                public double valueAt(Point point) {
+                public double internalValueAt(Point point) {
                     assert point.getDimension() == 2;
                     return 100 * Math.pow((point.get(1) - Math.pow(point.get(0), 2)), 2) + Math.pow(1 - point.get(0), 2);
                 }
@@ -33,9 +33,9 @@ public class Functions {
                     return 2;
                 }
             },
-            new IFunctionToOptimize() {
+            new AbstractFunctionToOptimize() {
                 @Override
-                public double valueAt(Point point) {
+                public double internalValueAt(Point point) {
                     assert point.getDimension() == 2;
 
                     return Math.pow(point.get(0) - 4, 2) + 4 * Math.pow(point.get(1) - 2, 2);
@@ -56,9 +56,9 @@ public class Functions {
                     return 2;
                 }
             },
-            new IFunctionToOptimize() {
+            new AbstractFunctionToOptimize() {
                 @Override
-                public double valueAt(Point point) {
+                public double internalValueAt(Point point) {
                     double sum = 0;
                     for (int i = 0; i < point.getDimension(); i++) {
                         sum += (point.get(i) - i - 1) * (point.get(i) - i - 1);
@@ -76,9 +76,9 @@ public class Functions {
                     return Point.from(1, n, x -> x);
                 }
             },
-            new IFunctionToOptimize() {
+            new AbstractFunctionToOptimize() {
                 @Override
-                public double valueAt(Point point) {
+                public double internalValueAt(Point point) {
                     assert point.getDimension() == 2;
 
                     return Math.abs((point.get(0) - point.get(1)) * (point.get(0) + point.get(1))) + Math.sqrt(point.get(0) * point.get(0) + point.get(1) * point.get(1));
@@ -96,9 +96,9 @@ public class Functions {
                     return 2;
                 }
             },
-            new IFunctionToOptimize() {
+            new AbstractFunctionToOptimize() {
                 @Override
-                public double valueAt(Point point) {
+                public double internalValueAt(Point point) {
                     double sumSquares = point.sumOfSquares();
                     return 0.5 + (Math.pow(Math.sin(sumSquares), 2) - 0.5) / Math.pow(1 + 0.001 * sumSquares, 2);
                 }
@@ -111,7 +111,7 @@ public class Functions {
     };
 
 
-    public static IFunctionToOptimize get(int idx) {
+    public static AbstractFunctionToOptimize get(int idx) {
         return functions[idx];
     }
 

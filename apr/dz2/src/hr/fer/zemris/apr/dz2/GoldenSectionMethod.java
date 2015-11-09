@@ -28,7 +28,7 @@ public class GoldenSectionMethod {
         }
     }
 
-    public double findOptima(IFunction1D f, double h, double point, boolean isUnimodal) {
+    public double findOptima(AbstractFunction1D f, double h, double point, boolean isUnimodal) {
         Interval interval;
         if (!isUnimodal) {
             interval = unimodalInterval(f, h, point);
@@ -38,7 +38,7 @@ public class GoldenSectionMethod {
         return goldenMean(f, interval.left, interval.right);
     }
 
-    Interval unimodalInterval(IFunction1D f, double h, double point) {
+    Interval unimodalInterval(AbstractFunction1D f, double h, double point) {
         double left = point - h;
         double right = point + h;
         double m = point;
@@ -70,7 +70,7 @@ public class GoldenSectionMethod {
         return new Interval(left, right);
     }
 
-    double goldenMean(IFunction1D f, double a, double b) {
+    double goldenMean(AbstractFunction1D f, double a, double b) {
         double c = b - k * (b - a);
         double d = a + k * (b - a);
         double fc = f.valueAt(c);

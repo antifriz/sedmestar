@@ -1,12 +1,6 @@
 package hr.fer.zemris.apr.dz2;
 
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.Parameterized;
-
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
 
 /**
  * Created by ivan on 11/8/15.
@@ -25,7 +19,7 @@ public class Exercise5 {
     }
 
     private void run(Point startingPoint) {
-        IFunctionToOptimize function = Functions.get(5);
+        AbstractFunctionToOptimize function = Functions.get(5);
 
         NelderMeadSimplex simplex = new NelderMeadSimplex();
         simplex.verbose=false;

@@ -10,7 +10,7 @@ public class Exercise2 {
     @Test
     public void test() {
         for (int i = 0; i < 4; i++) {
-            IFunctionToOptimize function = Functions.get(i);
+            AbstractFunctionToOptimize function = Functions.get(i);
             int dimension = function.dimension(5);
             Point startingPoint = function.startingPoint(dimension);
 

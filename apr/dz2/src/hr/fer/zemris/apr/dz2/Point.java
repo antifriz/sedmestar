@@ -165,4 +165,20 @@ public class Point {
     public double distanceTo(Point other) {
         return Math.sqrt(minus(other).sumOfSquares());
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Point point = (Point) o;
+
+        return Arrays.equals(values, point.values);
+
+    }
+
+    @Override
+    public int hashCode() {
+        return Arrays.hashCode(values);
+    }
 }

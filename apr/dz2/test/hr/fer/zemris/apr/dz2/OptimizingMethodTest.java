@@ -1,6 +1,5 @@
 package hr.fer.zemris.apr.dz2;
 
-import hr.fer.zemris.apr.dz2.*;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
@@ -20,10 +19,10 @@ public class OptimizingMethodTest {
 
     int dimension;
     double precision = 1;
-    IFunctionToOptimize function;
+    AbstractFunctionToOptimize function;
     IOptimizingMethod method;
 
-    public OptimizingMethodTest(String optimizingMethodName, int id, Integer dimension, IFunctionToOptimize function, IOptimizingMethod method) {
+    public OptimizingMethodTest(String optimizingMethodName, int id, Integer dimension, AbstractFunctionToOptimize function, IOptimizingMethod method) {
         this.function = function;
         this.dimension = dimension;
         this.method = method;
@@ -34,12 +33,16 @@ public class OptimizingMethodTest {
     public static Collection params() {
         List<Object[]> objects = new ArrayList<>();
 
-        int[] dims = new int[]{1, 2, 3, 5, 10,20,50,100};
-        IOptimizingMethod[] methods = new IOptimizingMethod[]{new NelderMeadSimplex(), new HookeJevesMethod()};
+        int[] dims = new int[]{1, 2, 3, 5, 10};
+        NelderMeadSimplex nelderMeadSimplex = new NelderMeadSimplex();
+        nelderMeadSimplex.timeout=10000;
+        nelderMeadSimplex.verbose = true;
+        HookeJevesMethod hookeJevesMethod = new HookeJevesMethod();
+        IOptimizingMethod[] methods = new IOptimizingMethod[]{nelderMeadSimplex, hookeJevesMethod};
         for (IOptimizingMethod method : methods) {
             for (int i = 0; i < Functions.size(); i++) {
                 for (int d : dims) {
-                    IFunctionToOptimize iFunctionToOptimize = Functions.get(i);
+                    AbstractFunctionToOptimize iFunctionToOptimize = Functions.get(i);
                     if (iFunctionToOptimize.dimension(d) == d) {
                         objects.add(new Object[]{method.getClass().getSimpleName(), i, d, iFunctionToOptimize, method});
                     }

@@ -9,7 +9,7 @@ public class Exercise3 {
 
     @Test
     public void test() {
-        IFunctionToOptimize function = Functions.get(3);
+        AbstractFunctionToOptimize function = Functions.get(3);
         Point startingPoint = Point.of(5, 5);
 
         NelderMeadSimplex simplex = new NelderMeadSimplex();

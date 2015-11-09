@@ -2,14 +2,13 @@ package hr.fer.zemris.apr.dz2;
 
 import java.util.Collections;
 import java.util.List;
-import java.util.concurrent.ThreadLocalRandom;
 
 /**
  * Created by ivan on 11/8/15.
  */
 public class NelderMeadSimplex implements IOptimizingMethod {
 
-    public double alpha = 1;
+    public double alpha = 1.00001;
     public double beta = 0.5;
     public double gamma = 2;
     public double epsilon = Config.PRECISION_6;
@@ -21,8 +20,8 @@ public class NelderMeadSimplex implements IOptimizingMethod {
     int lastIterationCount;
     long timeout = 0;
 
-    public Point findMinimum(IFunction f, Point initialPoint) {
-
+    public Point findMinimum(AbstractFunction fun, Point initialPoint) {
+        AbstractFunction f = new ProxyFunction(fun);
         if (verbose) System.out.printf("Initial point: %s\n====================\n", initialPoint);
 
         List<Point> d = PointUtils.constructSimplex(initialPoint, simplexT);
@@ -33,16 +32,17 @@ public class NelderMeadSimplex implements IOptimizingMethod {
         int i = 0;
         while (true) {
             final Point centroid = PointUtils.centroid(d, getHighest(d));
+            if (verbose) printSimplex(d, f);
             if (verbose) printPoint(centroid, f, "Centroid", 5);
 
-            if (Math.sqrt(d.stream().mapToDouble(x -> Math.pow(f.valueAt(x) - f.valueAt(centroid), 2)).sum()) <= d.size() * epsilon) {
+            if (Math.sqrt(d.stream().mapToDouble(x -> Math.pow(f.valueAt(x) - f.valueAt(centroid), 2)).sum()) <= d.size() * epsilon && Math.sqrt(d.stream().map(centroid::minus).mapToDouble(Point::sumOfSquares).sum())<=epsilon * d.size()) {
                 Point best = f.valueAt(centroid) < getLowestValue(d, f) ? centroid : getLowest(d);
                 if (verbose)
                     printPoint(best, f, String.format("====================\nNumber of iterations: %d\nBest", i + 1), 5);
                 lastIterationCount = i + 1;
                 return best;
             }
-            if(timeout>0 && System.currentTimeMillis() - timeStart > timeout){
+            if (timeout > 0 && System.currentTimeMillis() - timeStart > timeout) {
                 throw new RuntimeException("timeout");
             }
 
@@ -51,9 +51,9 @@ public class NelderMeadSimplex implements IOptimizingMethod {
             if (f.valueAt(reflection) < getLowestValue(d, f)) {
                 Point expansion = centroid.expand(reflection, gamma);
                 if (f.valueAt(expansion) < getLowestValue(d, f)) {
-                    updateLowest(expansion, d, f);
+                    updateHighest(expansion, d, f);
                 } else {
-                    updateLowest(reflection, d, f);
+                    updateHighest(reflection, d, f);
                 }
             } else {
                 boolean canBeSecondHighest = d.size() == 1 || f.valueAt(reflection) > f.valueAt(d.get(d.size() - 2));
@@ -77,41 +77,41 @@ public class NelderMeadSimplex implements IOptimizingMethod {
         }
     }
 
-    private void printSimplex(List<Point> d, IFunction f) {
+    private void printSimplex(List<Point> d, AbstractFunction f) {
         System.out.println("Simplex:");
         for (Point p : d) {
             printPoint(p, f, "", 5);
         }
     }
 
-    private void shrinkSimplex(IFunction f, List<Point> d) {
+    private void shrinkSimplex(AbstractFunction f, List<Point> d) {
         for (int i = 1; i < d.size(); i++) {
             d.set(i, d.get(i).shrink(getLowest(d), sigma));
         }
         notifyUpdate(d, f);
     }
 
-    private double getHighestValue(List<Point> d, IFunction f) {
+    private double getHighestValue(List<Point> d, AbstractFunction f) {
         return f.valueAt(getHighest(d));
     }
 
-    private void updateLowest(Point point, List<Point> d, IFunction f) {
+    private void updateLowest(Point point, List<Point> d, AbstractFunction f) {
         d.remove(0);
         d.add(0, point);
         notifyUpdate(d, f);
     }
 
-    private void updateHighest(Point point, List<Point> d, IFunction f) {
+    private void updateHighest(Point point, List<Point> d, AbstractFunction f) {
         d.remove(d.size() - 1);
         d.add(point);
         notifyUpdate(d, f);
     }
 
-    private double getLowestValue(List<Point> d, IFunction f) {
+    private double getLowestValue(List<Point> d, AbstractFunction f) {
         return f.valueAt(getLowest(d));
     }
 
-    private void notifyUpdate(List<Point> d, IFunction f) {
+    private void notifyUpdate(List<Point> d, AbstractFunction f) {
         Collections.sort(d, (a, b) -> Double.compare(f.valueAt(a), f.valueAt(b)));
     }
 

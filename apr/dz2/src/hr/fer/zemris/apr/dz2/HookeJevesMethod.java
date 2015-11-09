@@ -12,7 +12,8 @@ public class HookeJevesMethod implements IOptimizingMethod {
     int lastIterationCount;
 
     @Override
-    public Point findMinimum(IFunction f, Point initialPoint) {
+    public Point findMinimum(AbstractFunction fun, Point initialPoint) {
+        AbstractFunction f = new ProxyFunction(fun);
         Point p = initialPoint.copy();
         Point b = initialPoint.copy();
         int i = 0;
@@ -36,7 +37,8 @@ public class HookeJevesMethod implements IOptimizingMethod {
         return b;
     }
 
-    private Point explore(Point x, double dx, IFunction f) {
+    private Point explore(Point po, double dx, AbstractFunction f) {
+        Point x = po.copy();
         for (int i = 0; i < x.getDimension(); i++) {
             double p = f.valueAt(x);
 
