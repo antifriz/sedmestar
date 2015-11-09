@@ -30,6 +30,10 @@ public class Exercise1 {
 
         for (int i = 10; i < 10000; i *= 2) {
             for (IOptimizingMethod method : Config.getMethods(true)) {
+                if(method instanceof NelderMeadSimplex){
+                    ((NelderMeadSimplex) method).useTweak = false;
+                }
+                method.setVerbosity(true);
                 objects.add(new Object[]{method.getClass().getSimpleName(), method, i});
             }
         }
@@ -48,9 +52,9 @@ public class Exercise1 {
 
         Point minimum = method.findMinimum(function, Point.of(initial));
 
-        System.out.println(function.getAfterOptimizationCallCount());
+        System.out.println("Calls: "+function.getAfterOptimizationCallCount());
 
-        assertEquals(3, minimum.get(0), Config.PRECISION_6);
+        assertEquals(3, minimum.get(0), Config.PRECISION_3);
     }
 
 }

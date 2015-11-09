@@ -18,6 +18,7 @@ public class NelderMeadSimplex implements IOptimizingMethod {
     private boolean verbose = false;
 
     private long timeout = 0;
+    public boolean useTweak = false;
 
     public Point findMinimum(AbstractFunction fun, Point initialPoint) {
         AbstractFunction f = new ProxyFunction(fun);
@@ -33,7 +34,8 @@ public class NelderMeadSimplex implements IOptimizingMethod {
             if (verbose) printSimplex(d, f);
             if (verbose) printPoint(centroid, f, "Centroid", 5);
 
-            if (Math.sqrt(d.stream().mapToDouble(x -> Math.pow(f.valueAt(x) - f.valueAt(centroid), 2)).sum()) <= d.size() * epsilon && Math.sqrt(d.stream().map(centroid::minus).mapToDouble(Point::sumOfSquares).sum()) <= epsilon * d.size()) {
+
+            if (Math.sqrt(d.stream().mapToDouble(x -> Math.pow(f.valueAt(x) - f.valueAt(centroid), 2)).sum()) <= d.size() * epsilon && (!useTweak ||Math.sqrt(d.stream().map(centroid::minus).mapToDouble(Point::sumOfSquares).sum()) <= epsilon * d.size())) {
                 Point best = f.valueAt(centroid) < getLowestValue(d, f) ? centroid : getLowest(d);
                 if (verbose)
                     printPoint(best, f, "Best", 5);

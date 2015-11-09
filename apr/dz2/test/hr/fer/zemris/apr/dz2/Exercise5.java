@@ -12,7 +12,7 @@ public class Exercise5 {
     @Test
     public void test() {
         int counter = 0;
-        int n = 10;
+        int n = 10000;
         for (int i = 0; i < n; i++) {
             ThreadLocalRandom random = ThreadLocalRandom.current();
             Point of = Point.of(random.nextDouble(-50, 50), random.nextDouble(-50, 50));
@@ -30,6 +30,7 @@ public class Exercise5 {
         simplex.setVerbosity(false);
         simplex.setTimeout(1000);
         simplex.simplexT = 50;
+        simplex.useTweak = false;
         Point ps;
         try {
             ps = simplex.findMinimum(function, startingPoint);
