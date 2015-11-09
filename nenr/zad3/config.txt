@@ -1,0 +1,4 @@
+java -jar out/artifacts/controller/zad3.jar
+1
+20
+10
