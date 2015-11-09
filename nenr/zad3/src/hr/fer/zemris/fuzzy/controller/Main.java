@@ -22,6 +22,8 @@ public class Main {
 				S = s.nextInt();
 	        }
 
+
+
 	        // fuzzy magic ...
 
 	        akcel = 100; kormilo = 5;
