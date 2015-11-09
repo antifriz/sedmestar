@@ -20,7 +20,7 @@ public class Exercise5 {
                 counter++;
             }
         }
-        System.out.println(counter/(double)n*100+"%");
+        System.out.printf("%4.2f%%\n",counter/(double)n*100);
     }
 
     private boolean run(Point startingPoint) {
@@ -35,7 +35,7 @@ public class Exercise5 {
             ps = simplex.findMinimum(function, startingPoint);
 
 
-        int dimension = startingPoint.getDimension();
+        //int dimension = startingPoint.getDimension();
         //System.out.printf("NMS: %5d %s %6.4f\n", simplex.lastIterationCount, ps, PointUtils.deviation(ps, function.minimumAt(dimension)));
         return Math.abs(function.minimumValue()-function.valueAt(ps))<=0.0001;
         }
