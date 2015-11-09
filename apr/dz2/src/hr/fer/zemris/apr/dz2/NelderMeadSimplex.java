@@ -95,12 +95,6 @@ public class NelderMeadSimplex implements IOptimizingMethod {
         return f.valueAt(getHighest(d));
     }
 
-    private void updateLowest(Point point, List<Point> d, AbstractFunction f) {
-        d.remove(0);
-        d.add(0, point);
-        notifyUpdate(d, f);
-    }
-
     private void updateHighest(Point point, List<Point> d, AbstractFunction f) {
         d.remove(d.size() - 1);
         d.add(point);
