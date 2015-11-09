@@ -17,9 +17,9 @@ public class HookeJevesMethod implements IOptimizingMethod {
         double dx = INITIAL_DX;
         do {
             Point n = explore(p, dx, f);
-            int precision = 5;
+            int precision = 10;
             if (verbose)
-                System.out.printf("%s %s %s\n", pointToString(b, f, precision), pointToString(p, f, precision), pointToString(n, f, precision));
+                System.out.printf("%8.6f | %s %s %s\n", dx,pointToString(b, f, precision), pointToString(p, f, precision), pointToString(n, f, precision));
             if (f.valueAt(n) < f.valueAt(b)) {
                 p = n.multiply(2).minus(b);
                 b = n;
