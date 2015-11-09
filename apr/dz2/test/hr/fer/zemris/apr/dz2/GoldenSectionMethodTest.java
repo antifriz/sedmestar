@@ -14,16 +14,15 @@ public class GoldenSectionMethodTest {
 
         GoldenSectionMethod goldenSectionMethod = new GoldenSectionMethod();
 
-        AbstractFunction1D function = new AbstractFunction1D() {
-            @Override
-            double internalValueAt(double x) {
-                return (x - 3) * (x - 3);
-            }
-        };
-
         for (double h = 1; h < 20; h++) {
             for (int point = -20; point < 20; point++) {
-                double optima = goldenSectionMethod.findOptima(function, h, point, false);
+                double optima = goldenSectionMethod.findOptima(new AbstractFunction() {
+                    @Override
+                    protected double internalValueAt(Point point) {
+                        return Math.pow(point.get(0) - 3,2);
+                    }
+                }, point, false);
+                goldenSectionMethod.h = h;
                 assertEquals(optima,3,Math.pow(10,6));
             }
         }

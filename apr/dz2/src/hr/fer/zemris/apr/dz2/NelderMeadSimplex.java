@@ -15,10 +15,9 @@ public class NelderMeadSimplex implements IOptimizingMethod {
     public double sigma = 0.5;
     public double simplexT = 1;
 
-    boolean verbose = false;
+    private boolean verbose = false;
 
-    int lastIterationCount;
-    long timeout = 0;
+    private long timeout = 0;
 
     public Point findMinimum(AbstractFunction fun, Point initialPoint) {
         AbstractFunction f = new ProxyFunction(fun);
@@ -29,17 +28,15 @@ public class NelderMeadSimplex implements IOptimizingMethod {
         notifyUpdate(d, f);
 
         long timeStart = System.currentTimeMillis();
-        int i = 0;
         while (true) {
             final Point centroid = PointUtils.centroid(d, getHighest(d));
             if (verbose) printSimplex(d, f);
             if (verbose) printPoint(centroid, f, "Centroid", 5);
 
-            if (Math.sqrt(d.stream().mapToDouble(x -> Math.pow(f.valueAt(x) - f.valueAt(centroid), 2)).sum()) <= d.size() * epsilon && Math.sqrt(d.stream().map(centroid::minus).mapToDouble(Point::sumOfSquares).sum())<=epsilon * d.size()) {
+            if (Math.sqrt(d.stream().mapToDouble(x -> Math.pow(f.valueAt(x) - f.valueAt(centroid), 2)).sum()) <= d.size() * epsilon && Math.sqrt(d.stream().map(centroid::minus).mapToDouble(Point::sumOfSquares).sum()) <= epsilon * d.size()) {
                 Point best = f.valueAt(centroid) < getLowestValue(d, f) ? centroid : getLowest(d);
                 if (verbose)
-                    printPoint(best, f, String.format("====================\nNumber of iterations: %d\nBest", i + 1), 5);
-                lastIterationCount = i + 1;
+                    printPoint(best, f, "Best", 5);
                 return best;
             }
             if (timeout > 0 && System.currentTimeMillis() - timeStart > timeout) {
@@ -73,8 +70,17 @@ public class NelderMeadSimplex implements IOptimizingMethod {
                     updateHighest(reflection, d, f);
                 }
             }
-            i++;
         }
+    }
+
+    @Override
+    public void setVerbosity(boolean isVerbose) {
+        verbose = isVerbose;
+    }
+
+    @Override
+    public void setTimeout(long time) {
+        timeout = time;
     }
 
     private void printSimplex(List<Point> d, AbstractFunction f) {

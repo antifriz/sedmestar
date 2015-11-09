@@ -14,13 +14,15 @@ public class Exercise3 {
 
         NelderMeadSimplex simplex = new NelderMeadSimplex();
         Point ps = simplex.findMinimum(function, startingPoint);
+        int ccs = function.getAfterOptimizationCallCount();
 
 
         HookeJevesMethod hooke = new HookeJevesMethod();
         Point ph = hooke.findMinimum(function, startingPoint);
+        int cch = function.getAfterOptimizationCallCount();
 
 
         int dimension = startingPoint.getDimension();
-        System.out.printf("NMS: %5d %s %6.4f | HJM: %5d %s %6.4f\n", simplex.lastIterationCount, ps, PointUtils.deviation(ps, function.minimumAt(dimension)), hooke.lastIterationCount, ph, PointUtils.deviation(ph, function.minimumAt(dimension)));
+        System.out.printf("NMS: %5d %s %6.4f | HJM: %5d %s %6.4f\n", ccs, ps, PointUtils.deviation(ps, function.minimumAt(dimension)), cch, ph, PointUtils.deviation(ph, function.minimumAt(dimension)));
     }
 }

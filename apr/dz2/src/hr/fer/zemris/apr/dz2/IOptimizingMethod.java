@@ -13,4 +13,8 @@ public interface IOptimizingMethod {
     default String pointToString(Point p, AbstractFunction f, int precision) {
         return String.format("%s -> %f", p.toString(precision), f.valueAt(p));
     }
+
+    void setVerbosity(boolean isVerbose);
+
+    void setTimeout(long time);
 }

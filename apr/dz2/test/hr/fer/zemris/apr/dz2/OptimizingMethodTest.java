@@ -34,12 +34,9 @@ public class OptimizingMethodTest {
         List<Object[]> objects = new ArrayList<>();
 
         int[] dims = new int[]{1, 2, 3, 5, 10};
-        NelderMeadSimplex nelderMeadSimplex = new NelderMeadSimplex();
-        nelderMeadSimplex.timeout=10000;
-        nelderMeadSimplex.verbose = true;
-        HookeJevesMethod hookeJevesMethod = new HookeJevesMethod();
-        IOptimizingMethod[] methods = new IOptimizingMethod[]{nelderMeadSimplex, hookeJevesMethod};
-        for (IOptimizingMethod method : methods) {
+        for (IOptimizingMethod method : Config.getMethods(false)) {
+            method.setVerbosity(true);
+            method.setTimeout(10000);
             for (int i = 0; i < Functions.size(); i++) {
                 for (int d : dims) {
                     AbstractFunctionToOptimize iFunctionToOptimize = Functions.get(i);

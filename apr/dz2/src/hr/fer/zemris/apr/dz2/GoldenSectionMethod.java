@@ -3,19 +3,29 @@ package hr.fer.zemris.apr.dz2;
 /**
  * Created by ivan on 11/7/15.
  */
-public class GoldenSectionMethod {
+public class GoldenSectionMethod implements IOptimizingMethod {
 
     private static final double DEFAULT_K = 0.5 * Math.sqrt(5) - 0.5;
     private static final double DEFAULT_E = Math.pow(10, -6);
-    private final double k = DEFAULT_K;
-    private final double e;
+    public static final int DEFAULT_H = 1;
+    public double k = DEFAULT_K;
+    public double e = DEFAULT_E;
+    public double h = DEFAULT_H;
 
-    public GoldenSectionMethod(double e) {
-        this.e = e;
+    @Override
+    public Point findMinimum(AbstractFunction f, Point initialPoint) {
+        assert initialPoint.getDimension() == 1;
+        return Point.of(findOptima(f, initialPoint.get(0), false));
     }
 
-    public GoldenSectionMethod() {
-        this.e = DEFAULT_E;
+    @Override
+    public void setVerbosity(boolean isVerbose) {
+
+    }
+
+    @Override
+    public void setTimeout(long time) {
+
     }
 
     public class Interval {
@@ -28,26 +38,27 @@ public class GoldenSectionMethod {
         }
     }
 
-    public double findOptima(AbstractFunction1D f, double h, double point, boolean isUnimodal) {
+    public double findOptima(AbstractFunction fun, double point, boolean isUnimodal) {
+        // AbstractFunction f = new ProxyFunction(fun);
         Interval interval;
         if (!isUnimodal) {
-            interval = unimodalInterval(f, h, point);
+            interval = unimodalInterval(fun, h, point);
         } else {
             interval = new Interval(point - h, point + h);
         }
-        return goldenMean(f, interval.left, interval.right);
+        return goldenMean(fun, interval.left, interval.right);
     }
 
-    Interval unimodalInterval(AbstractFunction1D f, double h, double point) {
+    private Interval unimodalInterval(AbstractFunction f, double h, double point) {
         double left = point - h;
         double right = point + h;
         double m = point;
         double fl, fm, fr;
         int step = 1;
 
-        fm = f.valueAt(point);
-        fl = f.valueAt(left);
-        fr = f.valueAt(right);
+        fm = value(f, point);
+        fl = value(f, left);
+        fr = value(f, right);
 
         if (fm < fr && fm < fl)
             return new Interval(left, right);
@@ -57,7 +68,7 @@ public class GoldenSectionMethod {
                 m = right;
                 fm = fr;
                 right = point + h * (step *= 2);
-                fr = f.valueAt(right);
+                fr = value(f, right);
             } while (fm > fr);
         else
             do {
@@ -65,16 +76,16 @@ public class GoldenSectionMethod {
                 m = left;
                 fm = fl;
                 left = point - h * (step *= 2);
-                fl = f.valueAt(left);
+                fl = value(f, left);
             } while (fm > fl);
         return new Interval(left, right);
     }
 
-    double goldenMean(AbstractFunction1D f, double a, double b) {
+    private double goldenMean(AbstractFunction f, double a, double b) {
         double c = b - k * (b - a);
         double d = a + k * (b - a);
-        double fc = f.valueAt(c);
-        double fd = f.valueAt(d);
+        double fc = value(f, c);
+        double fd = value(f, d);
 
         while ((b - a) > e) {
             if (fc < fd) {
@@ -82,15 +93,19 @@ public class GoldenSectionMethod {
                 d = c;
                 c = b - k * (b - a);
                 fd = fc;
-                fc = f.valueAt(c);
+                fc = value(f, c);
             } else {
                 a = c;
                 c = d;
                 d = a + k * (b - a);
                 fc = fd;
-                fd = f.valueAt(d);
+                fd = value(f, d);
             }
         }
         return (a + b) / 2;
+    }
+
+    private double value(AbstractFunction f, double point) {
+        return f.valueAt(Point.of(point));
     }
 }

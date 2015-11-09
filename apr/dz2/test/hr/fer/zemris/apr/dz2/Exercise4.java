@@ -39,14 +39,15 @@ public class Exercise4 {
         AbstractFunctionToOptimize function = Functions.get(3);
 
         NelderMeadSimplex simplex = new NelderMeadSimplex();
-        simplex.verbose=false;
+        simplex.setVerbosity(false);
         simplex.simplexT=simplexStep;
-        simplex.timeout = 1000;
+        simplex.setTimeout( 1000);
         Point ps = simplex.findMinimum(function, startingPoint);
+        int ccs = function.getAfterOptimizationCallCount();
 
 
         int dimension = startingPoint.getDimension();
-        System.out.printf("NMS: %5d %s %6.4f", simplex.lastIterationCount, ps, PointUtils.deviation(ps, function.minimumAt(dimension)));
+        System.out.printf("NMS: %5d %s %6.4f", ccs, ps, PointUtils.deviation(ps, function.minimumAt(dimension)));
         org.junit.Assert.assertEquals(function.minimumValue(),function.valueAt(ps),Config.PRECISION_6);
     }
 

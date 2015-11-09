@@ -4,20 +4,17 @@ package hr.fer.zemris.apr.dz2;
  * Created by ivan on 11/8/15.
  */
 public class HookeJevesMethod implements IOptimizingMethod {
-    private double initialDx = 0.5;
+    public static final double INITIAL_DX = 0.5;
     private double precision = Config.PRECISION_6;
 
-    boolean verbose = false;
-
-    int lastIterationCount;
+    private boolean verbose = false;
 
     @Override
     public Point findMinimum(AbstractFunction fun, Point initialPoint) {
         AbstractFunction f = new ProxyFunction(fun);
         Point p = initialPoint.copy();
         Point b = initialPoint.copy();
-        int i = 0;
-        double dx = initialDx;
+        double dx = INITIAL_DX;
         do {
             Point n = explore(p, dx, f);
             int precision = 5;
@@ -30,10 +27,8 @@ public class HookeJevesMethod implements IOptimizingMethod {
                 dx /= 2;
                 p = b;
             }
-            i++;
         } while (dx > precision);
-        if (verbose) printPoint(b, f, String.format("====================\nNumber of iterations: %d\nBest", i), 5);
-        lastIterationCount = i;
+        if (verbose) printPoint(b, f, "Best", 5);
         return b;
     }
 
@@ -56,5 +51,13 @@ public class HookeJevesMethod implements IOptimizingMethod {
         return x;
     }
 
+    @Override
+    public void setVerbosity(boolean isVerbose) {
+        verbose = isVerbose;
+    }
 
+    @Override
+    public void setTimeout(long time) {
+
+    }
 }

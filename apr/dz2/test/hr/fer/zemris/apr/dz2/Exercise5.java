@@ -10,36 +10,34 @@ import java.util.concurrent.ThreadLocalRandom;
 public class Exercise5 {
 
     @Test
-    public void testA() {
+    public void test() {
         int counter = 0;
-        int n = 1000;
+        int n = 10;
         for (int i = 0; i < n; i++) {
             ThreadLocalRandom random = ThreadLocalRandom.current();
             Point of = Point.of(random.nextDouble(-50, 50), random.nextDouble(-50, 50));
-            if(run(of)){
+            if (run(of)) {
                 counter++;
             }
         }
-        System.out.printf("%4.2f%%\n",counter/(double)n*100);
+        System.out.printf("%4.2f%%\n", counter / (double) n * 100);
     }
 
     private boolean run(Point startingPoint) {
         AbstractFunctionToOptimize function = Functions.get(4);
 
         NelderMeadSimplex simplex = new NelderMeadSimplex();
-        simplex.verbose=false;
-        simplex.timeout= 1000;
-        simplex.simplexT=50;
+        simplex.setVerbosity(false);
+        simplex.setTimeout(1000);
+        simplex.simplexT = 50;
         Point ps;
-        try{
+        try {
             ps = simplex.findMinimum(function, startingPoint);
-
-
-        //int dimension = startingPoint.getDimension();
-        //System.out.printf("NMS: %5d %s %6.4f\n", simplex.lastIterationCount, ps, PointUtils.deviation(ps, function.minimumAt(dimension)));
-        return Math.abs(function.minimumValue()-function.valueAt(ps))<=0.0001;
-        }
-        catch (Throwable e){
+            // int ccs = function.getAfterOptimizationCallCount();
+            //int dimension = startingPoint.getDimension();
+            //System.out.printf("NMS: %5d %s %6.4f\n", ccs, ps, PointUtils.deviation(ps, function.minimumAt(dimension)));
+            return Math.abs(function.minimumValue() - function.valueAt(ps)) <= 0.0001;
+        } catch (Throwable e) {
             return false;
         }
     }
