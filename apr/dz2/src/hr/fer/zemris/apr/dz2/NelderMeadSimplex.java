@@ -49,11 +49,7 @@ public class NelderMeadSimplex implements IOptimizingMethod {
 
             if (f.valueAt(reflection) < getLowestValue(d, f)) {
                 Point expansion = centroid.expand(reflection, gamma);
-                if (f.valueAt(expansion) < getLowestValue(d, f)) {
-                    updateHighest(expansion, d, f);
-                } else {
-                    updateHighest(reflection, d, f);
-                }
+                updateHighest(f.valueAt(expansion) < getLowestValue(d, f) ? expansion : reflection, d, f);
             } else {
                 boolean canBeSecondHighest = d.size() == 1 || f.valueAt(reflection) > f.valueAt(d.get(d.size() - 2));
                 if (canBeSecondHighest) {
