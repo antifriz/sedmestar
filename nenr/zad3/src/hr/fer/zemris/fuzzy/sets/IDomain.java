@@ -1,4 +1,4 @@
-package hr.fer.zemris.fuzzy.controller;
+package hr.fer.zemris.fuzzy.sets;
 
 /**
  * Created by ivan on 10/14/15.
@@ -13,4 +13,8 @@ public interface IDomain extends Iterable<DomainElement> {
     int indexOfElement(DomainElement element);
 
     DomainElement elementForIndex(int index);
+
+    default int indexOfElement(int ...indexes){
+        return indexOfElement(new DomainElement(indexes));
+    }
 }

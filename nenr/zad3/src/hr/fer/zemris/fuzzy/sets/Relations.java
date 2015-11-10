@@ -1,4 +1,4 @@
-package hr.fer.zemris.fuzzy.controller;
+package hr.fer.zemris.fuzzy.sets;
 
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
@@ -16,6 +16,9 @@ public class Relations {
     }
 
     public static IFuzzySet compositionOfBinaryRelations(IFuzzySet relation1, IFuzzySet relation2) {
+        assert relation1.getDomain().getCardinality() == 2;
+        assert relation2.getDomain().getCardinality() == 2;
+
         SimpleDomain U = (SimpleDomain) relation1.getDomain().getComponent(0);
         SimpleDomain V = (SimpleDomain) relation1.getDomain().getComponent(1);
         SimpleDomain W = (SimpleDomain) relation2.getDomain().getComponent(1);

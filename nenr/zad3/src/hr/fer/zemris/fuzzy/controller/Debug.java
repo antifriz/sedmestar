@@ -1,5 +1,9 @@
 package hr.fer.zemris.fuzzy.controller;
 
+import hr.fer.zemris.fuzzy.sets.DomainElement;
+import hr.fer.zemris.fuzzy.sets.IDomain;
+import hr.fer.zemris.fuzzy.sets.IFuzzySet;
+
 /**
  * Created by ivan on 10/14/15.
  */

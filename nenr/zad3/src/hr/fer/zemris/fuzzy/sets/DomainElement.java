@@ -1,4 +1,4 @@
-package hr.fer.zemris.fuzzy.controller;
+package hr.fer.zemris.fuzzy.sets;
 
 import java.util.Arrays;
 
@@ -16,11 +16,11 @@ public class DomainElement {
         return new DomainElement(values);
     }
 
-    int getNumberOfComponents() {
+    public int getNumberOfComponents() {
         return values.length;
     }
 
-    int getComponentValue(int idx) {
+    public int getComponentValue(int idx) {
         return values[idx];
     }
 
@@ -43,5 +43,9 @@ public class DomainElement {
     @Override
     public String toString() {
         return Arrays.toString(values);
+    }
+
+    public DomainElement subset(int from, int to) {
+        return new DomainElement(Arrays.copyOfRange(values,from,to));
     }
 }

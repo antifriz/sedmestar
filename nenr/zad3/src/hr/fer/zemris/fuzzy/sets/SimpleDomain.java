@@ -1,4 +1,4 @@
-package hr.fer.zemris.fuzzy.controller;
+package hr.fer.zemris.fuzzy.sets;
 
 import java.util.Iterator;
 import java.util.NoSuchElementException;

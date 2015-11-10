@@ -1,5 +1,6 @@
-package hr.fer.zemris.fuzzy.controller;
+package hr.fer.zemris.fuzzy.sets;
 
+import java.util.HashMap;
 import java.util.Iterator;
 
 /**
@@ -10,7 +11,7 @@ public abstract class Domain implements IDomain {
     public Domain() {
     }
 
-    public static IDomain intRange(int first, int last) {
+    public static SimpleDomain intRange(int first, int last) {
         return new SimpleDomain(first, last);
     }
 
@@ -38,18 +39,23 @@ public abstract class Domain implements IDomain {
         return new CompositeDomain(domains);
     }
 
+    private HashMap<DomainElement, Integer> indexes = new HashMap<>();
+
     @Override
     public int indexOfElement(DomainElement element) {
-        Iterator<DomainElement> it = iterator();
-        int index = 0;
-        while (it.hasNext()) {
-            DomainElement de = it.next();
-            if (de.equals(element)) {
-                return index;
+        return indexes.computeIfAbsent(element, x -> {
+
+            Iterator<DomainElement> it = iterator();
+            int index = 0;
+            while (it.hasNext()) {
+                DomainElement de = it.next();
+                if (de.equals(x)) {
+                    return index;
+                }
+                index++;
             }
-            index++;
-        }
-        return -1;
+            throw new RuntimeException();
+        });
     }
 
     @Override
