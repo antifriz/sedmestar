@@ -28,7 +28,7 @@ public class Main {
 	        }
 
 
-            Pair<Integer, Integer> infer = FuzzySystem.infer(L - D, LK - DK, V);
+            Pair<Integer, Integer> infer = FuzzySystem.infer(L,D,LK,DK,V,S);
 
             // fuzzy magic ...
 	        akcel = infer.getKey();

@@ -54,7 +54,7 @@ public abstract class Domain implements IDomain {
                 }
                 index++;
             }
-            throw new RuntimeException();
+            throw new RuntimeException("No element "+element.toString());
         });
     }
 
