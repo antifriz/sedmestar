@@ -18,8 +18,8 @@ public abstract class FuzzySystem {
     public abstract int infer(int... input);
 
 
-    public static final int MAX_ACCELERATION = 40;
-    public static final int MAX_DISTANCE = 2000;
+    public static final int MAX_ACCELERATION = 80;
+    public static final int MAX_DISTANCE = 8000;
     public static final int MAX_SPEED = 2000;
     private static final int MAX_ANGLE = 120;
 
@@ -35,12 +35,6 @@ public abstract class FuzzySystem {
         FAST
     }
 
-    enum Acceleration {
-        NEGATIVE,
-        ZERO,
-        POSITIVE
-    }
-
     public static Pair<Integer, Integer> infer(int L, int D, int LK, int DK, int V, int S) {
         SimpleDomain relativeDistanceDomain = Domain.intRange(-MAX_DISTANCE, MAX_DISTANCE + 1);
 
@@ -51,8 +45,8 @@ public abstract class FuzzySystem {
         DomainElement neg15 = DomainElement.of(-15);
         DomainElement pos15 = DomainElement.of(15);
 
-        DomainElement minAcceleration = DomainElement.of(-MAX_ACCELERATION);
-        DomainElement maxAcceleration = DomainElement.of(MAX_ACCELERATION);
+        DomainElement minAcceleration = DomainElement.of(-MAX_ACCELERATION/2);
+        DomainElement maxAcceleration = DomainElement.of(MAX_ACCELERATION/2);
         DomainElement minAngle = DomainElement.of(-MAX_ANGLE / 4);
         DomainElement maxAngle = DomainElement.of(MAX_ANGLE / 4);
 
@@ -71,49 +65,32 @@ public abstract class FuzzySystem {
         IFuzzySet prettyPositiveAngle = StandardFuzzySets.gammaFunctionSet(angleDomain, zero, maxAngle);
 
 
-        DomainElement velSlow = DomainElement.of(40);
-        DomainElement velMid = DomainElement.of(120);
-        DomainElement velHigh = DomainElement.of(160);
+        DomainElement velSlow = DomainElement.of(60);
+        DomainElement velMid = DomainElement.of(200);
+        DomainElement velHigh = DomainElement.of(250);
 
         IFuzzySet slow = StandardFuzzySets.lFunctionSet(velocityDomain, velSlow, velMid);
         IFuzzySet mid = StandardFuzzySets.lambdaFunctionSet(velocityDomain, velSlow, velMid, velHigh);
         IFuzzySet fast = StandardFuzzySets.gammaFunctionSet(velocityDomain, velMid, velHigh);
 
 
-        double k =2;
-        IFuzzySet relativeLD = generateFuzzyInput((int)(k*(L - D) + (LK *Math.sqrt(2) - L)+ (D - DK*Math.sqrt(2))), prettyNegativeRelativeDistance, aroundZeroRelativeDistance, prettyPositiveRelativeDistance);
-        IFuzzySet relativeLKDK = generateFuzzyInput(LK - DK, prettyNegativeRelativeDistance, aroundZeroRelativeDistance, prettyPositiveRelativeDistance);
+        double k1 =2;
+        double k2 =2;
+        IFuzzySet relativeLD = generateFuzzyInput((int)(k1*(L - D) + (LK *Math.sqrt(2) - L)+ (D - DK*Math.sqrt(2))+k2*(LK - DK)), prettyNegativeRelativeDistance, aroundZeroRelativeDistance, prettyPositiveRelativeDistance);
         IFuzzySet velocity = generateFuzzyInput(V, slow, mid, fast);
 
-
         IFuzzySet LDvelocity = cartesianSet(relativeLD, velocity);
-        IFuzzySet LKDKvelocity = cartesianSet(relativeLKDK, velocity);
-
-        IFuzzySet Ldistance =  generateFuzzyInput(L, StandardFuzzySets.lFunctionSet(velocityDomain, DomainElement.of(30), DomainElement.of(50)),
-                StandardFuzzySets.lambdaFunctionSet(velocityDomain, DomainElement.of(30), DomainElement.of(50),DomainElement.of(100)),
-                StandardFuzzySets.lFunctionSet(velocityDomain, DomainElement.of(50), DomainElement.of(100)));
-        IFuzzySet Ddistance =  generateFuzzyInput(D, slow, mid, fast);
-
-        HashMap<DomainElement, IFuzzySet> accelerationRulesNew = new HashMap<>();
-        addRule(accelerationRulesNew, Velocity.FAST, prettyPositiveAcceleration);
-        addRule(accelerationRulesNew, Velocity.MID, aroundZeroAcceleration);
-        addRule(accelerationRulesNew, Velocity.SLOW, prettyNegativeAcceleration);
-
-        IFuzzySet inferAccFromLdistance = infer(Ldistance, accelerationRulesNew);
-        IFuzzySet inferAccFromDdistance = infer(Ddistance, accelerationRulesNew);
-
 
         HashMap<DomainElement, IFuzzySet> accelerationRules = new HashMap<>();
 
-        CalculatedFuzzySet one = new CalculatedFuzzySet(accelerationDomain, x -> 1);
         addCartesianRule(accelerationRules, RelativeDistance.NEGATIVE, Velocity.FAST, prettyNegativeAcceleration);
-        addCartesianRule(accelerationRules, RelativeDistance.NEGATIVE, Velocity.MID, one);
+        addCartesianRule(accelerationRules, RelativeDistance.NEGATIVE, Velocity.MID, prettyNegativeAcceleration);
         addCartesianRule(accelerationRules, RelativeDistance.NEGATIVE, Velocity.SLOW, prettyPositiveAcceleration);
         addCartesianRule(accelerationRules, RelativeDistance.ZERO, Velocity.FAST, prettyNegativeAcceleration);
         addCartesianRule(accelerationRules, RelativeDistance.ZERO, Velocity.MID, aroundZeroAcceleration);
         addCartesianRule(accelerationRules, RelativeDistance.ZERO, Velocity.SLOW, prettyPositiveAcceleration);
         addCartesianRule(accelerationRules, RelativeDistance.POSITIVE, Velocity.FAST, prettyNegativeAcceleration);
-        addCartesianRule(accelerationRules, RelativeDistance.POSITIVE, Velocity.MID, one);
+        addCartesianRule(accelerationRules, RelativeDistance.POSITIVE, Velocity.MID, prettyNegativeAcceleration);
         addCartesianRule(accelerationRules, RelativeDistance.POSITIVE, Velocity.SLOW, prettyPositiveAcceleration);
 
         HashMap<DomainElement, IFuzzySet> angleRules = new HashMap<>();
@@ -129,27 +106,14 @@ public abstract class FuzzySystem {
         addCartesianRule(angleRules, RelativeDistance.POSITIVE, Velocity.FAST, prettyPositiveAngle);
 
 
-        IFuzzySet inferAccFromLKDKDiff = infer(LKDKvelocity, accelerationRules);
-        IFuzzySet inferAccFromLDDiff = infer(LDvelocity, accelerationRules);
+        IFuzzySet inferAcc = infer(LDvelocity, accelerationRules);
 
-
-        IFuzzySet inferAcc = Operations.binaryOperation(inferAccFromLKDKDiff, inferAccFromLDDiff, Operations.zadehOr());
-       // inferAcc = Operations.binaryOperation(inferAcc, inferAccFromDdistance, Operations.zadehOr());
-     //   inferAcc = Operations.binaryOperation(inferAcc, inferAccFromLdistance, Operations.zadehOr());
         int x1 = COADefuzzifier.indexOfDefuzzified(inferAcc);
         int acceleration = inferAcc.getDomain().elementForIndex(x1).getComponentValue(0);
-        //Debug.print(inferAcc,"acc");
-        //System.out.println(acceleration);
+        IFuzzySet inferAngle = infer(LDvelocity, angleRules);
 
-        IFuzzySet inferAngleFromLKDK = infer(LKDKvelocity, angleRules);
-        IFuzzySet inferAngleFromLD = infer(LDvelocity, angleRules);
-
-        IFuzzySet inferAngle = Operations.binaryOperation(inferAngleFromLKDK, inferAngleFromLD, Operations.zadehOr());
         int x2 = COADefuzzifier.indexOfDefuzzified(inferAngle);
         int angle = inferAngle.getDomain().elementForIndex(x2).getComponentValue(0);
-        //Debug.print(inferAngle,"angle");
-        //System.out.println(angle);
-
 
         return new Pair<>(acceleration, angle);
     }
