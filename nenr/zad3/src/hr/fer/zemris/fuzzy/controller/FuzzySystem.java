@@ -18,10 +18,12 @@ public abstract class FuzzySystem {
     public abstract int infer(int... input);
 
 
-    public static final int MAX_ACCELERATION = 80;
-    public static final int MAX_DISTANCE = 8000;
+    public static final int DISTANCE_SPEEDUP = 10;
+
+    public static final int MAX_ACCELERATION = 2;
+    public static final int MAX_DISTANCE = 8000/DISTANCE_SPEEDUP;
     public static final int MAX_SPEED = 2000;
-    private static final int MAX_ANGLE = 120;
+    private static final int MAX_ANGLE = 135;
 
     enum RelativeDistance {
         NEGATIVE,
@@ -42,13 +44,13 @@ public abstract class FuzzySystem {
         SimpleDomain angleDomain = Domain.intRange(-MAX_ANGLE, MAX_ANGLE + 1);
         SimpleDomain velocityDomain = Domain.intRange(0, MAX_SPEED);
 
-        DomainElement neg15 = DomainElement.of(-15);
-        DomainElement pos15 = DomainElement.of(15);
+        DomainElement neg15 = DomainElement.of(-120/DISTANCE_SPEEDUP);
+        DomainElement pos15 = DomainElement.of(120/DISTANCE_SPEEDUP);
 
         DomainElement minAcceleration = DomainElement.of(-MAX_ACCELERATION/2);
         DomainElement maxAcceleration = DomainElement.of(MAX_ACCELERATION/2);
-        DomainElement minAngle = DomainElement.of(-MAX_ANGLE / 4);
-        DomainElement maxAngle = DomainElement.of(MAX_ANGLE / 4);
+        DomainElement minAngle = DomainElement.of(-MAX_ANGLE);
+        DomainElement maxAngle = DomainElement.of(MAX_ANGLE);
 
 
         DomainElement zero = DomainElement.of(0);
@@ -65,9 +67,9 @@ public abstract class FuzzySystem {
         IFuzzySet prettyPositiveAngle = StandardFuzzySets.gammaFunctionSet(angleDomain, zero, maxAngle);
 
 
-        DomainElement velSlow = DomainElement.of(60);
-        DomainElement velMid = DomainElement.of(200);
-        DomainElement velHigh = DomainElement.of(250);
+        DomainElement velSlow = DomainElement.of(115);
+        DomainElement velMid = DomainElement.of(260);
+        DomainElement velHigh = DomainElement.of(270);
 
         IFuzzySet slow = StandardFuzzySets.lFunctionSet(velocityDomain, velSlow, velMid);
         IFuzzySet mid = StandardFuzzySets.lambdaFunctionSet(velocityDomain, velSlow, velMid, velHigh);
@@ -75,8 +77,10 @@ public abstract class FuzzySystem {
 
 
         double k1 =2;
-        double k2 =2;
-        IFuzzySet relativeLD = generateFuzzyInput((int)(k1*(L - D) + (LK *Math.sqrt(2) - L)+ (D - DK*Math.sqrt(2))+k2*(LK - DK)), prettyNegativeRelativeDistance, aroundZeroRelativeDistance, prettyPositiveRelativeDistance);
+        double k2 =4;
+        int input = (int) (k1 * (L - D) + (LK * Math.sqrt(2) - L) + (D - DK * Math.sqrt(2)) + k2 * (LK - DK));
+        input /=10;
+        IFuzzySet relativeLD = generateFuzzyInput(input, prettyNegativeRelativeDistance, aroundZeroRelativeDistance, prettyPositiveRelativeDistance);
         IFuzzySet velocity = generateFuzzyInput(V, slow, mid, fast);
 
         IFuzzySet LDvelocity = cartesianSet(relativeLD, velocity);
@@ -115,7 +119,7 @@ public abstract class FuzzySystem {
         int x2 = COADefuzzifier.indexOfDefuzzified(inferAngle);
         int angle = inferAngle.getDomain().elementForIndex(x2).getComponentValue(0);
 
-        return new Pair<>(acceleration, angle);
+        return new Pair<>(acceleration*20, angle);
     }
 
 
