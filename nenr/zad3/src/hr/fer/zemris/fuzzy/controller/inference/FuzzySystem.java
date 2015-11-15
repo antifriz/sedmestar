@@ -2,7 +2,6 @@ package hr.fer.zemris.fuzzy.controller.inference;
 
 import hr.fer.zemris.fuzzy.controller.Defuzzifier;
 import hr.fer.zemris.fuzzy.sets.*;
-import javafx.util.Pair;
 
 import java.util.HashMap;
 
@@ -70,7 +69,8 @@ public abstract class FuzzySystem {
 
         IFuzzySet output = new MutableFuzzySet(rules.entrySet().iterator().next().getValue().getDomain());
         for (DomainElement element : input.getDomain()) {
-            IFuzzySet set = Operations.unaryOperation(rules.get(element), domainValue -> Operations.zadehAnd().valueAt(domainValue, input.getValueAt(element)));
+           // IFuzzySet set = Operations.unaryOperation(rules.get(element), domainValue -> Operations.zadehAnd().valueAt(domainValue, input.getValueAt(element)));
+            IFuzzySet set = Operations.unaryOperation(rules.get(element), domainValue -> domainValue* input.getValueAt(element));
 
             output = Operations.binaryOperation(output, set, Operations.zadehOr());
         }
