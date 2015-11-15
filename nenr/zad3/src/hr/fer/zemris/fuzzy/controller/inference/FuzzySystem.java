@@ -10,11 +10,11 @@ import java.util.HashMap;
  * Created by ivan on 11/9/15.
  */
 public abstract class FuzzySystem {
-    Defuzzifier mDefuzzifier;
-    public static final int MAX_SPEED = 2000;
-    public static final int DISTANCE_SPEEDUP = 10;
+    final Defuzzifier mDefuzzifier;
+    private static final int MAX_SPEED = 2000;
+    private static final int DISTANCE_SPEEDUP = 10;
 
-    public static final int MAX_DISTANCE = 8000 / DISTANCE_SPEEDUP;
+    private static final int MAX_DISTANCE = 8000 / DISTANCE_SPEEDUP;
     final IFuzzySet mSlow;
     final IFuzzySet mMid;
     final IFuzzySet mFast;
@@ -22,7 +22,7 @@ public abstract class FuzzySystem {
     final IFuzzySet mAroundZeroRelativeDistance;
     final IFuzzySet mPrettyPositiveRelativeDistance;
 
-    public FuzzySystem(Defuzzifier defuzzifier) {
+    FuzzySystem(Defuzzifier defuzzifier) {
         mDefuzzifier = defuzzifier;
 
 

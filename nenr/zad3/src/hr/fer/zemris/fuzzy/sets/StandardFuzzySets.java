@@ -16,7 +16,7 @@ public class StandardFuzzySets {
         return new CalculatedFuzzySet(domain, StandardFuzzySets.gammaFunction(domain.indexOfElement(from), domain.indexOfElement(to)));
     }
 
-    public static IIntUnaryFunction lFunction(int from, int to) {
+    private static IIntUnaryFunction lFunction(int from, int to) {
         if (from > to) {
             throw new IllegalStateException();
         }
@@ -31,7 +31,7 @@ public class StandardFuzzySets {
         };
     }
 
-    public static IIntUnaryFunction gammaFunction(int from, int to) {
+    private static IIntUnaryFunction gammaFunction(int from, int to) {
         if (from > to) {
             throw new IllegalStateException();
         }
@@ -46,7 +46,7 @@ public class StandardFuzzySets {
         };
     }
 
-    public static IIntUnaryFunction lambdaFunction(int from, int peak, int to) {
+    private static IIntUnaryFunction lambdaFunction(int from, int peak, int to) {
         if (from > peak || peak > to) {
             throw new IllegalStateException();
         }
@@ -61,21 +61,6 @@ public class StandardFuzzySets {
                 return (to - x) / (double) (to - peak);
             }
             return 0;
-        };
-    }
-
-    public static IIntUnaryFunction concentrate(IIntUnaryFunction function) {
-        return x -> Math.pow(function.valueAt(x), 2);
-    }
-
-    public static IIntUnaryFunction dilate(IIntUnaryFunction function) {
-        return x -> Math.sqrt(function.valueAt(x));
-    }
-
-    public static IIntUnaryFunction contrastIntensify(IIntUnaryFunction function) {
-        return x -> {
-            double value = function.valueAt(x);
-            return value < 0.5 ? 2 * value * value : 1 - 2 * (1 - value) * (1 - value);
         };
     }
 

@@ -9,7 +9,7 @@ import java.util.HashMap;
  * Created by ivan on 11/9/15.
  */
 public final class AkcelFuzzySystemMin extends FuzzySystem {
-    public static final int MAX_ACCELERATION = 2;
+    private static final int MAX_ACCELERATION = 2;
 
     private final HashMap<DomainElement, IFuzzySet> mAccelerationRules;
 

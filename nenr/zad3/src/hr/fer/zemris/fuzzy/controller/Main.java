@@ -9,14 +9,11 @@ import java.util.Scanner;
 public class Main {
 
 
-    public static final int RUDDER = 40;
-    public static final int AKCEL = 1000;
-
     public static void main(String[] args) throws IOException {
            BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
 
 	    int L=0,D=0,LK=0,DK=0,V=0,S=0,akcel,kormilo;
-	    String line = null;
+	    String line;
 
 		Defuzzifier defuzzifier = new COADefuzzifier();
 		FuzzySystem fsAkcel = new AkcelFuzzySystemMin(defuzzifier);

@@ -6,7 +6,7 @@ package hr.fer.zemris.fuzzy.sets;
 public class CalculatedFuzzySet implements IFuzzySet {
 
     private final IDomain mDomain;
-    private IIntUnaryFunction mFunction;
+    private final IIntUnaryFunction mFunction;
 
     public CalculatedFuzzySet(IDomain domain, IIntUnaryFunction function) {
         mDomain = domain;

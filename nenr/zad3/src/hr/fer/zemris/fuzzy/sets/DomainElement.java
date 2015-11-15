@@ -6,7 +6,7 @@ import java.util.Arrays;
  * Created by ivan on 10/14/15.
  */
 public class DomainElement {
-    private int[] values;
+    private final int[] values;
 
     DomainElement(int... values) {
         this.values = Arrays.copyOf(values, values.length);
@@ -45,7 +45,4 @@ public class DomainElement {
         return Arrays.toString(values);
     }
 
-    public DomainElement subset(int from, int to) {
-        return new DomainElement(Arrays.copyOfRange(values,from,to));
-    }
 }

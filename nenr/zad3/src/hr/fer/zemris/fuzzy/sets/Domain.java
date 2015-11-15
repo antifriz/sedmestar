@@ -8,7 +8,7 @@ import java.util.Iterator;
  */
 public abstract class Domain implements IDomain {
 
-    public Domain() {
+    Domain() {
     }
 
     public static SimpleDomain intRange(int first, int last) {
@@ -39,7 +39,7 @@ public abstract class Domain implements IDomain {
         return new CompositeDomain(domains);
     }
 
-    private HashMap<DomainElement, Integer> indexes = new HashMap<>();
+    private final HashMap<DomainElement, Integer> indexes = new HashMap<>();
 
     @Override
     public int indexOfElement(DomainElement element) {

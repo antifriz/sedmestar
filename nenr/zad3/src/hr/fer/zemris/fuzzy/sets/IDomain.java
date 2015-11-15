@@ -14,7 +14,4 @@ public interface IDomain extends Iterable<DomainElement> {
 
     DomainElement elementForIndex(int index);
 
-    default int indexOfElement(int ...indexes){
-        return indexOfElement(new DomainElement(indexes));
-    }
 }

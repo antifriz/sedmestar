@@ -50,14 +50,6 @@ public class SimpleDomain extends Domain {
         };
     }
 
-    public int getFirst() {
-        return first;
-    }
-
-    public int getLast() {
-        return last;
-    }
-
     @Override
     public boolean equals(Object obj) {
         if (obj instanceof SimpleDomain) {

@@ -4,8 +4,8 @@ package hr.fer.zemris.fuzzy.sets;
  * Created by ivan on 10/15/15.
  */
 public class MutableFuzzySet implements IFuzzySet {
-    private double[] mMemberships;
-    private IDomain mDomain;
+    private final double[] mMemberships;
+    private final IDomain mDomain;
 
     public MutableFuzzySet(IDomain domain) {
         mDomain = domain;
