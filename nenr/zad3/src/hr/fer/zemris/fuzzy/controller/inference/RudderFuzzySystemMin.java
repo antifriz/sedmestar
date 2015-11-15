@@ -1,5 +1,6 @@
 package hr.fer.zemris.fuzzy.controller.inference;
 
+import hr.fer.zemris.fuzzy.sets.Debug;
 import hr.fer.zemris.fuzzy.controller.Defuzzifier;
 import hr.fer.zemris.fuzzy.sets.*;
 
@@ -42,7 +43,9 @@ public final class RudderFuzzySystemMin extends FuzzySystem {
 
     @Override
     public int infer(IFuzzySet LDvelocity) {
-        IFuzzySet inferAngle = infer(LDvelocity, mAngleRules);
+        IFuzzySet inferAngle = infer(LDvelocity, mAngleRules, verbose);
+
+        if(verbose) Debug.print(inferAngle, "Infered angle");
 
         return inferAngle.getDomain().elementForIndex(mDefuzzifier.defuzzify(inferAngle)).getComponentValue(0);
     }

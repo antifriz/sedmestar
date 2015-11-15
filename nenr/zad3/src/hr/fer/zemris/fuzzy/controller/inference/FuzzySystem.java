@@ -1,5 +1,6 @@
 package hr.fer.zemris.fuzzy.controller.inference;
 
+import hr.fer.zemris.fuzzy.sets.Debug;
 import hr.fer.zemris.fuzzy.controller.Defuzzifier;
 import hr.fer.zemris.fuzzy.sets.*;
 
@@ -20,6 +21,8 @@ public abstract class FuzzySystem {
     final IFuzzySet mPrettyNegativeRelativeDistance;
     final IFuzzySet mAroundZeroRelativeDistance;
     final IFuzzySet mPrettyPositiveRelativeDistance;
+
+    public boolean verbose = false;
 
     FuzzySystem(Defuzzifier defuzzifier) {
         mDefuzzifier = defuzzifier;
@@ -76,12 +79,14 @@ public abstract class FuzzySystem {
     }
 
 
-    static IFuzzySet infer(IFuzzySet input, HashMap<DomainElement, IFuzzySet> rules) {
+    static IFuzzySet infer(IFuzzySet input, HashMap<DomainElement, IFuzzySet> rules, boolean verbose) {
 
         IFuzzySet output = new MutableFuzzySet(rules.entrySet().iterator().next().getValue().getDomain());
         for (DomainElement element : input.getDomain()) {
             // IFuzzySet set = Operations.unaryOperation(rules.get(element), domainValue -> Operations.zadehAnd().valueAt(domainValue, input.getValueAt(element)));
             IFuzzySet set = Operations.unaryOperation(rules.get(element), domainValue -> domainValue * input.getValueAt(element));
+
+            if(verbose) Debug.print(set,element.toString());
 
             output = Operations.binaryOperation(output, set, Operations.zadehOr());
         }

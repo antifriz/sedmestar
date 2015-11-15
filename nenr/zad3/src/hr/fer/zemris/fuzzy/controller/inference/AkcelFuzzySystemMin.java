@@ -1,5 +1,6 @@
 package hr.fer.zemris.fuzzy.controller.inference;
 
+import hr.fer.zemris.fuzzy.sets.Debug;
 import hr.fer.zemris.fuzzy.controller.Defuzzifier;
 import hr.fer.zemris.fuzzy.sets.*;
 
@@ -43,7 +44,9 @@ public final class AkcelFuzzySystemMin extends FuzzySystem {
     @Override
     public int infer(IFuzzySet LDvelocity) {
 
-        IFuzzySet inferAcc = infer(LDvelocity, mAccelerationRules);
+        IFuzzySet inferAcc = infer(LDvelocity, mAccelerationRules, verbose);
+
+        if(verbose) Debug.print(inferAcc, "Infered acc");
 
         return 20 * inferAcc.getDomain().elementForIndex(mDefuzzifier.defuzzify(inferAcc)).getComponentValue(0);
     }
