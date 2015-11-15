@@ -10,9 +10,44 @@ import java.util.HashMap;
  */
 public abstract class FuzzySystem {
     Defuzzifier mDefuzzifier;
+    public static final int MAX_SPEED = 2000;
+    public static final int DISTANCE_SPEEDUP = 10;
+
+    public static final int MAX_DISTANCE = 8000 / DISTANCE_SPEEDUP;
+    final IFuzzySet mSlow;
+    final IFuzzySet mMid;
+    final IFuzzySet mFast;
+    final IFuzzySet mPrettyNegativeRelativeDistance;
+    final IFuzzySet mAroundZeroRelativeDistance;
+    final IFuzzySet mPrettyPositiveRelativeDistance;
 
     public FuzzySystem(Defuzzifier defuzzifier) {
         mDefuzzifier = defuzzifier;
+
+
+        DomainElement velSlow = DomainElement.of(115);
+        DomainElement velMid = DomainElement.of(260);
+        DomainElement velHigh = DomainElement.of(270);
+
+        SimpleDomain velocityDomain = Domain.intRange(0, MAX_SPEED);
+
+        mSlow = StandardFuzzySets.lFunctionSet(velocityDomain, velSlow, velMid);
+        mMid = StandardFuzzySets.lambdaFunctionSet(velocityDomain, velSlow, velMid, velHigh);
+        mFast = StandardFuzzySets.gammaFunctionSet(velocityDomain, velMid, velHigh);
+
+
+        SimpleDomain relativeDistanceDomain = Domain.intRange(-MAX_DISTANCE, MAX_DISTANCE + 1);
+
+
+        DomainElement neg15 = DomainElement.of(-140 / DISTANCE_SPEEDUP);
+        DomainElement pos15 = DomainElement.of(140 / DISTANCE_SPEEDUP);
+        DomainElement zero = DomainElement.of(0);
+
+        mPrettyNegativeRelativeDistance = StandardFuzzySets.lFunctionSet(relativeDistanceDomain, neg15, zero);
+        mAroundZeroRelativeDistance = StandardFuzzySets.lambdaFunctionSet(relativeDistanceDomain, neg15, zero, pos15);
+        mPrettyPositiveRelativeDistance = StandardFuzzySets.gammaFunctionSet(relativeDistanceDomain, zero, pos15);
+
+
     }
 
     public abstract int infer(int L, int D, int LK, int DK, int V, int S);
@@ -54,10 +89,6 @@ public abstract class FuzzySystem {
     static <T extends Enum<T>, U extends Enum<U>> void addCartesianRule(HashMap<DomainElement, IFuzzySet> rules, T antecedent1, U antecedent2, IFuzzySet consequent) {
         rules.put(DomainElement.of(antecedent1.ordinal(), antecedent2.ordinal()), consequent);
     }
-//
-//    static <T extends Enum<T>> void addRule(HashMap<DomainElement, IFuzzySet> rules, T antecedent, IFuzzySet consequent) {
-//        rules.put(DomainElement.of(antecedent.ordinal()), consequent);
-//    }
 
     static IFuzzySet generateFuzzyInput(int input, IFuzzySet... sets) {
         return new CalculatedFuzzySet(Domain.intRange(0, sets.length), x -> sets[x].getValueAt(input));
