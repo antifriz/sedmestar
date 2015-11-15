@@ -124,7 +124,7 @@ public class Tests {
     public void primjer3() {
         IDomain u = Domain.intRange(1, 5); // {1,2,3,4}
         IFuzzySet r = new MutableFuzzySet(Domain.combine(u, u))
-                .set(DomainElement.of(1, 1), 1)
+                .set(DomainElement.of(1, 1), 0.9)
                 .set(DomainElement.of(2, 2), 1)
                 .set(DomainElement.of(3, 3), 1)
                 .set(DomainElement.of(4, 4), 1)

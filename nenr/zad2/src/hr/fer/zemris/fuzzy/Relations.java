@@ -15,10 +15,6 @@ public class Relations {
         return isUTimesURelation(relation) && stream(relation.getDomain().getComponent(0)).allMatch(x -> relation.getValueAt(new DomainElement(x.getComponentValue(0), x.getComponentValue(0))) == 1);
     }
 
-    public static boolean isMaxMinTransitive(IFuzzySet relation) {
-        return isUTimesURelation(relation) && stream(relation.getDomain().getComponent(0)).allMatch(x -> stream(relation.getDomain().getComponent(0)).allMatch(z -> relation.getValueAt(new DomainElement(x.getComponentValue(0), z.getComponentValue(0))) >= stream(relation.getDomain().getComponent(0)).mapToDouble(item -> Operations.zadehAnd().valueAt(relation.getValueAt(new DomainElement(x.getComponentValue(0), item.getComponentValue(0))), relation.getValueAt(new DomainElement(item.getComponentValue(0), z.getComponentValue(0))))).reduce(Operations.zadehOr()::valueAt).getAsDouble()));
-    }
-
     public static IFuzzySet compositionOfBinaryRelations(IFuzzySet relation1, IFuzzySet relation2) {
         SimpleDomain U = (SimpleDomain) relation1.getDomain().getComponent(0);
         SimpleDomain V = (SimpleDomain) relation1.getDomain().getComponent(1);
@@ -44,5 +40,9 @@ public class Relations {
 
     private static <T> Stream<T> stream(Iterable<T> iterable) {
         return StreamSupport.stream(iterable.spliterator(), true);
+    }
+
+    public static boolean isMaxMinTransitive(IFuzzySet relation) {
+        return isUTimesURelation(relation) && stream(relation.getDomain().getComponent(0)).allMatch(x -> stream(relation.getDomain().getComponent(0)).allMatch(z -> relation.getValueAt(new DomainElement(x.getComponentValue(0), z.getComponentValue(0))) >= stream(relation.getDomain().getComponent(0)).mapToDouble(item -> Operations.zadehAnd().valueAt(relation.getValueAt(new DomainElement(x.getComponentValue(0), item.getComponentValue(0))), relation.getValueAt(new DomainElement(item.getComponentValue(0), z.getComponentValue(0))))).reduce(Operations.zadehOr()::valueAt).getAsDouble()));
     }
 }

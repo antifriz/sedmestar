@@ -44,8 +44,8 @@ public abstract class FuzzySystem {
         SimpleDomain angleDomain = Domain.intRange(-MAX_ANGLE, MAX_ANGLE + 1);
         SimpleDomain velocityDomain = Domain.intRange(0, MAX_SPEED);
 
-        DomainElement neg15 = DomainElement.of(-120/DISTANCE_SPEEDUP);
-        DomainElement pos15 = DomainElement.of(120/DISTANCE_SPEEDUP);
+        DomainElement neg15 = DomainElement.of(-140/DISTANCE_SPEEDUP);
+        DomainElement pos15 = DomainElement.of(140/DISTANCE_SPEEDUP);
 
         DomainElement minAcceleration = DomainElement.of(-MAX_ACCELERATION/2);
         DomainElement maxAcceleration = DomainElement.of(MAX_ACCELERATION/2);
@@ -76,8 +76,8 @@ public abstract class FuzzySystem {
         IFuzzySet fast = StandardFuzzySets.gammaFunctionSet(velocityDomain, velMid, velHigh);
 
 
-        double k1 =2;
-        double k2 =4;
+        double k1 =1;
+        double k2 =2;
         int input = (int) (k1 * (L - D) + (LK * Math.sqrt(2) - L) + (D - DK * Math.sqrt(2)) + k2 * (LK - DK));
         input /=10;
         IFuzzySet relativeLD = generateFuzzyInput(input, prettyNegativeRelativeDistance, aroundZeroRelativeDistance, prettyPositiveRelativeDistance);
