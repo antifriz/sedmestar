@@ -13,61 +13,6 @@ import java.util.Random;
  */
 public class FuzzyControllerTest {
 
-
-    public static final int MAX_ACCELERATION = 100;
-    public static final int MAX_DISTANCE = 1200;
-    public static final int MAX_SPEED = 1000;
-    private static final int MAX_ANGLE = 100;
-
-    enum RelativeDistance {
-        NEGATIVE,
-        ZERO,
-        POSITIVE
-    }
-
-    enum Velocity {
-        SLOW,
-        FAST
-    }
-
-    enum Acceleration {
-        NEGATIVE,
-        ZERO,
-        POSITIVE
-    }
-
-    @Test
-    public void testPlayground() throws Exception {
-        int D = 50, L = 50, LK = 50, DK = 50, kormilo = 0, akcel = 0, V = 0;
-        Random random = new Random();
-        for (int i = 0; i < 1000; i++) {
-            D=DK= random.nextInt(100);
-            L = LK=random.nextInt(100);
-            V = random.nextInt(100);
-            int ld = L - D;
-            int lkdk = LK - DK;
-            Pair<Integer, Integer> infer = FuzzySystem.infer(ld,0, lkdk,0, V,0);
-            if(lkdk>0 && infer.getValue()<0){
-                System.out.printf("L=%d D=%d V=%d\n",L,D,V);
-                Assert.assertTrue(false);
-            }
-            if(lkdk<0 && infer.getValue()>0){
-                System.out.printf("L=%d D=%d V=%d\n",L,D,V);
-                Assert.assertTrue(false);
-            }
-            if(lkdk<10 || lkdk>10){
-                if(infer.getKey()<=0){
-                    System.out.printf("L=%d D=%d V=%d\n",L,D,V);
-                    Assert.assertTrue(false);
-                }
-            }
-
-
-
-        }
-//        System.out.println(infer.getKey()+" "+infer.getValue());
-    }
-
     @Test
     public void testName() throws Exception {
         int D = 50, L = 50, LK = 50, DK = 50, kormilo = 0, akcel = 0, V = 10;

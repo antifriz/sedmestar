@@ -8,8 +8,9 @@ import java.util.stream.StreamSupport;
 /**
  * Created by ivan on 11/9/15.
  */
-public class COADefuzzifier {
-    static int indexOfDefuzzified(IFuzzySet set){
+public class COADefuzzifier implements Defuzzifier {
+    @Override
+    public int defuzzify(IFuzzySet set){
         int i = 0;
         double sum = 0;
         double values = 0;

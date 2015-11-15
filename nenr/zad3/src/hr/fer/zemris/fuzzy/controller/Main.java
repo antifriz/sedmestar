@@ -15,6 +15,11 @@ public class Main {
 
 	    int L=0,D=0,LK=0,DK=0,V=0,S=0,akcel,kormilo;
 	    String line = null;
+
+		Defuzzifier defuzzifier = new COADefuzzifier();
+		FuzzySystem fsAkcel = new AkcelFuzzySystemMin(defuzzifier);
+		FuzzySystem fsRudder = new RudderFuzzySystemMin(defuzzifier);
+
 		while(true){
 			if((line = input.readLine())!=null){
 				if(line.charAt(0)=='K') break;
@@ -27,13 +32,9 @@ public class Main {
 				S = s.nextInt();
 	        }
 
+	        akcel = fsAkcel.infer(L,D,LK,DK,V,S);
+            kormilo = fsRudder.infer(L,D,LK,DK,V,S);
 
-            Pair<Integer, Integer> infer = FuzzySystem.infer(L,D,LK,DK,V,S);
-
-            // fuzzy magic ...
-	        akcel = infer.getKey();
-            kormilo = infer.getValue();
-            //akcel = 100; kormilo = (int) Math.log10(D-L)*100;
 	        System.out.println(akcel + " " + kormilo);
 	        System.out.flush();
 	   }
