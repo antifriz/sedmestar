@@ -1,5 +1,7 @@
 package hr.fer.zemris.fuzzy.controller;
-import javafx.util.Pair;
+import hr.fer.zemris.fuzzy.controller.inference.AkcelFuzzySystemMin;
+import hr.fer.zemris.fuzzy.controller.inference.FuzzySystem;
+import hr.fer.zemris.fuzzy.controller.inference.RudderFuzzySystemMin;
 
 import java.io.*;
 import java.util.Scanner;

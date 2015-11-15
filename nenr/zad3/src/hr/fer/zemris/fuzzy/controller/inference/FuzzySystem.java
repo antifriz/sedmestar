@@ -1,5 +1,6 @@
-package hr.fer.zemris.fuzzy.controller;
+package hr.fer.zemris.fuzzy.controller.inference;
 
+import hr.fer.zemris.fuzzy.controller.Defuzzifier;
 import hr.fer.zemris.fuzzy.sets.*;
 import javafx.util.Pair;
 

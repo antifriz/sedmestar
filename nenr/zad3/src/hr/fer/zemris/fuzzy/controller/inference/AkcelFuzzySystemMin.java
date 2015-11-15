@@ -1,5 +1,6 @@
-package hr.fer.zemris.fuzzy.controller;
+package hr.fer.zemris.fuzzy.controller.inference;
 
+import hr.fer.zemris.fuzzy.controller.Defuzzifier;
 import hr.fer.zemris.fuzzy.sets.*;
 
 import java.util.HashMap;
@@ -7,12 +8,9 @@ import java.util.HashMap;
 /**
  * Created by ivan on 11/9/15.
  */
-public class AkcelFuzzySystemMin extends FuzzySystem {
-
-    public static final int DISTANCE_SPEEDUP = 10;
-
+public final class AkcelFuzzySystemMin extends FuzzySystem {
     public static final int MAX_ACCELERATION = 2;
-    public static final int MAX_DISTANCE = 8000 / DISTANCE_SPEEDUP;
+
     private final HashMap<DomainElement, IFuzzySet> mAccelerationRules;
 
     public AkcelFuzzySystemMin(Defuzzifier defuzzifier) {

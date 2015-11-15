@@ -1,5 +1,6 @@
-package hr.fer.zemris.fuzzy.controller;
+package hr.fer.zemris.fuzzy.controller.inference;
 
+import hr.fer.zemris.fuzzy.controller.Defuzzifier;
 import hr.fer.zemris.fuzzy.sets.*;
 
 import java.util.HashMap;
@@ -7,7 +8,7 @@ import java.util.HashMap;
 /**
  * Created by ivan on 11/9/15.
  */
-public class RudderFuzzySystemMin extends FuzzySystem {
+public final class RudderFuzzySystemMin extends FuzzySystem {
     private static final int MAX_ANGLE = 135;
 
     private final HashMap<DomainElement, IFuzzySet> mAngleRules;
