@@ -41,13 +41,7 @@ public final class AkcelFuzzySystemMin extends FuzzySystem {
     }
 
     @Override
-    public int infer(int L, int D, int LK, int DK, int V, int S) {
-        double k1 = 1;
-        double k2 = 2;
-        int input = (int) (k1 * (L - D) + (LK * Math.sqrt(2) - L) + (D - DK * Math.sqrt(2)) + k2 * (LK - DK));
-        input /= 10;
-
-        IFuzzySet LDvelocity = cartesianSet(generateFuzzyInput(input, mPrettyNegativeRelativeDistance, mAroundZeroRelativeDistance, mPrettyPositiveRelativeDistance), generateFuzzyInput(V, mSlow, mMid, mFast));
+    public int infer(IFuzzySet LDvelocity) {
 
         IFuzzySet inferAcc = infer(LDvelocity, mAccelerationRules);
 

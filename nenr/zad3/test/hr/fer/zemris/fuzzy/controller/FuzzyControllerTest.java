@@ -1,12 +1,9 @@
 package hr.fer.zemris.fuzzy.controller;
 
-import hr.fer.zemris.fuzzy.sets.*;
-import javafx.util.Pair;
-import org.junit.Assert;
+import hr.fer.zemris.fuzzy.controller.inference.AkcelFuzzySystemMin;
+import hr.fer.zemris.fuzzy.controller.inference.FuzzySystem;
+import hr.fer.zemris.fuzzy.controller.inference.RudderFuzzySystemMin;
 import org.junit.Test;
-
-import java.util.HashMap;
-import java.util.Random;
 
 /**
  * Created by ivan on 11/9/15.
@@ -14,36 +11,12 @@ import java.util.Random;
 public class FuzzyControllerTest {
 
     @Test
-    public void testName() throws Exception {
-        int D = 50, L = 50, LK = 50, DK = 50, kormilo = 0, akcel = 0, V = 10;
+    public void test() throws Exception {
+        Defuzzifier defuzzifier = new COADefuzzifier();
+        FuzzySystem fsAkcel = new AkcelFuzzySystemMin(defuzzifier);
+        FuzzySystem fsRudder = new RudderFuzzySystemMin(defuzzifier);
+        int L = 50, D = 40, LK = 50, DK = 50, V = 0, S = 0;
 
-        if (D - L > 20) {
-            kormilo = 20;
-            akcel = +20;
-        } else if (D - L < -20) {
-            kormilo = -20;
-            akcel = +20;
-        } else {
-            kormilo = 0;
-            akcel = -20;
-        }
-
-        if (DK - LK > 20) {
-            kormilo += 20;
-            akcel += 20;
-        } else if (DK - LK < -20) {
-            kormilo -= 20;
-            akcel += 20;
-        } else {
-            akcel -= 20;
-        }
-
-        if (V == 0) {
-            akcel += 40;
-        }
-
-        akcel += 1;
-        System.out.println(akcel);
-        System.out.println(kormilo);
+        System.out.printf("Akcel=%d Rudder=%d\n", fsAkcel.infer(L, D, LK, DK, V, S), fsRudder.infer(L, D, LK, DK, V, S));
     }
 }

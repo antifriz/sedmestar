@@ -11,7 +11,7 @@ import java.util.HashMap;
 public abstract class FuzzySystem {
     final Defuzzifier mDefuzzifier;
     private static final int MAX_SPEED = 2000;
-    private static final int DISTANCE_SPEEDUP = 10;
+    private static final int DISTANCE_SPEEDUP = 1;
 
     private static final int MAX_DISTANCE = 8000 / DISTANCE_SPEEDUP;
     final IFuzzySet mSlow;
@@ -25,8 +25,8 @@ public abstract class FuzzySystem {
         mDefuzzifier = defuzzifier;
 
 
-        DomainElement velSlow = DomainElement.of(115);
-        DomainElement velMid = DomainElement.of(260);
+        DomainElement velSlow = DomainElement.of(145);
+        DomainElement velMid = DomainElement.of(250);
         DomainElement velHigh = DomainElement.of(270);
 
         SimpleDomain velocityDomain = Domain.intRange(0, MAX_SPEED);
@@ -39,8 +39,8 @@ public abstract class FuzzySystem {
         SimpleDomain relativeDistanceDomain = Domain.intRange(-MAX_DISTANCE, MAX_DISTANCE + 1);
 
 
-        DomainElement neg15 = DomainElement.of(-140 / DISTANCE_SPEEDUP);
-        DomainElement pos15 = DomainElement.of(140 / DISTANCE_SPEEDUP);
+        DomainElement neg15 = DomainElement.of(-200 / DISTANCE_SPEEDUP);
+        DomainElement pos15 = DomainElement.of(200 / DISTANCE_SPEEDUP);
         DomainElement zero = DomainElement.of(0);
 
         mPrettyNegativeRelativeDistance = StandardFuzzySets.lFunctionSet(relativeDistanceDomain, neg15, zero);
@@ -50,7 +50,18 @@ public abstract class FuzzySystem {
 
     }
 
-    public abstract int infer(int L, int D, int LK, int DK, int V, int S);
+    public final int infer(int L, int D, int LK, int DK, int V, int S) {
+        double k1 = 2;
+        double k2 = 2;
+        int R = (int) (k1 * (L - D) + (LK * Math.sqrt(2) - L) + (D - DK * Math.sqrt(2)) + k2 * (LK - DK));
+        R /= DISTANCE_SPEEDUP;
+
+        IFuzzySet LDvelocity = cartesianSet(generateFuzzyInput(R, mPrettyNegativeRelativeDistance, mAroundZeroRelativeDistance, mPrettyPositiveRelativeDistance), generateFuzzyInput(V, mSlow, mMid, mFast));
+
+        return infer(LDvelocity);
+    }
+
+    public abstract int infer(IFuzzySet LDvelocity);
 
     enum RelativeDistance {
         NEGATIVE,
