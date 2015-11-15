@@ -8,7 +8,7 @@ import java.util.List;
  */
 public class NelderMeadSimplex implements IOptimizingMethod {
 
-    public double alpha = 1;
+    public double alpha = 1.00001;
     public double beta = 0.5;
     public double gamma = 2;
     public double epsilon = Config.PRECISION_6;
