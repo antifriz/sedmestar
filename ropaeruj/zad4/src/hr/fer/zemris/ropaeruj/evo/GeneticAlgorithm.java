@@ -28,7 +28,7 @@ public class GeneticAlgorithm {
             double sum = 0;
             for (int i = 0; i < fileParser.valueVector.length; i++) {
                 double[] xes = fileParser.systemMatrix[i];
-                double diff = (Math.sin(arr[0]+arr[1]*xes[0])+arr[2]*Math.cos(xes[0]*(arr[3]+xes[1]))/(1+Math.exp(Math.pow(xes[0]-arr[4],2)))) - fileParser.valueVector[i];
+                double diff = (Math.sin(arr[0] + arr[1] * xes[0]) + arr[2] * Math.cos(xes[0] * (arr[3] + xes[1])) / (1 + Math.exp(Math.pow(xes[0] - arr[4], 2)))) - fileParser.valueVector[i];
                 sum += diff * diff;
             }
             return sum;
@@ -56,8 +56,12 @@ public class GeneticAlgorithm {
     private static void geneticAlgorithmLoop(ArgsParser argsParser, IFunction function, Random random, Chromosome[] currentPopulation, Chromosome[] nextPopulation) {
         int iterCount = 0;
         while (true) {
-            elitism(currentPopulation);
-            nextPopulation[0] = currentPopulation[0];
+            if (argsParser.isRouletteWheel()) {
+
+                elitism(currentPopulation);
+
+                nextPopulation[0] = currentPopulation[0];
+            }
 
             print(currentPopulation, iterCount);
 
@@ -102,18 +106,27 @@ public class GeneticAlgorithm {
     }
 
     private static void nextPopulationUsingKTournament(int iterCount, ArgsParser argsParser, Random random, Chromosome[] currentPopulation, Chromosome[] nextPopulation) {
-        for (int i = 1; i < nextPopulation.length; i++) {
-            Chromosome[] candidates = new Chromosome[argsParser.getTournamentN()];
-            for (int j = 0; j < argsParser.getTournamentN(); j++) {
-                candidates[j] = currentPopulation[random.nextInt(currentPopulation.length)];
-            }
-            Arrays.sort(candidates, Collections.<Chromosome>reverseOrder());
-
-            Chromosome mama = candidates[0];
-            Chromosome papa = candidates[1];
-
-            tweakChild(iterCount, argsParser, random, nextPopulation, i, mama, papa);
+        Chromosome[] candidates = new Chromosome[argsParser.getTournamentN()];
+        for (int j = 0; j < argsParser.getTournamentN(); j++) {
+            candidates[j] = currentPopulation[random.nextInt(currentPopulation.length)];
         }
+        Arrays.sort(candidates, Collections.<Chromosome>reverseOrder());
+
+        Chromosome mama = candidates[0];
+        Chromosome papa = candidates[1];
+
+        Chromosome badOne = candidates[candidates.length - 1];
+
+
+        int i = 0;
+        for (; i < currentPopulation.length; i++) {
+            if (currentPopulation[i] == badOne) {
+                break;
+            }
+        }
+
+        tweakChild(iterCount, argsParser, random, currentPopulation, i, mama, papa);
+        System.arraycopy(currentPopulation, 0, nextPopulation, 0, currentPopulation.length);
     }
 
     private static boolean isFinished(int iterCount, Chromosome[] currentPopulation, ArgsParser argsParser) {
