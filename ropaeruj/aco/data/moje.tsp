@@ -1,0 +1,16 @@
+NAME: bays29
+TYPE: TSP
+COMMENT: 29 cities in Bavaria, street distances (Groetschel,Juenger,Reinelt)
+DIMENSION: 29
+EDGE_WEIGHT_TYPE: EXPLICIT | EUC_2D
+EDGE_WEIGHT_FORMAT: FULL_MATRIX
+DISPLAY_DATA_TYPE: TWOD_DISPLAY
+EDGE_WEIGHT_SECTION
+DISPLAY_DATA_SECTION
+   1    1 1
+   2    10 1
+   3    1 10
+   4    10 10
+//   5     750.0  2030.0
+//   6    1030.0  2070.0
+EOF

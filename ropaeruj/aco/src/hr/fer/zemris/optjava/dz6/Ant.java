@@ -1,5 +1,6 @@
 package hr.fer.zemris.optjava.dz6;
 
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.Random;
@@ -9,77 +10,81 @@ import java.util.Random;
  */
 class Ant implements Comparable<Ant>, Iterable<Integer> {
     double fitness;
+    double distance;
 
     private LinkedHashSet<Integer> path = new LinkedHashSet<>();
 
 
-    boolean tryAddNode(int nodeIdx) {
-        return path.add(nodeIdx);
-    }
-
-    boolean hasVisited(int nodeIdx) {
-        return path.contains(nodeIdx);
-    }
-
     @Override
     public int compareTo(Ant o) {
-        return Double.compare(o.fitness, fitness);
+        return Double.compare(this.fitness, o.fitness);
     }
 
-    public static Ant withTraversal(Random random, double[][] pheromones, double[][] distances, int[][] candidatesList) {
+    public static Ant withTraversal(Random random, double[][] pheromones, double[][] closenesses, int[][] candidatesList, double alpha, double[][] distances) {
         Ant ant = new Ant();
-        ant.traverse(random, pheromones, distances, candidatesList);
+        ant.traverse(random, pheromones, closenesses, candidatesList, alpha);
         ant.updateFitness(distances);
         return ant;
     }
 
-    private void traverse(Random random, double[][] pheromones, double[][] distances, int[][] candidatesList) {
+    private void traverse(Random random, double[][] pheromones, double[][] closenesses, int[][] candidatesList, double alpha) {
         int numberOfNodes = pheromones.length;
-        assert numberOfNodes == distances.length && numberOfNodes == candidatesList.length;
+        assert numberOfNodes == closenesses.length && numberOfNodes == candidatesList.length;
 
-        int next = random.nextInt(distances.length);
+        int next = random.nextInt(numberOfNodes);
+        path.add(next);
 
         for (int i = 0; i < numberOfNodes - 1; i++) {
             int last = next;
 
-            if (areVisitedAll(candidatesList[last])) {
-                next = rouletteWheelPick(random, pheromones[last], candidatesList[last]);
+            if (!areVisitedAll(candidatesList[last])) {
+                next = rouletteWheelPick(random, pheromones[last], closenesses[last], candidatesList[last], alpha);
             } else {
-                next = rouletteWheelPick(random, pheromones[last]);
+                next = rouletteWheelPick(random, pheromones[last], closenesses[last], alpha);
             }
+            path.add(next);
         }
     }
 
-    private int rouletteWheelPick(Random random, double[] pheromones, int[] nodes) {
+    private int rouletteWheelPick(Random random, double[] pheromones, double[] closenesses, int[] nodes, double alpha) {
         double sum = 0;
         for (int node : nodes) {
-            sum += pheromones[node];
+            if (!path.contains(node)) {
+                sum += Math.pow(pheromones[node], alpha) * closenesses[node];
+            }
         }
 
         double rnd = random.nextDouble() * sum;
 
-        for (int i = 0; i < nodes.length; i++) {
-            rnd -= pheromones[nodes[i]];
-            if (rnd < 0) {
-                return i;
+        for (int node : nodes) {
+            if (!path.contains(node)) {
+                rnd -= Math.pow(pheromones[node], alpha) * closenesses[node];
+                if (rnd < 0) {
+                    return node;
+                }
             }
         }
         throw new RuntimeException();
     }
 
 
-    private int rouletteWheelPick(Random random, double[] pheromones) {
+    private int rouletteWheelPick(Random random, double[] pheromones, double[] closenesses, double alpha) {
         double sum = 0;
-        for (double pheromone : pheromones) {
-            sum += pheromone;
+        for (int i = 0; i < pheromones.length; i++) {
+            if (!path.contains(i)) {
+                double pheromone = Math.pow(pheromones[i], alpha) * closenesses[i];
+                sum += pheromone;
+            }
         }
 
         double rnd = random.nextDouble() * sum;
 
         for (int i = 0; i < pheromones.length; i++) {
-            rnd -= pheromones[i];
-            if (rnd < 0) {
-                return i;
+            if (!path.contains(i)) {
+                rnd -= Math.pow(pheromones[i], alpha) * closenesses[i];
+                if (rnd < 0) {
+                    return i;
+                }
             }
         }
         throw new RuntimeException();
@@ -107,6 +112,7 @@ class Ant implements Comparable<Ant>, Iterable<Integer> {
         distance += distances[first][next];
 
         fitness = 1 / distance;
+        this.distance = distance;
     }
 
     public static Ant badOne() {
@@ -116,7 +122,31 @@ class Ant implements Comparable<Ant>, Iterable<Integer> {
     }
 
     @Override
+    public String toString() {
+        int[] nodes = path.stream().mapToInt(x -> x).toArray();
+
+        int idx = 0;
+        for (int i = 0; i < nodes.length; i++) {
+            if (nodes[i] == 0) {
+                idx = i;
+                break;
+            }
+        }
+
+        int[] nodesNormalized = new int[nodes.length];
+        System.arraycopy(nodes, idx, nodesNormalized, 0, nodes.length - idx);
+        if (idx > 0) {
+            System.arraycopy(nodes, 0, nodesNormalized, nodes.length - idx, idx);
+        }
+        for (int i = 0; i < nodesNormalized.length; i++) {
+            nodesNormalized[i]++;
+        }
+        return Arrays.toString(nodesNormalized);
+    }
+
+    @Override
     public Iterator<Integer> iterator() {
         return path.iterator();
     }
+
 }
