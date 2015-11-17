@@ -48,7 +48,7 @@ public class FFANNTest {
     }
 
     private void checkFann(FFANN ffann, double weightsVals, double expected) {
-        PSOTrainer trainer = new PSOTrainer(ffann, dataset, 1, 1, 1, 1, 1);
+        PSOTrainer trainer = new PSOGlobalTrainer(ffann, dataset, 1, 1, 1, 1, 1);
 
         System.out.println(dataset.getSize());
 

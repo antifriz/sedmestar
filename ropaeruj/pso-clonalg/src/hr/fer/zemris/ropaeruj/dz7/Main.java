@@ -4,12 +4,6 @@ import java.io.IOException;
 
 public class Main {
 
-    enum Algorithm {
-        PSO_A,
-        PSO_B,
-        CLONALG
-    }
-
     public static void main(String[] args) throws IOException {
         // write your code here
 
@@ -25,29 +19,31 @@ public class Main {
                 }
         );
 
-        PSOTrainer trainer = new PSOTrainer(ffann, dataset, 1, 1,Integer.valueOf(args[2]), Double.valueOf(args[3]),Integer.valueOf(args[4]));
-
-        trainer.trainFFANN();
-
         String alg = args[1];
-        Algorithm algorithm;
-        int neighborhood = 0;
+        //int neighborhood = 0;
+
+        IFANNTrainer trainer;
+
+        int particleCount = Integer.valueOf(args[2]);
+        double err = Double.valueOf(args[3]);
+        int maxIter = Integer.valueOf(args[4]);
 
         switch (alg) {
             case "pso-a":
-                algorithm = Algorithm.PSO_A;
-                break;
             case "clonalg":
-                algorithm = Algorithm.CLONALG;
+                trainer = new PSOGlobalTrainer(ffann, dataset, particleCount, err, maxIter);
                 break;
             default:
                 if (alg.startsWith("pso-b")) {
                     String[] v = alg.split("-");
-                    neighborhood = Integer.valueOf(v[v.length - 1]);
+                    int neighborhood = Integer.valueOf(v[v.length - 1]);
+                    trainer = new PSOLocalTrainer(ffann, dataset, particleCount, err, maxIter, neighborhood);
                     break;
                 }
                 throw new RuntimeException("Invalid arguments");
         }
-        //System.out.println(Arrays.deepToString(dataset));
+
+
+        trainer.trainFFANN();
     }
 }

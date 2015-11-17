@@ -6,27 +6,26 @@ import java.util.Random;
 /**
  * Created by ivan on 11/17/15.
  */
-public class PSOTrainer implements IFANNTrainer {
-    private static final boolean DEBUG = false;
+public abstract class PSOTrainer implements IFANNTrainer {
     public static final double END_INERTIA = 0.9;
     public static final double BEGIN_INERTIA = 0.4;
     public static final int C_1 = 2;
     public static final int C_2 = 2;
+    public static final double MAX_VELOCITY = 1;
+    public static final double MAX_POSITION = 1;
 
     private final FFANN mFfann;
     private final IReadOnlyDataset mDataset;
-    private final double mMaxWeightPosition;
-    private final double mMaxWeightVelocity;
     private final int mWeightCount;
     private double mErr;
     private final int mMaxIter;
     private int mParticleCount;
+     Particle[] mParticles;
+    Particle mGlobalBest;
 
-    public PSOTrainer(FFANN ffann, IReadOnlyDataset dataset, double maxWeightPosition, double maxWeightVelocity, int particleCount, double err, int maxIter) {
+    public PSOTrainer(FFANN ffann, IReadOnlyDataset dataset, int particleCount, double err, int maxIter) {
         mFfann = ffann;
         mDataset = dataset;
-        mMaxWeightPosition = maxWeightPosition;
-        mMaxWeightVelocity = maxWeightVelocity;
         mErr = err;
         mMaxIter = maxIter;
 
@@ -37,52 +36,60 @@ public class PSOTrainer implements IFANNTrainer {
 
     @Override
     public double[] trainFFANN() {
-        Random random = new Random();
 
-        Particle[] particles = new Particle[mParticleCount];
-        for (int i = 0; i < particles.length; i++) {
-            particles[i] = new Particle(mWeightCount, mMaxWeightPosition, mMaxWeightVelocity, random);
-        }
-
-        particles[0].setFitness(-evaluate(particles[0].x));
-        Particle globalBest = new Particle(particles[0]);
+        initParticles();
 
         for (int i = 0; i < mMaxIter; i++) {
-            evaluate(particles);
+            evaluate(mParticles);
 
-            for (Particle particle : particles) {
-                if (particle.getFitness() > globalBest.getFitness()) {
-                    globalBest = new Particle(particle);
-                }
-            }
-
+            updateBest();
 
             double inertia = calculateInertia(i, mMaxIter);
-            for (Particle particle : particles) {
-                particle.update(globalBest, inertia);
+            for (int i1 = 0; i1 < mParticles.length; i1++) {
+               mParticles[i1].update(getSocialParticle(i1), inertia);
             }
 
-            if (-globalBest.fitness < mErr) {
+            if (-mGlobalBest.fitness < mErr) {
                 break;
             }
 
-            System.out.printf("[%5d] %3d%% %f\n", i, (int) Math.round(100 * percentageOfGoodClassifications(globalBest.x)), -globalBest.fitness);
+            System.out.printf("[%5d] %3d%% %f\n", i, (int) Math.round(100 * percentageOfGoodClassifications(mGlobalBest.x)), -mGlobalBest.fitness);
         }
-        System.out.printf("FIN %3d %f%% %s\n", (int) Math.round(100 * percentageOfGoodClassifications(globalBest.x)), -globalBest.fitness, Arrays.toString(globalBest.x));
-        return globalBest.x;
+        System.out.printf("FIN %3d %f%% %s\n", (int) Math.round(100 * percentageOfGoodClassifications(mGlobalBest.x)), -mGlobalBest.fitness, Arrays.toString(mGlobalBest.x));
+        return mGlobalBest.x;
     }
+
+    protected void updateBest() {
+        for (Particle particle : mParticles) {
+            if (particle.getFitness() > mGlobalBest.getFitness()) {
+                mGlobalBest = new Particle(particle);
+            }
+        }
+    }
+
+    protected void initParticles() {
+        Random random = new Random();
+
+        mParticles = new Particle[mParticleCount];
+        for (int i = 0; i < mParticles.length; i++) {
+            mParticles[i] = new Particle(mWeightCount, random);
+        }
+
+        evaluate(mParticles);
+
+        mGlobalBest = new Particle(mParticles[0]);
+    }
+
+    protected abstract Particle getSocialParticle(int idx);
 
     private double calculateInertia(int iter, int maxIterCount) {
         return (1 - iter / (double) maxIterCount) * (END_INERTIA - BEGIN_INERTIA) + BEGIN_INERTIA;
     }
 
     private void evaluate(Particle[] particles) {
-        if (DEBUG) System.out.println("Fitnesses:");
         for (Particle particle : particles) {
             particle.setFitness(-evaluate(particle.x));
-            if (DEBUG) System.out.println(particle.getFitness());
         }
-        if (DEBUG) System.out.println("Fitnesses end");
     }
 
     public double evaluate(double[] weights) {
@@ -120,27 +127,24 @@ public class PSOTrainer implements IFANNTrainer {
     }
 
 
-    private class Particle implements Comparable<Particle> {
+    protected class Particle implements Comparable<Particle> {
         private final int mDim;
-        private final double mMaxWeightVelocity;
         private final Random mRandom;
-        double[] x;
-        double[] v;
+        final double[] x;
+        final double[] v;
         private double fitness;
         double[] pb;
 
-        Particle(int dim, double maxWeightPosition, double maxWeightVelocity, Random random) {
+        Particle(int dim, Random random) {
             mDim = dim;
-            mMaxWeightVelocity = maxWeightVelocity;
             mRandom = random;
-            x = random.doubles(dim).map(x -> (x * 2 - 1) * maxWeightPosition).toArray();
-            v = random.doubles(dim).map(x -> (x * 2 - 1) * maxWeightVelocity).toArray();
+            x = random.doubles(dim).map(x -> (x * 2 - 1) * MAX_POSITION).toArray();
+            v = random.doubles(dim).map(x -> (x * 2 - 1) * MAX_VELOCITY).toArray();
             pb = x;
         }
 
         Particle(Particle particle) {
             mDim = particle.mDim;
-            mMaxWeightVelocity = particle.mMaxWeightVelocity;
             mRandom = particle.mRandom;
             x = Arrays.copyOf(particle.x, particle.x.length);
             v = Arrays.copyOf(particle.v, particle.v.length);
@@ -163,7 +167,7 @@ public class PSOTrainer implements IFANNTrainer {
             for (int i = 0; i < mDim; i++) {
                 v[i] = inertia * v[i] + C_1 * mRandom.nextDouble() * (pb[i] - x[i])
                         + C_2 * mRandom.nextDouble() * (socialParticle.x[i] - x[i]);
-                v[i] = Math.max(-mMaxWeightVelocity, Math.min(mMaxWeightVelocity, v[i]));
+                v[i] = Math.max(-MAX_VELOCITY, Math.min(MAX_VELOCITY, v[i]));
                 x[i] = x[i] + v[i];
             }
         }

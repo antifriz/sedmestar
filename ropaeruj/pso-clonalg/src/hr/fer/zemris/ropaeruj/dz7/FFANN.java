@@ -46,13 +46,6 @@ public class FFANN {
             mNeurons[k++] = new DummyNeuron();
             lastLayerFirstNeuronIdx += beforeLayerSize;
         }
-
-        for (int i = 0; i < mNeurons.length; i++) {
-            if(mNeurons[i] instanceof DummyNeuron){
-            }else if(mNeurons[i] instanceof RealNeuron) {
-                RealNeuron neuron = (RealNeuron) mNeurons[i];
-            }
-        }
     }
 
     public int getWeightsCount() {
