@@ -1,9 +1,11 @@
 package hr.fer.zemris.ropaeruj.dz7;
 
+import java.util.stream.Stream;
+
 /**
  * Created by ivan on 11/16/15.
  */
-public interface IReadOnlyDataset {
+public interface IReadOnlyDataset extends Iterable<double[][]>{
     int getSize();
 
     int getInputDimension();
@@ -19,4 +21,6 @@ public interface IReadOnlyDataset {
     }
 
     double[][] getSampleAt(int idx);
+
+    Stream<double[][]> stream();
 }

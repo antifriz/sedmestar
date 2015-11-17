@@ -8,7 +8,7 @@ import org.junit.Test;
 public class MainTest {
     @Test
     public void testMain() throws Exception {
-        Main.main(new String[]{"iris.data","pso-b-1","100","0.1","1000"});
+        Main.main(new String[]{"iris.data","pso-b-1","50","0.02","500"});
 
     }
 }

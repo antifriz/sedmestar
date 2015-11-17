@@ -1,10 +1,6 @@
 package hr.fer.zemris.ropaeruj.dz7;
 
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.util.Arrays;
-import java.util.Map;
 
 public class Main {
 
@@ -21,14 +17,17 @@ public class Main {
 
 
         FFANN ffann = new FFANN(
-                new int[]{4,5,3,3},
+                new int[]{4, 5, 3, 3},
                 new ITransferFunction[]{
                         new SigmoidTransferFunction(),
                         new SigmoidTransferFunction(),
                         new SigmoidTransferFunction()
-                },
-                dataset
+                }
         );
+
+        PSOTrainer trainer = new PSOTrainer(ffann, dataset, 1, 1,Integer.valueOf(args[2]), Double.valueOf(args[3]),Integer.valueOf(args[4]));
+
+        trainer.trainFFANN();
 
         String alg = args[1];
         Algorithm algorithm;
@@ -44,17 +43,11 @@ public class Main {
             default:
                 if (alg.startsWith("pso-b")) {
                     String[] v = alg.split("-");
-                    neighborhood = Integer.valueOf(v[v.length-1]);
+                    neighborhood = Integer.valueOf(v[v.length - 1]);
                     break;
                 }
                 throw new RuntimeException("Invalid arguments");
         }
-
-        int n = Integer.valueOf(args[2]);
-
-        double merr = Double.valueOf(args[3]);
-
-        int maxiter = Integer.valueOf(args[4]);
-        System.out.println(Arrays.deepToString(dataset));
+        //System.out.println(Arrays.deepToString(dataset));
     }
 }
