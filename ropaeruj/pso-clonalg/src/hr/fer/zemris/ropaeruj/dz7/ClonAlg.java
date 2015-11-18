@@ -84,7 +84,7 @@ public class ClonAlg implements IFANNTrainer {
         for (int i = 0; i < n; i++) {
             int nc = (int) Math.floor(beta * n / (i + 1));
             Antibody copy = antibodies[i].copy();
-            copy.tweak = false;
+            copy.tweak = true;
             cloned.add(copy);
             for (int j = 1; j < nc; j++) {
                 cloned.add(antibodies[i].copy());
@@ -107,9 +107,7 @@ public class ClonAlg implements IFANNTrainer {
     }
 
     private void evaluate(Antibody[] antibodies) {
-        for (Antibody antibody : antibodies) {
-            antibody.fitness = -mFfann.evaluate(antibody.values);
-        }
+        Arrays.stream(antibodies).parallel().filter(x->!x.tweak).forEach(antibody->antibody.fitness = -mFfann.evaluate(antibody.values));
     }
 
     private static class Antibody implements Comparable<Antibody> {
