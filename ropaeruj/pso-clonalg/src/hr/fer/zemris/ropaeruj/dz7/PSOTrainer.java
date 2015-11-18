@@ -15,7 +15,6 @@ public abstract class PSOTrainer implements IFANNTrainer {
     public static final double MAX_POSITION = 1;
 
     private final FFANN mFfann;
-    private final IReadOnlyDataset mDataset;
     private final int mWeightCount;
     private double mErr;
     private final int mMaxIter;
@@ -23,9 +22,8 @@ public abstract class PSOTrainer implements IFANNTrainer {
      Particle[] mParticles;
     Particle mGlobalBest;
 
-    public PSOTrainer(FFANN ffann, IReadOnlyDataset dataset, int particleCount, double err, int maxIter) {
+    public PSOTrainer(FFANN ffann, int particleCount, double err, int maxIter) {
         mFfann = ffann;
-        mDataset = dataset;
         mErr = err;
         mMaxIter = maxIter;
 
@@ -53,9 +51,9 @@ public abstract class PSOTrainer implements IFANNTrainer {
                 break;
             }
 
-            System.out.printf("[%5d] %3d%% %f\n", i, (int) Math.round(100 * percentageOfGoodClassifications(mGlobalBest.x)), -mGlobalBest.fitness);
+            System.out.printf("[%5d] %3d%% %f\n", i, (int) Math.round(100 * mFfann.percentageOfGoodClassifications(mGlobalBest.x)), -mGlobalBest.fitness);
         }
-        System.out.printf("FIN %3d %f%% %s\n", (int) Math.round(100 * percentageOfGoodClassifications(mGlobalBest.x)), -mGlobalBest.fitness, Arrays.toString(mGlobalBest.x));
+        System.out.printf("FIN %3d %f%% %s\n", (int) Math.round(100 * mFfann.percentageOfGoodClassifications(mGlobalBest.x)), -mGlobalBest.fitness, Arrays.toString(mGlobalBest.x));
         return mGlobalBest.x;
     }
 
@@ -88,43 +86,11 @@ public abstract class PSOTrainer implements IFANNTrainer {
 
     private void evaluate(Particle[] particles) {
         for (Particle particle : particles) {
-            particle.setFitness(-evaluate(particle.x));
+            particle.setFitness(-mFfann.evaluate(particle.x));
         }
     }
 
-    public double evaluate(double[] weights) {
-        int outputDimension = mDataset.getOutputDimension();
-        double[] outputs = new double[outputDimension];
-        double sum = 0;
-        for (double[][] sample : mDataset) {
-            mFfann.calcOutputs(sample[0], weights, outputs);
-            for (int i = 0; i < outputDimension; i++) {
-                double diff = outputs[i] - sample[1][i];
-                sum += diff * diff;
-            }
-        }
-        return sum / mDataset.getSize();
-    }
 
-
-    private double percentageOfGoodClassifications(double[] weights) {
-        int outputDimension = mDataset.getOutputDimension();
-        double[] outputs = new double[outputDimension];
-        double sum = 0;
-        for (double[][] sample : mDataset) {
-            int subsum = 0;
-            mFfann.calcOutputs(sample[0], weights, outputs);
-            for (int i = 0; i < outputDimension; i++) {
-                if (Math.abs(outputs[i] - sample[1][i]) < 0.5) {
-                    subsum++;
-                }
-            }
-            if (subsum == outputDimension) {
-                sum++;
-            }
-        }
-        return sum / (double) mDataset.getSize();
-    }
 
 
     protected class Particle implements Comparable<Particle> {

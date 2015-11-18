@@ -6,8 +6,8 @@ package hr.fer.zemris.ropaeruj.dz7;
 public class PSOGlobalTrainer extends PSOTrainer {
 
 
-    public PSOGlobalTrainer(FFANN ffann, IReadOnlyDataset dataset, int particleCount, double err, int maxIter) {
-        super(ffann, dataset, particleCount, err, maxIter);
+    public PSOGlobalTrainer(FFANN ffann, int particleCount, double err, int maxIter) {
+        super(ffann, particleCount, err, maxIter);
     }
 
 

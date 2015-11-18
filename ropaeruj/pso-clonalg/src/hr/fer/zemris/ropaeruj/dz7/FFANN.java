@@ -9,8 +9,10 @@ public class FFANN {
 
     private final int mWeightsCount;
     private final INeuron[] mNeurons;
+    private IReadOnlyDataset mDataset;
 
-    public FFANN(int[] layers, ITransferFunction[] transferFunctions) {
+    public FFANN(int[] layers, ITransferFunction[] transferFunctions, IReadOnlyDataset dataset) {
+        mDataset = dataset;
         assert layers.length > 1;
         assert transferFunctions.length + 1 == layers.length;
 
@@ -46,6 +48,17 @@ public class FFANN {
             mNeurons[k++] = new DummyNeuron();
             lastLayerFirstNeuronIdx += beforeLayerSize;
         }
+    }
+
+    public static FFANN createSigmoidal(int[] layers, IReadOnlyDataset dataset) {
+        ITransferFunction[] transferFunctions = new ITransferFunction[layers.length - 1];
+        Arrays.fill(transferFunctions, new SigmoidTransferFunction());
+
+        return new FFANN(
+                layers,
+                transferFunctions,
+                dataset);
+
     }
 
     public int getWeightsCount() {
@@ -116,6 +129,41 @@ public class FFANN {
             }
             return mTransferFunction.valueAt(sum);
         }
+    }
+
+
+    public double evaluate(double[] weights) {
+        int outputDimension = mDataset.getOutputDimension();
+        double[] outputs = new double[outputDimension];
+        double sum = 0;
+        for (double[][] sample : mDataset) {
+            calcOutputs(sample[0], weights, outputs);
+            for (int i = 0; i < outputDimension; i++) {
+                double diff = outputs[i] - sample[1][i];
+                sum += diff * diff;
+            }
+        }
+        return sum / mDataset.getSize();
+    }
+
+
+    public double percentageOfGoodClassifications(double[] weights) {
+        int outputDimension = mDataset.getOutputDimension();
+        double[] outputs = new double[outputDimension];
+        double sum = 0;
+        for (double[][] sample : mDataset) {
+            int subsum = 0;
+            calcOutputs(sample[0], weights, outputs);
+            for (int i = 0; i < outputDimension; i++) {
+                if (Math.abs(outputs[i] - sample[1][i]) < 0.5) {
+                    subsum++;
+                }
+            }
+            if (subsum == outputDimension) {
+                sum++;
+            }
+        }
+        return sum / (double) mDataset.getSize();
     }
 
 

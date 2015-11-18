@@ -9,19 +9,11 @@ public class Main {
 
         IReadOnlyDataset dataset = ParseableReadOnlyDataset.createFromFile(args[0]);
 
+        int[] layers = {4, 5, 3, 3};
 
-        FFANN ffann = new FFANN(
-                new int[]{4, 5, 3, 3},
-                new ITransferFunction[]{
-                        new SigmoidTransferFunction(),
-                        new SigmoidTransferFunction(),
-                        new SigmoidTransferFunction()
-                }
-        );
+        FFANN ffann = FFANN.createSigmoidal(layers, dataset);
 
         String alg = args[1];
-        //int neighborhood = 0;
-
         IFANNTrainer trainer;
 
         int particleCount = Integer.valueOf(args[2]);
@@ -30,14 +22,16 @@ public class Main {
 
         switch (alg) {
             case "pso-a":
+                trainer = new PSOGlobalTrainer(ffann, particleCount, err, maxIter);
+                break;
             case "clonalg":
-                trainer = new PSOGlobalTrainer(ffann, dataset, particleCount, err, maxIter);
+                trainer = new ClonAlg(ffann,particleCount,err,maxIter);
                 break;
             default:
                 if (alg.startsWith("pso-b")) {
                     String[] v = alg.split("-");
                     int neighborhood = Integer.valueOf(v[v.length - 1]);
-                    trainer = new PSOLocalTrainer(ffann, dataset, particleCount, err, maxIter, neighborhood);
+                    trainer = new PSOLocalTrainer(ffann, particleCount, err, maxIter, neighborhood);
                     break;
                 }
                 throw new RuntimeException("Invalid arguments");

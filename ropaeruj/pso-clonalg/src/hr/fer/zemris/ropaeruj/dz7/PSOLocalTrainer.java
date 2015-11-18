@@ -8,8 +8,8 @@ public class PSOLocalTrainer extends PSOTrainer {
     private Particle[][] mNeighbors;
     private Particle[] mBestNeighbors;
 
-    public PSOLocalTrainer(FFANN ffann, IReadOnlyDataset dataset, int particleCount, double err, int maxIter, int neighborhoodSize) {
-        super(ffann, dataset, particleCount, err, maxIter);
+    public PSOLocalTrainer(FFANN ffann, int particleCount, double err, int maxIter, int neighborhoodSize) {
+        super(ffann, particleCount, err, maxIter);
         mNeighborhoodSize = neighborhoodSize;
         mBestNeighbors = new Particle[particleCount];
         mNeighbors = new Particle[particleCount][mNeighborhoodSize * 2 + 1];
