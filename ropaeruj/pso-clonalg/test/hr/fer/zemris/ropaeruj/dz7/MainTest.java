@@ -8,6 +8,6 @@ import org.junit.Test;
 public class MainTest {
     @Test
     public void testMain() throws Exception {
-        Main.main(new String[]{"iris.data","clonalg","20","0.02","1000"});
+        Main.main(new String[]{"iris.data","pso-b-7","20","0.02","10000"});
     }
 }

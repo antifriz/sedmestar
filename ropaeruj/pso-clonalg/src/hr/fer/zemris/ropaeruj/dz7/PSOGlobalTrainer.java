@@ -3,7 +3,7 @@ package hr.fer.zemris.ropaeruj.dz7;
 /**
  * Created by ivan on 11/17/15.
  */
-public class PSOGlobalTrainer extends PSOTrainer {
+public final class PSOGlobalTrainer extends PSOTrainer {
 
 
     public PSOGlobalTrainer(FFANN ffann, int particleCount, double err, int maxIter) {

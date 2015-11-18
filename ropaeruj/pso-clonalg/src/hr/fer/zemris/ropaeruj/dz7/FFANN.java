@@ -5,11 +5,11 @@ import java.util.Arrays;
 /**
  * Created by ivan on 11/16/15.
  */
-public class FFANN {
+public final class FFANN {
 
     private final int mWeightsCount;
     private final INeuron[] mNeurons;
-    private IReadOnlyDataset mDataset;
+    private final IReadOnlyDataset mDataset;
 
     public FFANN(int[] layers, ITransferFunction[] transferFunctions, IReadOnlyDataset dataset) {
         mDataset = dataset;
@@ -65,7 +65,13 @@ public class FFANN {
         int neuronsCount = mNeurons.length;
         double[] neuronOutputs = new double[mNeurons.length];
 
-        process(weights, neuronOutputs, inputs, neuronsCount);
+        for (int i1 = 0; i1 < inputs.length; i1++) {
+            mNeurons[i1].setOutput(inputs[i1]);
+        }
+
+        for (int i1 = 0; i1 < neuronsCount; i1++) {
+            neuronOutputs[i1] = mNeurons[i1].getOutput(neuronOutputs, weights);
+        }
 
         int srcPos = neuronsCount - outputs.length - 1;
         System.arraycopy(neuronOutputs, srcPos, outputs, 0, outputs.length);
@@ -126,36 +132,31 @@ public class FFANN {
     }
 
 
-    public double evaluate(double[] weights) {
-        int outputDimension = mDataset.getOutputDimension();
+    public double evaluate(final double[] weights) {
+        final int outputDimension = mDataset.getOutputDimension();
+        final int inputDimension = mDataset.getInputDimension();
         double sum = 0;
-        double[] neuronOutputs = new double[mNeurons.length];
+        final double[] neuronOutputs = new double[mNeurons.length];
+        final int neuronsCount = mNeurons.length;
+        int offset = neuronsCount - outputDimension - 1;
         for (double[][] sample : mDataset) {
-            int neuronsCount = mNeurons.length;
 
-            process(weights, neuronOutputs, sample[0], neuronsCount);
+            double[] sampleInput = sample[0];
+            for (int i1 = 0; i1 < inputDimension; i1++) {
+                mNeurons[i1].setOutput(sampleInput[i1]);
+            }
 
-            sum = getSum(outputDimension, sum, neuronOutputs, sample[1], neuronsCount - outputDimension - 1);
+            for (int i1 = 0; i1 < neuronsCount; i1++) {
+                neuronOutputs[i1] = mNeurons[i1].getOutput(neuronOutputs, weights);
+            }
+
+            double[] sampleOutput = sample[1];
+            for (int i = 0; i < outputDimension; i++) {
+                double diff = neuronOutputs[(i + offset)] - sampleOutput[i];
+                sum += diff * diff;
+            }
         }
         return sum / mDataset.getSize();
-    }
-
-    private void process(double[] weights, double[] neuronOutputs, double[] doubles, int neuronsCount) {
-        for (int i1 = 0; i1 < doubles.length; i1++) {
-            mNeurons[i1].setOutput(doubles[i1]);
-        }
-
-        for (int i1 = 0; i1 < neuronsCount; i1++) {
-            neuronOutputs[i1] = mNeurons[i1].getOutput(neuronOutputs, weights);
-        }
-    }
-
-    private double getSum(int outputDimension, double sum, double[] neuronOutputs, double[] doubles, int srcPos) {
-        for (int i = 0; i < outputDimension; i++) {
-            double diff = neuronOutputs[i + srcPos] - doubles[i];
-            sum += diff * diff;
-        }
-        return sum;
     }
 
 

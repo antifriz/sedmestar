@@ -19,7 +19,7 @@ public abstract class PSOTrainer implements IFANNTrainer {
     private double mErr;
     private final int mMaxIter;
     private int mParticleCount;
-     Particle[] mParticles;
+    Particle[] mParticles;
     Particle mGlobalBest;
 
     public PSOTrainer(FFANN ffann, int particleCount, double err, int maxIter) {
@@ -44,7 +44,7 @@ public abstract class PSOTrainer implements IFANNTrainer {
 
             double inertia = calculateInertia(i, mMaxIter);
             for (int i1 = 0; i1 < mParticles.length; i1++) {
-               mParticles[i1].update(getSocialParticle(i1), inertia);
+                mParticles[i1].update(getSocialParticle(i1), inertia);
             }
 
             if (-mGlobalBest.fitness < mErr) {
@@ -85,13 +85,8 @@ public abstract class PSOTrainer implements IFANNTrainer {
     }
 
     private void evaluate(Particle[] particles) {
-        for (Particle particle : particles) {
-            particle.setFitness(-mFfann.evaluate(particle.x));
-        }
+        Arrays.stream(particles).forEach(particle -> particle.setFitness(-mFfann.evaluate(particle.x)));
     }
-
-
-
 
     protected class Particle implements Comparable<Particle> {
         private final int mDim;

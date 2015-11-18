@@ -5,7 +5,7 @@ import java.util.*;
 /**
  * Created by ivan on 11/17/15.
  */
-public class ClonAlg implements IFANNTrainer {
+public final class ClonAlg implements IFANNTrainer {
 
     private final FFANN mFfann;
     private final int mPopulationCount;
