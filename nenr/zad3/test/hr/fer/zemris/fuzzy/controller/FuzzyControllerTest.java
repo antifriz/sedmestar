@@ -16,7 +16,7 @@ public class FuzzyControllerTest {
         FuzzySystem fsAkcel = new AkcelFuzzySystemMin(defuzzifier);
         fsAkcel.verbose = true;
         FuzzySystem fsRudder = new RudderFuzzySystemMin(defuzzifier);
-        int L = 50, D = 40, LK = 50, DK = 50, V = 0, S = 0;
+        int L = 50, D = 20, LK = 50, DK = 20, V = 1000, S = 0;
         fsRudder.verbose = true;
 
         System.out.printf("Akcel=%d Rudder=%d\n", fsAkcel.infer(L, D, LK, DK, V, S), fsRudder.infer(L, D, LK, DK, V, S));

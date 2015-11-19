@@ -12,7 +12,7 @@ import java.util.HashMap;
 public abstract class FuzzySystem {
     final Defuzzifier mDefuzzifier;
     private static final int MAX_SPEED = 2000;
-    private static final int DISTANCE_SPEEDUP = 1;
+    private static final int DISTANCE_SPEEDUP = 10;
 
     private static final int MAX_DISTANCE = 8000 / DISTANCE_SPEEDUP;
     final IFuzzySet mSlow;
