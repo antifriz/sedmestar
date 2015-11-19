@@ -17,7 +17,7 @@ import static org.junit.Assert.assertEquals;
 @RunWith(Parameterized.class)
 public class MainTest {
 
-    public static Collection<String> allowed = Arrays.asList("bays29", "att48", "ch150", "pr2392");
+    public static Collection<String> allowed = Arrays.asList("att532", "att48", "ch150", "pr2392");
     private String mFileName;
     private Double mResult;
 
