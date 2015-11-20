@@ -1,0 +1,3 @@
+[submodule "raspuz/local-symmetry-classifier"]
+	path = raspuz/local-symmetry-classifier
+	url = git@github.com:antifriz/local-symmetry-classifier.git
