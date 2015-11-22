@@ -2,11 +2,14 @@ package hr.fer.zemris.ropaeruj.dz7;
 
 import java.io.IOException;
 
+/**
+ *
+ * npr: iris.data pso-b-7 20 0.02 10000
+ *
+ */
 public class Main {
 
     public static void main(String[] args) throws IOException {
-        // write your code here
-
         IReadOnlyDataset dataset = ParseableReadOnlyDataset.createFromFile(args[0]);
 
         int[] layers = {4, 5, 3, 3};
