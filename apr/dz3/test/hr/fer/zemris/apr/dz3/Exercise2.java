@@ -27,13 +27,16 @@ public class Exercise2 {
     private void innerTest(DerivationMethod.Method dMethod, int functionId) {
         IOptimizingMethod method = new DerivationMethod(dMethod, DerivationMethod.Type.OPTIMIZATION_ON_LINE);
 
-        AFTOWithDerivatives f1 = Functions.get(functionId);
+        AFTOWithDerivatives f = Functions.get(functionId);
+        ProxyFunctionWithDerivatives proxy = new ProxyFunctionWithDerivatives(f);
 
-        Point minimum = method.findMinimum(f1, f1.startingPoint(f1.dimension(2)));
+        Point minimum = method.findMinimum(proxy, proxy.startingPoint(proxy.dimension(2)));
 
         System.out.println("Found minimum:");
         System.out.println(minimum);
         System.out.println("Real minimum:");
-        System.out.println(f1.minimumAt(f1.dimension(2)));
+        System.out.println(proxy.minimumAt(proxy.dimension(2)));
+
+        System.out.println(proxy.getStats());
     }
 }
