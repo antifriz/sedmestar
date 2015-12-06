@@ -106,6 +106,19 @@ public final class Matrix {
         }
     }
 
+    public static Matrix fill(int i, int j, double ... vals){
+        assert vals.length == i*j;
+        double[][] underlying = new double[i][j];
+        int k = 0;
+        for (int ii = 0; ii < i; ii++) {
+            for (int jj = 0; jj < j; jj++) {
+                underlying[ii][jj] = vals[k];
+                k++;
+            }
+        }
+        return new Matrix(underlying);
+    }
+
     private static double[][] allocateZeroedArray(int i, int j) {
         return new double[i][j];
     }
