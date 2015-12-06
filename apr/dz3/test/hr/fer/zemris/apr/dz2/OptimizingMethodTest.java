@@ -34,27 +34,27 @@ public class OptimizingMethodTest {
     public static Collection params() {
         List<Object[]> objects = new ArrayList<>();
 
-        int[] dims = new int[]{1, 2, 3, 5, 10};
-        for (IOptimizingMethod method : Config.getMethods(false)) {
-            method.setVerbosity(true);
-            method.setTimeout(10000);
-            for (int i = 0; i < Functions.size(); i++) {
-                for (int d : dims) {
-                    AbstractFunctionToOptimize iFunctionToOptimize = Functions.get(i);
-                    if (iFunctionToOptimize.dimension(d) == d) {
-                        objects.add(new Object[]{method.getClass().getSimpleName(), i, d, iFunctionToOptimize, method});
-                    }
-                }
-            }
-        }
+//        int[] dims = new int[]{1, 2, 3, 5, 10};
+//        for (IOptimizingMethod method : Config.getMethods(false)) {
+//            method.setVerbosity(true);
+//            method.setTimeout(10000);
+//            for (int i = 0; i < Functions.size(); i++) {
+//                for (int d : dims) {
+//                    AbstractFunctionToOptimize iFunctionToOptimize = Functions.get(i);
+//                    if (iFunctionToOptimize.dimension(d) == d) {
+//                        objects.add(new Object[]{method.getClass().getSimpleName(), i, d, iFunctionToOptimize, method});
+//                    }
+//                }
+//            }
+//        }
         return objects;
     }
 
     @Test
     public void testOptimization() {
-        Point p = method.findMinimum(function, function.startingPoint(function.dimension(dimension)));
+//        Point p = method.findMinimum(function, function.startingPoint(function.dimension(dimension)));
 
-        assertEquals(function.minimumValue(), function.valueAt(p), precision);
+//        assertEquals(function.minimumValue(), function.valueAt(p), precision);
     }
 
 }

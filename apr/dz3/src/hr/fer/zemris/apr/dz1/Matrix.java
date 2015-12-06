@@ -498,7 +498,7 @@ public final class Matrix {
         int size = vector.getDimension();
         double[][] underlying = new double[size][1];
         for (int i = 0; i < size; i++) {
-            underlying[i][1] = vector.get(i);
+            underlying[i][0] = vector.get(i);
         }
         return new Matrix(underlying);
     }

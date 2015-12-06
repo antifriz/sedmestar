@@ -37,7 +37,7 @@ public class Functions {
 
                 @Override
                 protected Matrix internalHessianAt(Point point) {
-                    return Matrix.fill(2, 2, 400 * (3*Math.pow(point.get(0), 2) - point.get(1)), -400 * point.get(0), -400 * point.get(0), 200);
+                    return Matrix.fill(2, 2, 400 * (3*Math.pow(point.get(0), 2) - point.get(1))+2, -400 * point.get(0), -400 * point.get(0), 200);
                 }
 
                 @Override

@@ -71,6 +71,8 @@ public class GoldenSectionMethod implements IOptimizingMethod {
                 fr = value(f, right);
             } while (fm > fr);
         else
+        {
+            //throw new RuntimeException();
             do {
                 right = m;
                 m = left;
@@ -78,6 +80,7 @@ public class GoldenSectionMethod implements IOptimizingMethod {
                 left = point - h * (step *= 2);
                 fl = value(f, left);
             } while (fm > fl);
+        }
         return new Interval(left, right);
     }
 
