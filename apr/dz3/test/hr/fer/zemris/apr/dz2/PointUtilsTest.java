@@ -1,8 +1,7 @@
 package hr.fer.zemris.apr.dz2;
 
-import hr.fer.zemris.apr.dz2.Config;
-import hr.fer.zemris.apr.dz2.Point;
-import hr.fer.zemris.apr.dz2.PointUtils;
+import hr.fer.zemris.apr.dz3.Point;
+import hr.fer.zemris.apr.dz3.PointUtils;
 import org.junit.Test;
 
 import java.util.List;

@@ -1,4 +1,7 @@
-package hr.fer.zemris.apr.dz2;
+package hr.fer.zemris.apr.dz3;
+
+import hr.fer.zemris.apr.dz1.IVector;
+import hr.fer.zemris.apr.dz1.Matrix;
 
 import java.text.DecimalFormat;
 import java.util.Arrays;
@@ -12,7 +15,7 @@ import java.util.stream.IntStream;
 /**
  * Created by ivan on 11/8/15.
  */
-public class Point {
+public class Point implements IVector {
     public final double[] values;
 
     private Point(double[] values) {
@@ -180,5 +183,19 @@ public class Point {
     @Override
     public int hashCode() {
         return Arrays.hashCode(values);
+    }
+
+    public double norm() {
+        return Math.sqrt(sumOfSquares());
+    }
+
+    public static Point fromMatrix(Matrix matrix) {
+        assert matrix.isColumnVector();
+        int rowDimension = matrix.getRowDimension();
+        double[] underlying = new double[rowDimension];
+        for (int i = 0; i < rowDimension; i++) {
+            underlying[i] = matrix.get(i, 0);
+        }
+        return new Point(underlying);
     }
 }

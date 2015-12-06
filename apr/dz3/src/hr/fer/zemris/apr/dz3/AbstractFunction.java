@@ -1,4 +1,6 @@
-package hr.fer.zemris.apr.dz2;
+package hr.fer.zemris.apr.dz3;
+
+import hr.fer.zemris.apr.dz3.Point;
 
 /**
  * Created by ivan on 11/8/15.
@@ -6,7 +8,7 @@ package hr.fer.zemris.apr.dz2;
 public abstract class AbstractFunction {
     private int callCount = 0;
 
-    final double valueAt(Point point){
+    public final double valueAt(Point point){
         callCount++;
         return internalValueAt( point);
     }

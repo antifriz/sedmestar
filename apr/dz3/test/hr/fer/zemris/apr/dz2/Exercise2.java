@@ -1,5 +1,6 @@
 package hr.fer.zemris.apr.dz2;
 
+import hr.fer.zemris.apr.dz3.*;
 import org.junit.Test;
 
 /**

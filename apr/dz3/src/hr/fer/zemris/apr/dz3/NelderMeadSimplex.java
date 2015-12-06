@@ -1,4 +1,4 @@
-package hr.fer.zemris.apr.dz2;
+package hr.fer.zemris.apr.dz3;
 
 import java.util.Collections;
 import java.util.List;

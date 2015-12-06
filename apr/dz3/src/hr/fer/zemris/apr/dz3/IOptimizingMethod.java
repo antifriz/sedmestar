@@ -1,4 +1,4 @@
-package hr.fer.zemris.apr.dz2;
+package hr.fer.zemris.apr.dz3;
 
 /**
  * Created by ivan on 11/8/15.

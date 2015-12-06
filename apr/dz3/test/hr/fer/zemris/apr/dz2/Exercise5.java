@@ -1,5 +1,9 @@
 package hr.fer.zemris.apr.dz2;
 
+import hr.fer.zemris.apr.dz3.AbstractFunctionToOptimize;
+import hr.fer.zemris.apr.dz3.Functions;
+import hr.fer.zemris.apr.dz3.NelderMeadSimplex;
+import hr.fer.zemris.apr.dz3.Point;
 import org.junit.Test;
 
 import java.util.concurrent.ThreadLocalRandom;

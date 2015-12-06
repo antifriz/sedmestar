@@ -1,5 +1,8 @@
 package hr.fer.zemris.apr.dz2;
 
+import hr.fer.zemris.apr.dz3.AbstractFunction;
+import hr.fer.zemris.apr.dz3.GoldenSectionMethod;
+import hr.fer.zemris.apr.dz3.Point;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;

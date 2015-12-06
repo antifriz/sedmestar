@@ -1,5 +1,6 @@
 package hr.fer.zemris.apr.dz2;
 
+import hr.fer.zemris.apr.dz3.*;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
@@ -48,7 +49,7 @@ public class Exercise4 {
 
         int dimension = startingPoint.getDimension();
         System.out.printf("NMS, Calls: %5d Point: %s Deviation: %6.4f\n", ccs, ps, PointUtils.deviation(ps, function.minimumAt(dimension)));
-        org.junit.Assert.assertEquals(function.minimumValue(),function.valueAt(ps),Config.PRECISION_3);
+        org.junit.Assert.assertEquals(function.minimumValue(),function.valueAt(ps), Config.PRECISION_3);
     }
 
     @Test
