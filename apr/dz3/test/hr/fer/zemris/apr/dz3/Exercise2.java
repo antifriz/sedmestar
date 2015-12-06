@@ -8,15 +8,32 @@ import org.junit.Test;
 
 public class Exercise2 {
     @Test
-    public void testByOptOnLine() throws Exception {
-        IOptimizingMethod optimizingMethod = new DerivationMethod(DerivationMethod.Method.NEWTON_RAPHSON, DerivationMethod.Type.OPTIMIZATION_ON_LINE);
+    public void testGrad1() throws Exception {
+        innerTest(DerivationMethod.Method.GRADIENT_DESCENT,0);
+    }
+    @Test
+    public void testNR1() throws Exception {
+        innerTest(DerivationMethod.Method.NEWTON_RAPHSON,0);
+    }
+    @Test
+    public void testGrad2() throws Exception {
+        innerTest(DerivationMethod.Method.GRADIENT_DESCENT,1);
+    }
+    @Test
+    public void testNR2() throws Exception {
+        innerTest(DerivationMethod.Method.NEWTON_RAPHSON,1);
+    }
 
-        AFTOWithDerivatives f1 = Functions.get(1);
+    private void innerTest(DerivationMethod.Method dMethod, int functionId) {
+        IOptimizingMethod method = new DerivationMethod(dMethod, DerivationMethod.Type.OPTIMIZATION_ON_LINE);
 
-        Point minimum = optimizingMethod.findMinimum(f1, f1.startingPoint(f1.dimension(2)));
+        AFTOWithDerivatives f1 = Functions.get(functionId);
 
+        Point minimum = method.findMinimum(f1, f1.startingPoint(f1.dimension(2)));
+
+        System.out.println("Found minimum:");
         System.out.println(minimum);
+        System.out.println("Real minimum:");
         System.out.println(f1.minimumAt(f1.dimension(2)));
-
     }
 }

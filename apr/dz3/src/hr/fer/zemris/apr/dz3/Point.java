@@ -210,4 +210,13 @@ public class Point implements IVector {
     public Point plus(double value) {
         return unaryOperation(x->x+value);
     }
+
+    public boolean isInfiniteOrNan() {
+        for (double v : values) {
+            if(Double.isInfinite(v) || Double.isNaN(v)){
+                return true;
+            }
+        }
+        return false;
+    }
 }

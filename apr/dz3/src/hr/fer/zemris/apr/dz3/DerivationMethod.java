@@ -45,7 +45,7 @@ public class DerivationMethod implements IOptimizingMethod {
 
         while (true) {
 
-//            printPoint(point,f,"Point",3);
+            //printPoint(point,f,"Point",3);
 
             Point solution = func.gradientAt(point).multiply(-1);
             if (mMethod == Method.NEWTON_RAPHSON) {
@@ -55,7 +55,7 @@ public class DerivationMethod implements IOptimizingMethod {
 
             double norm = solution.norm();
 
-            if (norm < mEpsilon || lastSeen > 100) {
+            if (norm < mEpsilon || lastSeen > 100||point.isInfiniteOrNan()) {
                 break;
             }
             switch (mType) {
