@@ -10,7 +10,7 @@ import java.util.function.Function;
  */
 public class BoxMethod implements IOptimizingMethod {
 
-    public double alpha = 1.0000;
+    public double alpha = 1.3;
     public double epsilon = Config.PRECISION_6;
 
     private boolean verbose = false;

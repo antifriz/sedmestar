@@ -39,6 +39,16 @@ public class ProxyFunctionWithDerivatives extends AFTOWithDerivatives{
         return internalFunction.startingPoint(n);
     }
 
+    @Override
+    public Point minimumAt(int n) {
+        return internalFunction.minimumAt(n);
+    }
+
+    @Override
+    public double minimumValue() {
+        return internalFunction.minimumValue();
+    }
+
     public String getStats() {
         StringBuilder sb = new StringBuilder();
         sb.append("Function calls: ").append(internalFunction.getAfterOptimizationCallCount()).append('\n');

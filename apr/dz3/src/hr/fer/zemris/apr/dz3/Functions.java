@@ -31,6 +31,11 @@ public class Functions {
                 }
 
                 @Override
+                public double minimumValue() {
+                    return 0;
+                }
+
+                @Override
                 protected Point internalGradientAt(Point point) {
                     return Point.of(-400 * (point.get(1) - Math.pow(point.get(0), 2)) * point.get(0)-2*(1-point.get(0)), 200 * (point.get(1) - Math.pow(point.get(0), 2))+2);
                 }
@@ -61,6 +66,11 @@ public class Functions {
                 @Override
                 public Point minimumAt(int n) {
                     return Point.of(4, 2);
+                }
+
+                @Override
+                public double minimumValue() {
+                    return 0;
                 }
 
                 @Override
@@ -104,6 +114,11 @@ public class Functions {
                 public Point minimumAt(int n) {
                     return Point.of(2, -3);
                 }
+
+                @Override
+                public double minimumValue() {
+                    return 0;
+                }
             },
             new AFTOWithDerivatives() {
                 @Override
@@ -129,6 +144,11 @@ public class Functions {
                 @Override
                 public Point minimumAt(int n) {
                     return Point.of(3, 0);
+                }
+
+                @Override
+                public double minimumValue() {
+                    return 0;
                 }
             },
     };

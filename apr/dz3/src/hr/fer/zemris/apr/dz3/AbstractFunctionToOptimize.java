@@ -7,12 +7,8 @@ public abstract class AbstractFunctionToOptimize extends AbstractFunction {
 
     public abstract Point startingPoint(int n);
 
-    public Point minimumAt(int n) {
-        return Point.zeros(n);
-    }
+    public abstract Point minimumAt(int n);
 
-    public double minimumValue() {
-        return 0;
-    }
+    public abstract double minimumValue();
 
 }
