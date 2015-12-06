@@ -10,35 +10,41 @@ import java.util.function.Function;
  */
 public class BoxMethod implements IOptimizingMethod {
 
-    public double alpha = 1.00001;
-    public double beta = 0.5;
-    public double gamma = 2;
+    public double alpha = 1.0000;
     public double epsilon = Config.PRECISION_6;
-    public double sigma = 0.5;
-    public double simplexT = 1;
 
     private boolean verbose = false;
 
     private long timeout = 0;
     public boolean useTweak = false;
-    private double mTopExplicit;
     private double mBottomExplicit;
-    Function<Point,Boolean> implicitSatisfaction;
+    private double mTopExplicit;
+    private Function<Point, Boolean> mImplicitSatisfaction;
+
+    public BoxMethod(double bottomExplicit, double topExplicit, Function<Point, Boolean> implicitSatisfaction) {
+        mBottomExplicit = bottomExplicit;
+        mTopExplicit = topExplicit;
+        mImplicitSatisfaction = implicitSatisfaction;
+    }
 
     public Point findMinimum(AbstractFunction fun, Point initialPoint) {
         AbstractFunction f = new ProxyFunction(fun);
 
-        if(!satisfiyExplicit(initialPoint).equals(initialPoint) || implicitSatisfaction.apply(initialPoint)){
-            throw new RuntimeException("Initial point not OK");
+        if (!satisfiyExplicit(initialPoint).equals(initialPoint) || !mImplicitSatisfaction.apply(initialPoint)) {
+            System.out.println(initialPoint);
+            System.out.println(satisfiyExplicit(initialPoint));
+            throw new RuntimeException("Initial point not OK " + !satisfiyExplicit(initialPoint).equals(initialPoint) + " " + !mImplicitSatisfaction.apply(initialPoint));
         }
 
         if (verbose) System.out.printf("Initial point: %s\n====================\n", initialPoint);
 
 
-
         List<Point> d = constructBox(initialPoint);
 
         notifyUpdate(d, f);
+
+        Point bestCentroidSoFar = initialPoint;
+        int lastSeen = 0;
 
         long timeStart = System.currentTimeMillis();
         while (true) {
@@ -47,7 +53,7 @@ public class BoxMethod implements IOptimizingMethod {
             if (verbose) printPoint(centroid, f, "Centroid", 5);
 
 
-            if (Math.sqrt(d.stream().mapToDouble(x -> Math.pow(f.valueAt(x) - f.valueAt(centroid), 2)).sum()) <= d.size() * epsilon && (!useTweak ||Math.sqrt(d.stream().map(centroid::minus).mapToDouble(Point::sumOfSquares).sum()) <= epsilon * d.size())) {
+            if (lastSeen>100 ||(Math.sqrt(d.stream().mapToDouble(x -> Math.pow(f.valueAt(x) - f.valueAt(centroid), 2)).sum()) <= d.size() * epsilon && (!useTweak || Math.sqrt(d.stream().map(centroid::minus).mapToDouble(Point::sumOfSquares).sum()) <= epsilon * d.size()))) {
                 Point best = f.valueAt(centroid) < getLowestValue(d, f) ? centroid : getLowest(d);
                 if (verbose)
                     printPoint(best, f, "Best", 5);
@@ -61,12 +67,20 @@ public class BoxMethod implements IOptimizingMethod {
 
             reflection = satisfiyExplicit(reflection);
 
-            satisfyImplicit(centroid,reflection);
+            reflection = satisfyImplicit(centroid, reflection);
 
-            if(f.valueAt(d.get(d.size()-2))<f.valueAt(reflection)){
-                reflection = reflection.shrink(centroid,0.5);
+            if (f.valueAt(d.get(d.size() - 2)) < f.valueAt(reflection)) {
+                reflection = reflection.shrink(centroid, 0.5);
             }
-            updateHighest(reflection,d,f);
+            updateHighest(reflection, d, f);
+
+            if(f.valueAt(centroid)<f.valueAt(bestCentroidSoFar)){
+                bestCentroidSoFar = centroid;
+                lastSeen = 0;
+            }
+            else {
+                lastSeen++;
+            }
         }
     }
 
@@ -80,7 +94,7 @@ public class BoxMethod implements IOptimizingMethod {
         points.add(initialPoint);
         for (int i = 1; i < count; i++) {
             Point point = Point.random(initialPoint.getDimension());
-            point = point.multiply(mTopExplicit-mBottomExplicit).plus(mBottomExplicit);
+            point = point.multiply(mTopExplicit - mBottomExplicit).plus(mBottomExplicit);
             point = satisfyImplicit(initialPoint, point);
             points.add(point);
         }
@@ -88,8 +102,8 @@ public class BoxMethod implements IOptimizingMethod {
     }
 
     private Point satisfyImplicit(Point center, Point point) {
-        while(!implicitSatisfaction.apply(point)){
-            point = point.shrink(center,0.5);
+        while (!mImplicitSatisfaction.apply(point)) {
+            point = point.shrink(center, 0.5);
         }
         return point;
     }
