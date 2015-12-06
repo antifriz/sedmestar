@@ -20,7 +20,7 @@ public class Exercise1 {
     private void innerTest(DerivationMethod.Type type) {
         IOptimizingMethod method = new DerivationMethod(DerivationMethod.Method.GRADIENT_DESCENT,type);
 
-        AFTOWithDerivatives f1 = Functions.get(0);
+        AFTOWithDerivatives f1 = Functions.get(2);
 
         Point minimum = method.findMinimum(f1, f1.startingPoint(f1.dimension(2)));
 
