@@ -25,7 +25,7 @@ public class Exercise4 {
         AbstractFunctionToOptimize f = Functions.get(functionId);
 
 
-        final double r = 0.001;
+        final double r = 1;
         AbstractFunction fLimits = new AbstractFunction() {
             @Override
             protected double internalValueAt(Point point) {
@@ -38,8 +38,7 @@ public class Exercise4 {
                 return f.valueAt(point) + internal + external;
             }
         };
-        //Point initialPoint = f.startingPoint(f.dimension(2));
-        Point initialPoint = Point.of(0.5,1);
+        Point initialPoint = f.startingPoint(f.dimension(2));
         Point minimum = method.findMinimum(fLimits, initialPoint);
 
         System.out.println("Found minimum:");
