@@ -33,7 +33,7 @@ public class Exercise4 {
                 double g2 = 2 - point.get(0);
                 Function<Double, Double> extF = x -> 1 / 2.0 * Math.pow(x - Math.abs(x), 2);
 
-                double internal = point.unaryOperation(x -> -r * Math.log(100 - x) - r * Math.log(x + 100)).sum();
+                double internal = point.unaryOperation(x -> -r * Math.log(Math.max(100 - x,0)) - r * Math.log(Math.max(x + 100,0))).sum();
                 double external = 1 / r * (extF.apply(g1) + extF.apply(g2));
                 return f.valueAt(point) + internal + external;
             }
