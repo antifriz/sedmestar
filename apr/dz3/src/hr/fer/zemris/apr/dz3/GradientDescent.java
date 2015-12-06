@@ -22,8 +22,8 @@ public class GradientDescent implements IOptimizingMethod {
 
     @Override
     public Point findMinimum(AbstractFunction f, Point initialPoint) {
-        assert f instanceof AFTOWithGradients;
-        AFTOWithGradients func = (AFTOWithGradients) f;
+        assert f instanceof AFTOWithDerivatives;
+        AFTOWithDerivatives func = (AFTOWithDerivatives) f;
 
         GoldenSectionMethod gsm = new GoldenSectionMethod();
         Point point = initialPoint;

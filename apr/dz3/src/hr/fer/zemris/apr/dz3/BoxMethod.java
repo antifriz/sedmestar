@@ -1,7 +1,9 @@
 package hr.fer.zemris.apr.dz3;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.function.Function;
 
 /**
  * Created by ivan on 11/8/15.
@@ -19,12 +21,22 @@ public class BoxMethod implements IOptimizingMethod {
 
     private long timeout = 0;
     public boolean useTweak = false;
+    private double mTopExplicit;
+    private double mBottomExplicit;
+    Function<Point,Boolean> implicitSatisfaction;
 
     public Point findMinimum(AbstractFunction fun, Point initialPoint) {
         AbstractFunction f = new ProxyFunction(fun);
+
+        if(!satisfiyExplicit(initialPoint).equals(initialPoint) || implicitSatisfaction.apply(initialPoint)){
+            throw new RuntimeException("Initial point not OK");
+        }
+
         if (verbose) System.out.printf("Initial point: %s\n====================\n", initialPoint);
 
-        List<Point> d = PointUtils.constructSimplex(initialPoint, simplexT);
+
+
+        List<Point> d = constructBox(initialPoint);
 
         notifyUpdate(d, f);
 
@@ -47,28 +59,39 @@ public class BoxMethod implements IOptimizingMethod {
 
             Point reflection = getHighest(d).reflect(centroid, alpha);
 
-            if (f.valueAt(reflection) < getLowestValue(d, f)) {
-                Point expansion = centroid.expand(reflection, gamma);
-                updateHighest(f.valueAt(expansion) < getLowestValue(d, f) ? expansion : reflection, d, f);
-            } else {
-                boolean canBeSecondHighest = d.size() == 1 || f.valueAt(reflection) > f.valueAt(d.get(d.size() - 2));
-                if (canBeSecondHighest) {
-                    if (f.valueAt(reflection) < getHighestValue(d, f)) {
-                        updateHighest(reflection, d, f);
-                    }
+            reflection = satisfiyExplicit(reflection);
 
-                    Point contraction = getHighest(d).contract(centroid, beta);
-                    if (f.valueAt(contraction) < getHighestValue(d, f)) {
-                        updateHighest(contraction, d, f);
-                    } else {
-                        shrinkSimplex(f, d);
-                    }
+            satisfyImplicit(centroid,reflection);
 
-                } else {
-                    updateHighest(reflection, d, f);
-                }
+            if(f.valueAt(d.get(d.size()-2))<f.valueAt(reflection)){
+                reflection = reflection.shrink(centroid,0.5);
             }
+            updateHighest(reflection,d,f);
         }
+    }
+
+    private Point satisfiyExplicit(Point point) {
+        return point.limitFromAbove(mTopExplicit).limitFromBelow(mBottomExplicit);
+    }
+
+    private List<Point> constructBox(Point initialPoint) {
+        double count = Math.pow(2, initialPoint.getDimension());
+        List<Point> points = new ArrayList<>();
+        points.add(initialPoint);
+        for (int i = 1; i < count; i++) {
+            Point point = Point.random(initialPoint.getDimension());
+            point = point.multiply(mTopExplicit-mBottomExplicit).plus(mBottomExplicit);
+            point = satisfyImplicit(initialPoint, point);
+            points.add(point);
+        }
+        return points;
+    }
+
+    private Point satisfyImplicit(Point center, Point point) {
+        while(!implicitSatisfaction.apply(point)){
+            point = point.shrink(center,0.5);
+        }
+        return point;
     }
 
     @Override
@@ -86,17 +109,6 @@ public class BoxMethod implements IOptimizingMethod {
         for (Point p : d) {
             printPoint(p, f, "", 5);
         }
-    }
-
-    private void shrinkSimplex(AbstractFunction f, List<Point> d) {
-        for (int i = 1; i < d.size(); i++) {
-            d.set(i, d.get(i).shrink(getLowest(d), sigma));
-        }
-        notifyUpdate(d, f);
-    }
-
-    private double getHighestValue(List<Point> d, AbstractFunction f) {
-        return f.valueAt(getHighest(d));
     }
 
     private void updateHighest(Point point, List<Point> d, AbstractFunction f) {

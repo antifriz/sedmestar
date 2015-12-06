@@ -116,6 +116,14 @@ public class Point implements IVector {
         return new Point(values);
     }
 
+    public Point limitFromAbove(double maxVal){
+        return unaryOperation(a->Math.min(a,maxVal));
+    }
+
+    public Point limitFromBelow(double minVal){
+        return unaryOperation(a->Math.max(a,minVal));
+    }
+
     public Point reflect(Point center, double alpha) {
         return binaryOperation(center, (a, b) -> (1 + alpha) * b - alpha * a);
     }
@@ -197,5 +205,9 @@ public class Point implements IVector {
             underlying[i] = matrix.get(i, 0);
         }
         return new Point(underlying);
+    }
+
+    public Point plus(double value) {
+        return unaryOperation(x->x+value);
     }
 }

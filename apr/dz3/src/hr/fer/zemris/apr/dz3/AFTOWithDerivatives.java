@@ -5,6 +5,7 @@ import hr.fer.zemris.apr.dz1.Matrix;
 /**
  * Created by ivan on 12/6/15.
  */
-public abstract class AFTOWithHessian  extends AFTOWithGradients{
+public abstract class AFTOWithDerivatives extends AbstractFunctionToOptimize{
     public abstract Matrix getHessianAtPoint(Point point);
+    public abstract Point getGradientAtPoint(Point point);
 }

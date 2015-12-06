@@ -23,8 +23,8 @@ public class NewtonRaphsonMethod implements IOptimizingMethod {
 
     @Override
     public Point findMinimum(AbstractFunction f, Point initialPoint) {
-        assert f instanceof AFTOWithHessian;
-        AFTOWithHessian func = (AFTOWithHessian) f;
+        assert f instanceof AFTOWithDerivatives;
+        AFTOWithDerivatives func = (AFTOWithDerivatives) f;
 
         GoldenSectionMethod gsm = new GoldenSectionMethod();
         Point point = initialPoint;
