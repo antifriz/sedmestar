@@ -11,25 +11,12 @@ import java.util.function.Function;
  */
 public class Exercise5 {
     @Test
-    public void test1() throws Exception {
-        innerTest(0);
-    }
-
-    @Test
-    public void test2() throws Exception {
-        innerTest(1);
-    }
-
-    @Test
-    public void testName() throws Exception {
-        System.out.println(Math.log(0));
-
+    public void test4() throws Exception {
+        innerTest(3);
     }
 
     private void innerTest(int functionId) {
-//        IOptimizingMethod method = new BoxMethod(-100, 100, point -> !useImplicit || (point.get(1) >= point.get(0) && 2 >= point.get(0)));
         IOptimizingMethod method = new NelderMeadSimplex();
-
 
         AbstractFunctionToOptimize f = Functions.get(functionId);
 
@@ -56,7 +43,7 @@ public class Exercise5 {
                 }
             };
             Point minimum = method.findMinimum(fLimits, initialPoint);
-            System.out.println(minimum);
+            System.out.println(minimum + " "+fLimits.valueAt(minimum));
             if(initialPoint.distanceTo(minimum)<epsilon){
                 initialPoint = minimum;
                 break;
@@ -65,6 +52,8 @@ public class Exercise5 {
             initialPoint = minimum;
             tt *= 10;
         }
+
+
 
         System.out.println("Found minimum:");
         System.out.println(initialPoint);

@@ -18,27 +18,20 @@ public class Exercise4 {
     }
 
     private void innerTest(int functionId) {
-//        IOptimizingMethod method = new BoxMethod(-100, 100, point -> !useImplicit || (point.get(1) >= point.get(0) && 2 >= point.get(0)));
         IOptimizingMethod method = new NelderMeadSimplex();
-
-
         AbstractFunctionToOptimize f = Functions.get(functionId);
-
 
         final double r = 1;
         AbstractFunction fLimits = new AbstractFunction() {
             @Override
             protected double internalValueAt(Point point) {
-                double g1 = point.get(1) - point.get(0);
-                double g2 = 2 - point.get(0);
-                Function<Double, Double> extF = x -> 1 / 2.0 * Math.pow(x - Math.abs(x), 2);
-
-                double internal = point.unaryOperation(x -> -r * Math.log(Math.max(100 - x,0)) - r * Math.log(Math.max(x + 100,0))).sum();
-                double external = 1 / r * (extF.apply(g1) + extF.apply(g2));
-                return f.valueAt(point) + internal + external;
+                double internal = point.unaryOperation(x -> ln(100 - x) + ln(x + 100)).sum() +ln(point.get(1) - point.get(0))+ln(2 - point.get(0));
+                return f.valueAt(point) -r*internal;
             }
         };
         Point initialPoint = f.startingPoint(f.dimension(2));
+        //initialPoint = Point.of(-1,0);
+        //method.setVerbosity(true);
         Point minimum = method.findMinimum(fLimits, initialPoint);
 
         System.out.println("Found minimum:");
@@ -47,5 +40,9 @@ public class Exercise4 {
         System.out.println(f.minimumAt(f.dimension(2)));
 
         System.out.println("Function calls: " + f.getAfterOptimizationCallCount());
+    }
+
+    private double ln(double x){
+        return Math.log(Math.max(0,x));
     }
 }
