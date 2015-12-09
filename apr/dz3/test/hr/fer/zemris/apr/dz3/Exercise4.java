@@ -21,11 +21,11 @@ public class Exercise4 {
         IOptimizingMethod method = new NelderMeadSimplex();
         AbstractFunctionToOptimize f = Functions.get(functionId);
 
-        final double r = 1;
+        final double r = 0.0001;
         AbstractFunction fLimits = new AbstractFunction() {
             @Override
             protected double internalValueAt(Point point) {
-                double internal = point.unaryOperation(x -> ln(100 - x) + ln(x + 100)).sum() +ln(point.get(1) - point.get(0))+ln(2 - point.get(0));
+                double internal = /*point.unaryOperation(x -> ln(100 - x) + ln(x + 100)).sum() +*/ln(point.get(1) - point.get(0))+ln(2 - point.get(0));
                 return f.valueAt(point) -r*internal;
             }
         };

@@ -37,7 +37,9 @@ public class Functions {
 
                 @Override
                 protected Point internalGradientAt(Point point) {
-                    return Point.of(-400 * (point.get(1) - Math.pow(point.get(0), 2)) * point.get(0)-2*(1-point.get(0)), 200 * (point.get(1) - Math.pow(point.get(0), 2))+2);
+                    return Point.of(
+                            2 * (200*Math.pow(point.get(0),3) - 200 * point.get(0)*point.get(1) +point.get(0)-1),
+                            200*(point.get(1)-Math.pow(point.get(0),2)));
                 }
 
                 @Override
