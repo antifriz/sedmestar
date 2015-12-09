@@ -8,6 +8,6 @@ import org.junit.Test;
 public class ANNTrainerTest {
     @Test
     public void testMain() throws Exception {
-        ANNTrainer.main(new String[]{""});
+        ANNTrainer.main(new String[]{"data.txt", "tdnn-8x10x1", "10", "0.1", "1000"});
     }
 }

@@ -1,11 +1,36 @@
 package hr.fer.zemris.ropaeruj.dz8;
 
+import java.io.IOException;
+import java.util.Arrays;
+import java.util.Random;
+
 /**
  * Created by ivan on 12/9/15.
  */
 public class ANNTrainer {
-    public static void main(String[] args){
+    public static void main(String[] args) throws IOException {
 
+        Random random = new Random();
+
+        ANN ann = ANN.create(args[1]);
+
+
+
+        ParseableReadOnlyDataset dataset = ParseableReadOnlyDataset.loadData(args[0], ann.getInputDimension(), -1);
+
+        DiffEvoAlg diffEvoAlg = new DiffEvoAlg();
+        diffEvoAlg.setEvaluator(ANNEvaluator.createFor(ann, dataset));
+
+
+        double crossoverProbability = 0.8;
+
+        int populationSize = Integer.parseInt(args[2]);
+        double desiredError = Double.parseDouble(args[3]);
+        int maxIterCount = Integer.parseInt(args[4]);
+
+        double[] result = diffEvoAlg.run(populationSize, random, crossoverProbability, maxIterCount, desiredError);
+
+        System.out.println(Arrays.toString(result));
     }
 
 }
