@@ -12,9 +12,7 @@ public class ANNTrainer {
 
         Random random = new Random();
 
-        ANN ann = ANN.create(args[1]);
-
-
+        ANN ann = ANN.create(args[1], new TanhSigmoidTransferFunction(),new TanhSigmoidTransferFunction());
 
         ParseableReadOnlyDataset dataset = ParseableReadOnlyDataset.loadData(args[0], ann.getInputDimension(), -1);
 
@@ -22,13 +20,13 @@ public class ANNTrainer {
         diffEvoAlg.setEvaluator(ANNEvaluator.createFor(ann, dataset));
 
 
-        double crossoverProbability = 0.8;
+        double crossoverConstant = 0.9;
 
         int populationSize = Integer.parseInt(args[2]);
         double desiredError = Double.parseDouble(args[3]);
         int maxIterCount = Integer.parseInt(args[4]);
 
-        double[] result = diffEvoAlg.run(populationSize, random, crossoverProbability, maxIterCount, desiredError);
+        double[] result = diffEvoAlg.run(populationSize, random, crossoverConstant, maxIterCount, desiredError);
 
         System.out.println(Arrays.toString(result));
     }

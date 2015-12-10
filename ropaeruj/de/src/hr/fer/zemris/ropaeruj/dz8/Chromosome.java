@@ -14,8 +14,8 @@ public class Chromosome {
         this.genes = genes;
     }
 
-    public static Chromosome createNormalizedRandom(Random random) {
-        return new Chromosome(random.doubles(-1, 1).toArray());
+    public static Chromosome createNormalizedRandom(Random random, int dimension) {
+        return new Chromosome(random.doubles(-1, 1).limit(dimension).toArray());
     }
 
     public Chromosome duplicate() {

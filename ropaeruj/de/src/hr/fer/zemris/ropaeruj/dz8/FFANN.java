@@ -12,7 +12,7 @@ public final class FFANN extends ANN {
     private final int[] mLayers;
 
     public FFANN(int[] layers, ITransferFunction[] transferFunctions/*, IReadOnlyDataset dataset*/) {
-        mLayers = layers;
+        mLayers = Arrays.copyOf(layers, layers.length);
         assert layers.length > 1;
         assert transferFunctions.length + 1 == layers.length;
 
@@ -48,6 +48,8 @@ public final class FFANN extends ANN {
             mNeurons[k++] = new DummyNeuron();
             lastLayerFirstNeuronIdx += beforeLayerSize;
         }
+
+        System.out.printf("Loaded FFANN with dimension %s\n", Arrays.toString(layers));
     }
 
     public static FFANN createSigmoidal(int[] layers) {
@@ -60,10 +62,11 @@ public final class FFANN extends ANN {
 
     }
 
-    public static FFANN create(int[] layers, ITransferFunction transferFunction) {
+    public static FFANN create(int[] layers, ITransferFunction hiddenLayersTF, ITransferFunction outputLayerTF) {
         ITransferFunction[] transferFunctions = new ITransferFunction[layers.length - 1];
-        Arrays.fill(transferFunctions, transferFunction);
+        Arrays.fill(transferFunctions, hiddenLayersTF);
 
+        transferFunctions[transferFunctions.length - 1] = outputLayerTF;
         return new FFANN(
                 layers,
                 transferFunctions);
@@ -72,6 +75,9 @@ public final class FFANN extends ANN {
 
     @Override
     public void calcOutputs(double[] inputs, double[] weights, double[] outputs) {
+        assert weights.length == mWeightsCount;
+        assert inputs.length == getInputDimension();
+
         int neuronsCount = mNeurons.length;
         double[] neuronOutputs = new double[mNeurons.length];
 

@@ -35,7 +35,7 @@ public class ParseableReadOnlyDataset implements IReadOnlyDataset {
         double max = Arrays.stream(dataset).max().getAsDouble();
         double min = Arrays.stream(dataset).min().getAsDouble();
 
-        dataset = Arrays.stream(dataset).map(x->min+(max-min)*x).toArray();
+        dataset = Arrays.stream(dataset).map(x->(x-min)/(max-min) * 2 - 1).toArray();
 
         List<double[][]> data = new ArrayList<>();
 
@@ -43,9 +43,7 @@ public class ParseableReadOnlyDataset implements IReadOnlyDataset {
             double[][] d = new double[2][];
             d[0] = new double[l];
             d[1] = new double[1];
-            for (int j = 0; j < l; j++) {
-                d[0][j] = dataset[i + j];
-            }
+            System.arraycopy(dataset, i, d[0], 0, l);
             d[1][0] = dataset[i + l];
 
             data.add(d);

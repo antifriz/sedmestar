@@ -2,6 +2,8 @@ package hr.fer.zemris.ropaeruj.dz8;
 
 import hr.fer.zemris.ropaeruj.dz7.IReadOnlyDataset;
 
+import java.util.Arrays;
+
 /**
  * Created by ivan on 12/9/15.
  */
@@ -40,13 +42,14 @@ public abstract class ANNEvaluator {
                     double v = output[i] - realOutput[i];
                     sum += v * v;
                 }
+                //System.out.println(Arrays.toString(output) + " " + Arrays.toString(realOutput));
             }
             return sum / mDataset.getSize();
         }
 
         @Override
         int getSolutionDimension() {
-            return 0;
+            return mFfann.getWeightsCount();
         }
     }
 }
