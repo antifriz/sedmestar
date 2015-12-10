@@ -50,7 +50,7 @@ public class FFANN extends ANN {
             lastLayerFirstNeuronIdx += beforeLayerSize;
         }
 
-        System.out.printf("Loaded FFANN with dimension %s\n", Arrays.toString(layers));
+        System.out.printf("Loaded "+this.getClass().getSimpleName()+" with dimension %s\n", Arrays.toString(layers));
     }
 
     public static FFANN create(int[] layers, ITransferFunction transferFunction) {

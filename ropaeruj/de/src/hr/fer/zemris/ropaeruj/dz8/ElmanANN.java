@@ -14,17 +14,12 @@ public class ElmanANN extends FFANN {
         mMemoryNeurons = memoryNeurons;
     }
 
-    public static ElmanANN create(int[] layers, ITransferFunction hiddenLayersTF, ITransferFunction outputLayerTF) {
+    public static ElmanANN create(int[] layers, ITransferFunction transferFunction) {
         ITransferFunction[] transferFunctions = new ITransferFunction[layers.length - 1];
-        Arrays.fill(transferFunctions, hiddenLayersTF);
-
-        transferFunctions[transferFunctions.length - 1] = outputLayerTF;
+        Arrays.fill(transferFunctions, transferFunction);
 
         layers[0] += layers[1];
-        return new ElmanANN(
-                layers,
-                transferFunctions, layers[1]);
-
+        return new ElmanANN(layers, transferFunctions, layers[1]);
     }
 
     @Override
@@ -47,7 +42,7 @@ public class ElmanANN extends FFANN {
             mIsInInitialState = false;
             System.arraycopy(weights, 0, elmanInputs, inputsLength, mMemoryNeurons);
         } else {
-            System.arraycopy(mNeuronOutputs, inputsLength, elmanInputs, inputsLength, mMemoryNeurons - inputsLength);
+            System.arraycopy(mNeuronOutputs, elmanInputs.length + 1, elmanInputs, inputsLength, mMemoryNeurons - inputsLength);
         }
         System.arraycopy(inputs,0,elmanInputs,0,inputsLength);
         super.calcOutputs(elmanInputs, elmanWeights, outputs);

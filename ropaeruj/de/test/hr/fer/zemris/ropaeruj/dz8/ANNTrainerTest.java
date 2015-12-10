@@ -15,7 +15,7 @@ public class ANNTrainerTest {
 
     @Test
     public void testELMAN() throws Exception {
-        ANNTrainer.main(new String[]{"data.txt", "elman-1x10x1", "7", "0.02", "5000"});
+        ANNTrainer.main(new String[]{"data.txt", "elman-1x10x1", "10", "0.02", "5000"});
     }
 
     @Test
