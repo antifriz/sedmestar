@@ -1,4 +1,4 @@
-package hr.fer.zemris.ropaeruj.dz7;
+package hr.fer.zemris.ropaeruj.dz8;
 
 import java.util.stream.Stream;
 

@@ -1,7 +1,5 @@
 package hr.fer.zemris.ropaeruj.dz8;
 
-import hr.fer.zemris.ropaeruj.dz7.IReadOnlyDataset;
-
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -49,8 +47,8 @@ public class ParseableReadOnlyDataset implements IReadOnlyDataset {
             data.add(d);
         }
 
-        if (limit != -1 && limit < data.size()) {
-            return new ParseableReadOnlyDataset(data.subList(0, limit));
+        if (limit != -1 && limit-l < data.size()) {
+            return new ParseableReadOnlyDataset(data.subList(0, limit-l));
         }
         return new ParseableReadOnlyDataset(data);
     }

@@ -12,9 +12,10 @@ public class ANNTrainer {
 
         Random random = new Random();
 
-        ANN ann = ANN.create(args[1], new TanhSigmoidTransferFunction(),new TanhSigmoidTransferFunction());
+        ANN ann = ANN.create(args[1], new TanhSigmoidTransferFunction());
 
-        ParseableReadOnlyDataset dataset = ParseableReadOnlyDataset.loadData(args[0], ann.getInputDimension(), -1);
+        ParseableReadOnlyDataset dataset = ParseableReadOnlyDataset.loadData(args[0], ann.getInputDimension(), 600);
+        System.out.println(dataset.getSize());
 
         DiffEvoAlg diffEvoAlg = new DiffEvoAlg();
         diffEvoAlg.setEvaluator(ANNEvaluator.createFor(ann, dataset));

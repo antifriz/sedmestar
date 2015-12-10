@@ -5,11 +5,12 @@ import java.util.Arrays;
 /**
  * Created by ivan on 11/16/15.
  */
-public final class FFANN extends ANN {
+public class FFANN extends ANN {
 
     private final int mWeightsCount;
     private final INeuron[] mNeurons;
     private final int[] mLayers;
+    protected double[] mNeuronOutputs;
 
     public FFANN(int[] layers, ITransferFunction[] transferFunctions/*, IReadOnlyDataset dataset*/) {
         mLayers = Arrays.copyOf(layers, layers.length);
@@ -52,45 +53,30 @@ public final class FFANN extends ANN {
         System.out.printf("Loaded FFANN with dimension %s\n", Arrays.toString(layers));
     }
 
-    public static FFANN createSigmoidal(int[] layers) {
+    public static FFANN create(int[] layers, ITransferFunction transferFunction) {
         ITransferFunction[] transferFunctions = new ITransferFunction[layers.length - 1];
-        Arrays.fill(transferFunctions, new SigmoidTransferFunction());
-
-        return new FFANN(
-                layers,
-                transferFunctions);
-
-    }
-
-    public static FFANN create(int[] layers, ITransferFunction hiddenLayersTF, ITransferFunction outputLayerTF) {
-        ITransferFunction[] transferFunctions = new ITransferFunction[layers.length - 1];
-        Arrays.fill(transferFunctions, hiddenLayersTF);
-
-        transferFunctions[transferFunctions.length - 1] = outputLayerTF;
-        return new FFANN(
-                layers,
-                transferFunctions);
-
+        Arrays.fill(transferFunctions, transferFunction);
+        return new FFANN(layers, transferFunctions);
     }
 
     @Override
     public void calcOutputs(double[] inputs, double[] weights, double[] outputs) {
         assert weights.length == mWeightsCount;
-        assert inputs.length == getInputDimension();
+        assert inputs.length == mLayers[0];
 
         int neuronsCount = mNeurons.length;
-        double[] neuronOutputs = new double[mNeurons.length];
+        mNeuronOutputs = new double[mNeurons.length];
 
         for (int i1 = 0; i1 < inputs.length; i1++) {
             mNeurons[i1].setOutput(inputs[i1]);
         }
 
         for (int i1 = 0; i1 < neuronsCount; i1++) {
-            neuronOutputs[i1] = mNeurons[i1].getOutput(neuronOutputs, weights);
+            mNeuronOutputs[i1] = mNeurons[i1].getOutput(mNeuronOutputs, weights);
         }
 
         int srcPos = neuronsCount - outputs.length - 1;
-        System.arraycopy(neuronOutputs, srcPos, outputs, 0, outputs.length);
+        System.arraycopy(mNeuronOutputs, srcPos, outputs, 0, outputs.length);
     }
 
     @Override
@@ -98,6 +84,12 @@ public final class FFANN extends ANN {
         return mLayers[0];
     }
 
+    @Override
+    public void reset() {
+
+    }
+
+    @Override
     public int getWeightsCount() {
         return mWeightsCount;
     }

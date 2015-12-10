@@ -2,6 +2,7 @@ package hr.fer.zemris.ropaeruj.dz8;
 
 import java.util.Arrays;
 import java.util.Random;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.IntStream;
 
 /**
@@ -16,16 +17,17 @@ public class DiffEvoAlg {
     }
 
     public double[] run(int populationSize, final Random random, double crossoverConstant, int maxIterCount, double desiredError) {
-        assert mEvaluator!=null;
+        assert mEvaluator != null;
 
-        final int dimension =mEvaluator.getSolutionDimension();
+        final int dimension = mEvaluator.getSolutionDimension();
         Chromosome[] population = IntStream.range(0, populationSize).mapToObj(x -> Chromosome.createNormalizedRandom(random, dimension)).map(this::evaluate).toArray(Chromosome[]::new);
 
         int counter = 0;
         while (!isStopConditionSatisfied(++counter, maxIterCount, population, desiredError)) {
             final Chromosome[] pop = population;
             final Chromosome best = getBest(pop);
-            population = IntStream.range(0,populationSize).parallel().mapToObj(i->{
+            final AtomicInteger newOnes = new AtomicInteger(0);
+            population = IntStream.range(0, populationSize).parallel().mapToObj(i -> {
                 int r0 = pickUnseenIndex(random, populationSize, i);
                 int r1 = pickUnseenIndex(random, populationSize, i, r0);
                 int r2 = pickUnseenIndex(random, populationSize, i, r0, r1);
@@ -40,7 +42,7 @@ public class DiffEvoAlg {
 
                 // differential mutation
                 for (int j = 0; j < dimension; j++) {
-                    mutantVector.genes[j] += random.nextDouble() * (bVector.genes[j] - cVector.genes[j]);
+                    mutantVector.genes[j] +=random.nextDouble()* (bVector.genes[j] - cVector.genes[j]);
                 }
 
                 // crossover
@@ -53,8 +55,18 @@ public class DiffEvoAlg {
                 evaluate(mutantVector);
 
                 // selection
-                return mutantVector.error <= goalVector.error ? mutantVector : goalVector;
+                if (mutantVector.error <= goalVector.error) {
+                    newOnes.incrementAndGet();
+                    //System.out.println("Improvement "+(goalVector.error - mutantVector.error));
+                    return mutantVector;
+                }
+                else {
+                    return goalVector;
+                }
             }).toArray(Chromosome[]::new);
+            if(counter%100 == 0){
+                System.out.printf("[%5d] Best: %6.4f | Worst: %6.4f | New ones: %4d (%6.2f%%)\n", counter, getBest(population).error, getWorst(population).error, newOnes.get(), newOnes.get() /(float) populationSize*100);
+            }
         }
 
         return getBest(population).genes;
@@ -84,9 +96,8 @@ public class DiffEvoAlg {
         if (counter >= maxIterCount) {
             return true;
         }
-        System.out.printf("[%5d] %f %f\n", counter, getBest(population).error, getWorst(population).error);
-        for (int i = 0; i < desiredError; i++) {
-            if (population[i].error <= desiredError) {
+        for (Chromosome chromosome : population) {
+            if (chromosome.error <= desiredError) {
                 return true;
             }
         }
@@ -94,11 +105,11 @@ public class DiffEvoAlg {
     }
 
     private Chromosome getBest(Chromosome[] population) {
-        return Arrays.stream(population).min((a, b)->Double.compare(a.error,b.error)).get();
+        return Arrays.stream(population).min((a, b) -> Double.compare(a.error, b.error)).get();
     }
 
     private Chromosome getWorst(Chromosome[] population) {
-        return Arrays.stream(population).max((a, b)->Double.compare(a.error,b.error)).get();
+        return Arrays.stream(population).max((a, b) -> Double.compare(a.error, b.error)).get();
     }
 
 }

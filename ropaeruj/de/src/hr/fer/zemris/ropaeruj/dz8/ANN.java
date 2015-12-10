@@ -8,26 +8,26 @@ import java.util.Arrays;
  */
 public abstract class ANN {
 
-    public static ANN create(String type, ITransferFunction hiddenLayerTF, ITransferFunction outputLayerTF) {
+    public static ANN create(String type, ITransferFunction transferFunction) {
         String[] splitted = type.split("-");
 
         int[] layers = Arrays.stream(splitted[1].split("x")).mapToInt(Integer::valueOf).toArray();
         switch (splitted[0]) {
             case "tdnn":
-                return FFANN.create(layers, hiddenLayerTF, outputLayerTF);
+                return FFANN.create(layers, transferFunction);
             case "elman":
-                return ElmanANN.create(layers, hiddenLayerTF);
+                return ElmanANN.create(layers, transferFunction);
             default:
                 throw new IllegalArgumentException(type);
         }
 
     }
 
-    public static ANN create(String type) {
-        return create(type, new SigmoidTransferFunction(), new SigmoidTransferFunction());
-    }
-
     public abstract void calcOutputs(double[] inputs, double[] weights, double[] outputs);
 
     public abstract int getInputDimension();
+
+    public abstract void reset();
+
+    public abstract int getWeightsCount();
 }

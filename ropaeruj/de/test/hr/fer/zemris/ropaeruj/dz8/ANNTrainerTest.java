@@ -9,8 +9,13 @@ import java.util.Arrays;
  */
 public class ANNTrainerTest {
     @Test
-    public void testMain() throws Exception {
-        ANNTrainer.main(new String[]{"data.txt", "tdnn-8x10x4x1", "15", "0.02", "50000"});
+    public void testTDNN() throws Exception {
+        ANNTrainer.main(new String[]{"data.txt", "tdnn-8x10x1", "15", "0.02", "50000"});
+    }
+
+    @Test
+    public void testELMAN() throws Exception {
+        ANNTrainer.main(new String[]{"data.txt", "elman-1x10x1", "7", "0.02", "5000"});
     }
 
     @Test
