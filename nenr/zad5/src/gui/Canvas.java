@@ -1,92 +1,84 @@
 package gui;
 
-import graphicalobjects.GraphicalObject;
-import geometry.Point;
-import rendering.Renderer;
-import rendering.G2DRendererImpl;
-
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.*;
-import java.util.Comparator;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.awt.event.MouseMotionListener;
+import java.util.ArrayList;
 import java.util.List;
 
-
 /**
- * Created by ivan on 6/16/15.
+ * Created by ivan on 12/12/15.
  */
-public class Canvas extends JComponent implements KeyListener,MouseListener, MouseMotionListener {
-    private GUI gui;
+public class Canvas extends JComponent implements MouseListener, MouseMotionListener {
+    private IListener mListener;
 
-    public Canvas(GUI gui) {
-        this.gui = gui;
+    public void setListener(IListener listener) {
+        mListener = listener;
     }
 
+    interface IListener {
+        void onPointsCollected(int[] xes, int[] yes);
+    }
+
+    private Canvas() {
+        addMouseListener(this);
+        addMouseMotionListener(this);
+        mPointList = new ArrayList<>();
+    }
+
+    public static Canvas create() {
+        return new Canvas();
+    }
+
+    @Override
+    public void mouseDragged(MouseEvent e) {
+        mPointList.add(e.getPoint());
+        repaint();
+    }
+
+    @Override
+    public void mouseMoved(MouseEvent e) {
+
+    }
+
+    List<Point> mPointList;
 
     @Override
     protected void paintComponent(Graphics g) {
-/*        Graphics2D g2d = (Graphics2D) g;
-        Renderer r = new G2DRendererImpl(g2d);
+        super.paintComponent(g);
+        g.setColor(Color.black);
 
-        List<GraphicalObject> objects =gui.documentModel.getAllObjects();
-        for (GraphicalObject go : objects)
-        {
-            go.render(r);
-            gui.getCurrentState().afterDraw(r, go);
-        }
-        gui.getCurrentState().afterDraw(r);*/
+        int[] xes = mPointList.stream().mapToInt(x -> x.x).toArray();
+        int[] yes = mPointList.stream().mapToInt(x -> x.y).toArray();
+        g.drawPolyline(xes, yes, xes.length);
     }
 
     @Override
-    public void keyTyped(KeyEvent keyEvent) {
-    }
-
-    @Override
-    public void keyPressed(KeyEvent keyEvent) {
-        gui.getCurrentState().keyPressed(keyEvent);
-    }
-
-    @Override
-    public void keyReleased(KeyEvent keyEvent) {
+    public void mouseClicked(MouseEvent e) {
 
     }
 
     @Override
-    public void mouseClicked(MouseEvent mouseEvent) {
-
-    }
-
-    Point getPoint(MouseEvent mouseEvent){
-        return new Point((int) mouseEvent.getPoint().getX(), (int) mouseEvent.getPoint().getY()-gui.getToolBarHeight());
+    public void mousePressed(MouseEvent e) {
+        mPointList.clear();
+        repaint();
     }
 
     @Override
-    public void mousePressed(MouseEvent mouseEvent) {
-        gui.getCurrentState().mouseDown(getPoint(mouseEvent), mouseEvent.isShiftDown(), mouseEvent.isControlDown());
+    public void mouseReleased(MouseEvent e) {
+        int[] xes = mPointList.stream().mapToInt(x -> x.x).toArray();
+        int[] yes = mPointList.stream().mapToInt(x -> x.y).toArray();
+        mListener.onPointsCollected(xes, yes);
     }
 
     @Override
-    public void mouseReleased(MouseEvent mouseEvent) {
-        gui.getCurrentState().mouseUp(getPoint(mouseEvent), mouseEvent.isShiftDown(), mouseEvent.isControlDown());
+    public void mouseEntered(MouseEvent e) {
     }
 
     @Override
-    public void mouseEntered(MouseEvent mouseEvent) {
-
-    }
-
-    @Override
-    public void mouseExited(MouseEvent mouseEvent) {
-
-    }
-
-    @Override
-    public void mouseDragged(MouseEvent mouseEvent) {
-        gui.getCurrentState().mouseDragged(getPoint(mouseEvent));
-    }
-
-    @Override
-    public void mouseMoved(MouseEvent mouseEvent) {
+    public void mouseExited(MouseEvent e) {
 
     }
 }
