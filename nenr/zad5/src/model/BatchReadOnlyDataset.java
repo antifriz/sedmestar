@@ -18,6 +18,7 @@ public class BatchReadOnlyDataset implements IReadOnlyDataset {
 
     public BatchReadOnlyDataset(List<double[][]> rawDataset, int split) {
         assert split != 0;
+        assert split == 1;
         if (split == -1) {
             split = rawDataset.size();
         }
@@ -36,13 +37,38 @@ public class BatchReadOnlyDataset implements IReadOnlyDataset {
     }
 
     @Override
+    public void reset() {
+        mStep = 0;
+    }
+
+    @Override
+    public void next() {
+        mStep++;
+        mStep%=mSplit;
+    }
+
+    @Override
+    public List<double[][]> getWhole() {
+        return Collections.unmodifiableList(mRawDataset);
+    }
+
+    @Override
+    public int getSize() {
+        return getLimit(mStep +1) - getLimit(mStep);
+    }
+
+    @Override
     public Iterator<double[][]> iterator() {
         if (mSplit == 1) {
             return Collections.unmodifiableList(mRawDataset).iterator();
         }
-        int from = (int) Math.ceil(mStep * mRawDataset.size() / (float) mSplit);
-        int to = (int) Math.ceil(Math.min((mStep + 1) * mRawDataset.size() / (float) mSplit, mRawDataset.size()));
+        int from = getLimit(mStep);
+        int to = getLimit(mStep+1);
 
         return Collections.unmodifiableList(mRawDataset.subList(from, to)).iterator();
+    }
+
+    private int getLimit(int step) {
+        return (int) Math.ceil(Math.min(step * mRawDataset.size() / (float) mSplit, mRawDataset.size()));
     }
 }

@@ -1,8 +1,8 @@
 package model;
 
+import ann.BackpropAlg;
 import ann.FFANN;
 import ann.SigmoidTransferFunction;
-import gui.GUI;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -12,7 +12,7 @@ import java.util.stream.Collectors;
 /**
  * Created by ivan on 12/12/15.
  */
-public class Model implements GUI.IListener {
+public class Model {
 
     private List<CharacterObject> mCharacters;
 
@@ -21,45 +21,49 @@ public class Model implements GUI.IListener {
     }
 
 
-    @Override
     public void onPointsCollected(Clazz canvasClazz, int[] xes, int[] yes) {
         CharacterObject character = new CharacterObject(canvasClazz, xes, yes);
         mCharacters.add(character);
     }
 
-    @Override
     public void onUndo() {
-        mCharacters.remove(mCharacters.size() - 1);
+        if (mCharacters.size() > 0) {
+            mCharacters.remove(mCharacters.size() - 1);
+        }
     }
 
-    @Override
     public void onTrainSelected() {
-        int featureSize = 20;
-        FFANN ffann = FFANN.create(new int[]{featureSize, 6, Clazz.values().length}, new SigmoidTransferFunction());
-        CharacterObject lastCharacter = mCharacters.get(mCharacters.size() - 1);
+        if(mCharacters.size()>0) {
+            int featureSize = 2;
+            FFANN ffann = FFANN.create(new int[]{featureSize, 2, Clazz.values().length}, new SigmoidTransferFunction());
 
+            List<double[][]> rawDataset = mCharacters.stream().map(x -> {
+                double[] output = new double[Clazz.values().length];
+                output[x.getClazzId()] = 1;
+                return new double[][]{x.getFeatures(featureSize), output};
+            }).collect(Collectors.toList());
 
-        List<double[][]> rawDataset = mCharacters.stream().map(x -> {
-            double[] output = new double[Clazz.values().length];
-            output[x.getClazzId()] = 1;
-            return new double[][]{x.getFeatures(featureSize), output};
-        }).collect(Collectors.toList());
+            BatchReadOnlyDataset batchReadOnlyDataset = new BatchReadOnlyDataset(rawDataset, 1);
 
-        BatchReadOnlyDataset batchReadOnlyDataset = new BatchReadOnlyDataset(rawDataset, 1);
-
-
-        double[] weights = new double[ffann.getWeightsCount()];
-
-
-        double[] outputs = new double[Clazz.values().length];
-        double[] features = lastCharacter.getFeatures(featureSize);
-        System.out.println(Arrays.toString(features));
-        ffann.calcOutputs(features, weights, outputs);
-        System.out.println(Arrays.toString(outputs));
+            BackpropAlg alg = new BackpropAlg(ffann, batchReadOnlyDataset);
+            double[] weights = alg.run(0.01, 1000);
+            System.out.println(Arrays.toString(weights));
+        }
     }
 
-    @Override
     public void onTestSelected() {
 
+    }
+
+    public String getDatasetInfo() {
+        int[] count = new int[Clazz.values().length];
+        for (CharacterObject c : mCharacters) {
+            count[c.getClazzId()]++;
+        }
+        StringBuilder sb = new StringBuilder();
+        for (Clazz c : Clazz.values()) {
+            sb.append(c.name()).append("[").append(count[c.ordinal()]).append("]\n");
+        }
+        return sb.toString();
     }
 }

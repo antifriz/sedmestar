@@ -68,9 +68,11 @@ public class Canvas extends JComponent implements MouseListener, MouseMotionList
 
     @Override
     public void mouseReleased(MouseEvent e) {
-        int[] xes = mPointList.stream().mapToInt(x -> x.x).toArray();
-        int[] yes = mPointList.stream().mapToInt(x -> x.y).toArray();
-        mListener.onPointsCollected(xes, yes);
+        if(mPointList.size()>0) {
+            int[] xes = mPointList.stream().mapToInt(x -> x.x).toArray();
+            int[] yes = mPointList.stream().mapToInt(x -> x.y).toArray();
+            mListener.onPointsCollected(xes, yes);
+        }
     }
 
     @Override

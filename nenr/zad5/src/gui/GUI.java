@@ -1,6 +1,7 @@
 package gui;
 
 import model.Clazz;
+import model.Model;
 
 import javax.swing.*;
 import java.awt.*;
@@ -9,24 +10,17 @@ import java.awt.*;
  * Created by ivan on 6/16/15.
  */
 public class GUI extends JFrame implements Canvas.IListener {
-    private final IListener mListener;
+    private final Model mModel;
+    private final JTextArea mTextArea;
 
-    public interface IListener {
-        void onPointsCollected(Clazz canvasClazz, int[] xes, int[] yes);
 
-        void onUndo();
-
-        void onTrainSelected();
-
-        void onTestSelected();
-    }
 
     private final Canvas mCanvas;
     private final JPanel mToolsPanel;
     private Clazz mCanvasClazz = Clazz.values()[0];
 
-    public GUI(IListener listener) {
-        mListener = listener;
+    public GUI(Model model) {
+        mModel = model;
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         JPanel panel = new JPanel();
@@ -39,18 +33,18 @@ public class GUI extends JFrame implements Canvas.IListener {
 
 
         JButton trainButton = new JButton("Train");
-        trainButton.addActionListener(e -> mListener.onTrainSelected());
+        trainButton.addActionListener(e -> mModel.onTrainSelected());
         mToolsPanel.add(trainButton);
 
         JButton testButton = new JButton("Test");
-        testButton.addActionListener(e -> mListener.onTestSelected());
+        testButton.addActionListener(e -> mModel.onTestSelected());
         mToolsPanel.add(testButton);
 
 
         mToolsPanel.add(new JButton("jej2"));
 
         JButton undoButton = new JButton("Undo");
-        undoButton.addActionListener(e -> mListener.onUndo());
+        undoButton.addActionListener(e -> undo());
         mToolsPanel.add(undoButton);
 
         ButtonGroup buttonGroup = new ButtonGroup();
@@ -60,6 +54,11 @@ public class GUI extends JFrame implements Canvas.IListener {
             mToolsPanel.add(radioButton);
             buttonGroup.add(radioButton);
         }
+        buttonGroup.getElements().nextElement().setSelected(true);
+
+        mTextArea = new JTextArea();
+        updateGUI();
+        mToolsPanel.add(mTextArea);
 
         mToolsPanel.setBackground(Color.blue);
 
@@ -70,6 +69,16 @@ public class GUI extends JFrame implements Canvas.IListener {
         mCanvas.setListener(this);
     }
 
+    private void undo() {
+        mModel.onUndo();
+
+        updateGUI();
+    }
+
+    private void updateGUI() {
+        mTextArea.setText(mModel.getDatasetInfo());
+    }
+
     private void updateState(Clazz c) {
         mCanvasClazz = c;
     }
@@ -77,6 +86,8 @@ public class GUI extends JFrame implements Canvas.IListener {
     @Override
     public void onPointsCollected(int[] xes, int[] yes) {
         assert xes.length == yes.length;
-        mListener.onPointsCollected(mCanvasClazz, xes, yes);
+        mModel.onPointsCollected(mCanvasClazz, xes, yes);
+        updateGUI();
     }
+
 }

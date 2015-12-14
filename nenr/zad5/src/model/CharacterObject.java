@@ -40,17 +40,15 @@ public class CharacterObject {
     }
 
     public double[] getFeatures(int featureSize) {
-        assert featureSize%2 ==0;
-        return mCache.computeIfAbsent(featureSize/2, M -> {
+        assert featureSize % 2 == 0;
+        return mCache.computeIfAbsent(featureSize / 2, M -> {
             double[] distances = new double[mXes.length];
             distances[0] = 0;
             for (int i = 1; i < distances.length; i++) {
-                distances[i] = Point.distance(mXes[i], mYes[i], mXes[i - 1], mYes[i - 1]);
+                distances[i] = distances[i - 1] + Point.distance(mXes[i], mYes[i], mXes[i - 1], mYes[i - 1]);
             }
 
             double D = distances[distances.length - 1];
-
-            M = 10;
 
             double[] xesReduced = new double[M];
             double[] yesReduced = new double[M];
@@ -59,20 +57,29 @@ public class CharacterObject {
             int pointIdx = 0;
             for (int i = 0; i < M; i++) {
                 double desiredDistance = step * i;
-                double realIdx;
-                while (pointIdx < distances.length && distances[pointIdx] < desiredDistance) pointIdx++;
-                if (pointIdx == distances.length) {
-                    realIdx = pointIdx - 1;
-                } else if (pointIdx == 0) {
-                    realIdx = 0;
+                if (desiredDistance >= D) {
+                    xesReduced[i] = mXes[mXes.length - 1];
+                    xesReduced[i] = mXes[mYes.length - 1];
                 } else {
-                    realIdx = pointIdx + (desiredDistance - distances[pointIdx - 1]) / (distances[pointIdx] - distances[pointIdx - 1]);
-                }
-                int floorIdx = (int) Math.floor(realIdx);
-                double decimalPart = floorIdx == mXes.length - 1 ? 0 : realIdx - floorIdx;
+                    double realIdx;
+                    while (distances[pointIdx] < desiredDistance) pointIdx++;
+                    if (pointIdx == 0) {
+                        realIdx = 0;
+                    } else {
+                        realIdx = pointIdx + (pointIdx < distances.length ? (desiredDistance - distances[pointIdx - 1]) / (distances[pointIdx] - distances[pointIdx - 1]) : 0);
+                    }
+                    int floorIdx = (int) Math.floor(realIdx);
+                    double decimalPart = realIdx - floorIdx;
 
-                xesReduced[i] = mXes[floorIdx] + decimalPart * (mXes[floorIdx + 1] - mXes[floorIdx]);
-                yesReduced[i] = mYes[floorIdx] + decimalPart * (mYes[floorIdx + 1] - mYes[floorIdx]);
+                    xesReduced[i] = mXes[floorIdx] + (floorIdx + 1 < distances.length ? decimalPart * (mXes[floorIdx + 1] - mXes[floorIdx]) : 0);
+                    yesReduced[i] = mYes[floorIdx] + (floorIdx + 1 < distances.length ? decimalPart * (mYes[floorIdx + 1] - mYes[floorIdx]) : 0);
+                    if(Double.isNaN(xesReduced[i])){
+                        xesReduced[i] = 0;
+                    }
+                    if(Double.isNaN(yesReduced[i])){
+                        yesReduced[i] = 0;
+                    }
+                }
             }
 
             double[] features = new double[M * 2];
@@ -83,7 +90,7 @@ public class CharacterObject {
         });
     }
 
-    public int getClazzId(){
+    public int getClazzId() {
         return mClazz.ordinal();
     }
 

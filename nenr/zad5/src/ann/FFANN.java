@@ -5,12 +5,13 @@ import java.util.Arrays;
 /**
  * Created by ivan on 11/16/15.
  */
-public class FFANN extends ANN {
+public class FFANN {
 
     private final int mWeightsCount;
-    private final INeuron[] mNeurons;
+    public final INeuron[] mNeurons;
     private final int[] mLayers;
     protected double[] mNeuronOutputs;
+    private final int[] mLayerStartIndices;
 
     public FFANN(int[] layers, ITransferFunction[] transferFunctions) {
         mLayers = Arrays.copyOf(layers, layers.length);
@@ -37,8 +38,10 @@ public class FFANN extends ANN {
         for (int i = 0; i < firstLayerSize + 1; i++) {
             mNeurons[i] = new DummyNeuron();
         }
-
+        mLayerStartIndices = new int[layers.length];
+        mLayerStartIndices[0] = 0;
         for (int i = 1; i < numberOfLayers; i++) {
+            mLayerStartIndices[i] = k;
             ITransferFunction transferFunction = transferFunctions[i - 1];
             int beforeLayerSize = layers[i - 1] + 1;
             int thisLayerSize = layers[i];
@@ -59,7 +62,6 @@ public class FFANN extends ANN {
         return new FFANN(layers, transferFunctions);
     }
 
-    @Override
     public void calcOutputs(double[] inputs, double[] weights, double[] outputs) {
         assert weights.length == mWeightsCount;
         assert inputs.length == mLayers[0];
@@ -79,25 +81,40 @@ public class FFANN extends ANN {
         System.arraycopy(mNeuronOutputs, srcPos, outputs, 0, outputs.length);
     }
 
-    @Override
     public int getInputDimension() {
         return mLayers[0];
     }
 
-    @Override
     public void reset() {
 
     }
 
-    @Override
     public int getWeightsCount() {
         return mWeightsCount;
+    }
+
+    public int getOutputDimension() {
+        return mLayers[mLayers.length-1];
+    }
+
+    public int[] getLayers() {
+        return mLayers;
+    }
+
+    public int getLayerStartIdx(int i) {
+        return mLayerStartIndices[i];
+    }
+    public int getLastLayerStartIdx() {
+        return mLayerStartIndices[mLayerStartIndices.length-1];
     }
 
     interface INeuron {
         void setOutput(double value);
 
         double getOutput(double[] neuronsOutputs, double[] weights);
+
+        int getWeightFrom();
+        int getWeightSize();
     }
 
     private static class DummyNeuron implements INeuron {
@@ -112,6 +129,16 @@ public class FFANN extends ANN {
         @Override
         public double getOutput(double[] neuronsOutputs, double[] weights) {
             return mOutput;
+        }
+
+        @Override
+        public int getWeightFrom() {
+            throw new UnsupportedOperationException();
+        }
+
+        @Override
+        public int getWeightSize() {
+            throw new UnsupportedOperationException();
         }
     }
 
@@ -141,6 +168,16 @@ public class FFANN extends ANN {
                 sum += inputs[mNeuronFrom + i] * weights[mWeightFrom + i];
             }
             return mTransferFunction.valueAt(sum);
+        }
+
+        @Override
+        public int getWeightFrom() {
+            return mWeightFrom;
+        }
+
+        @Override
+        public int getWeightSize() {
+            return mLength;
         }
     }
 }
