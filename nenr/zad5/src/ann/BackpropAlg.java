@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
-import java.util.stream.IntStream;
 
 /**
  * Created by ivan on 12/13/15.
@@ -13,8 +12,11 @@ public class BackpropAlg {
 
     private FFANN mFfann;
     private IReadOnlyDataset mDataset;
+    private List<double[]> mOutputDiff;
+    private List<double[]> mNeuronOutputs;
     private double[] mWeights;
     private double mEta = 1;
+    private double[][] mDeltas;
 
     public BackpropAlg(FFANN ffann, IReadOnlyDataset dataset) {
         mFfann = ffann;
@@ -22,9 +24,15 @@ public class BackpropAlg {
     }
 
     public double[] run(double epsilon, int maxIterCount) {
-        prepare();
-
+        mWeights = new double[mFfann.getWeightsCount()];
+        for (int i = 0; i < mWeights.length; i++) {
+            mWeights[i] = i + 1;
+        }
+        mWeights = ThreadLocalRandom.current().doubles().limit(mWeights.length).map(x -> 2 * x - 1).toArray();
+        mDataset.reset();
         int[] layers = mFfann.getLayers();
+
+        mEta = 1.0 / mDataset.getWhole().size() * 2;
 
         double etaRatio = Math.exp((Math.log(0.1) - Math.log(mEta)) / maxIterCount);
         long start = System.currentTimeMillis();
@@ -42,6 +50,7 @@ public class BackpropAlg {
                 break;
             }
 
+            initCache();
 
             updateWeights(layers);
 
@@ -53,36 +62,7 @@ public class BackpropAlg {
         return mWeights;
     }
 
-    private void prepare() {
-        mWeights = new double[mFfann.getWeightsCount()];
-        for (int i = 0; i < mWeights.length; i++) {
-            mWeights[i] = i + 1;
-        }
-        mWeights = ThreadLocalRandom.current().doubles().limit(mWeights.length).map(x -> 2 * x - 1).toArray();
-        mDataset.reset();
-
-        mEta = 1.0 / mDataset.getWhole().size() * 2;
-    }
-
     private void updateWeights(int[] layers) {
-        List<double[]> outputDiff = new ArrayList<>();
-        List<double[]> neuronOutputs = new ArrayList<>();
-
-
-        for (double[][] data : mDataset) {
-            double[] outputs = new double[mFfann.getOutputDimension()];
-            mFfann.calcOutputs(data[0], mWeights, outputs);
-
-            for (int i1 = 0; i1 < outputs.length; i1++) {
-                outputs[i1] -= data[1][i1];
-            }
-
-            outputDiff.add(outputs);
-            neuronOutputs.add(Arrays.copyOf(mFfann.mNeuronOutputs, mFfann.mNeuronOutputs.length));
-        }
-
-        double[][] deltas = initializeDeltas(neuronOutputs);
-
         final int size = mDataset.getSize();
         final FFANN.INeuron[] neurons = mFfann.mNeurons;
         final int length = layers.length;
@@ -91,30 +71,29 @@ public class BackpropAlg {
             final int kLayerStartIdx = mFfann.getLayerStartIdx(k);
             final int kPlus1LayerStartIdx = mFfann.getLayerStartIdx(k + 1);
             final int jMax = layers[k + 1];
-            IntStream.range(0, jMax).parallel().forEach(j -> {
+            for (int j = 0; j < jMax; j++) {
                 final int jWeightStartIdx = neurons[kPlus1LayerStartIdx + j].getWeightFrom();
                 final int iMax = layers[k] + 1;
                 for (int i = 0; i < iMax; i++) {
                     final int ithNeuronIdx = kLayerStartIdx + i;
                     double val = 0;
                     for (int s = 0; s < size; s++) {
-                        final double y1 = neuronOutputs.get(s)[kPlus1LayerStartIdx + j];
-                        final double delta = y1 * (1 - y1) * -outputDiff.get(s)[j];
-                        deltas[s][kPlus1LayerStartIdx + j] = delta;
-                        val += delta * neuronOutputs.get(s)[ithNeuronIdx];
+                        final double y1 = mNeuronOutputs.get(s)[kPlus1LayerStartIdx + j];
+                        final double delta = y1 * (1 - y1) * -mOutputDiff.get(s)[j];
+                        mDeltas[s][kPlus1LayerStartIdx + j] = delta;
+                        val += delta * mNeuronOutputs.get(s)[ithNeuronIdx];
                     }
                     mWeights[jWeightStartIdx + i] += val * mEta;
                 }
-            });
+            }
         }
-        for (int kk = length - 3; kk >= 0; kk--) {
-            final int k = kk;
+        for (int k = length - 3; k >= 0; k--) {
             final int kLayerStartIdx = mFfann.getLayerStartIdx(k);
             final int kPlus1LayerStartIdx = mFfann.getLayerStartIdx(k + 1);
             final int kPlus2LayerStartIdx = mFfann.getLayerStartIdx(k + 2);
             final int kPlus1LayerLength = mFfann.getLayers()[k + 2];
             final int jMax = layers[k + 1];
-            IntStream.range(0, jMax).parallel().forEach(j -> {
+            for (int j = 0; j < jMax; j++) {
                 final int jWeightStartIdx = neurons[kPlus1LayerStartIdx + j].getWeightFrom();
                 final int iMax = layers[k] + 1;
                 for (int i = 0; i < iMax; i++) {
@@ -122,37 +101,95 @@ public class BackpropAlg {
                     double val = 0;
                     for (int s = 0; s < size; s++) {
                         double sum = 0;
-                        final double[] deltaS = deltas[s];
+                        final double[] deltaS = mDeltas[s];
                         for (int o = 0; o < kPlus1LayerLength; o++) {
                             sum += deltaS[kPlus2LayerStartIdx + o] * mWeights[neurons[kPlus2LayerStartIdx + o].getWeightFrom() + j];
                         }
-                        final double y1 = neuronOutputs.get(s)[kPlus1LayerStartIdx + j];
+                        final double y1 = mNeuronOutputs.get(s)[kPlus1LayerStartIdx + j];
                         final double delta = y1 * (1 - y1) * sum;
                         deltaS[kPlus1LayerStartIdx + j] = delta;
-                        val += delta * neuronOutputs.get(s)[ithNeuronIdx];
+                        final double y = mNeuronOutputs.get(s)[ithNeuronIdx];
+                        val += delta * y;
                     }
                     mWeights[jWeightStartIdx + i] += val * mEta;
                 }
-            });
+            }
         }
     }
 
-    private double[][] initializeDeltas(List<double[]> neuronOutputs) {
-        return new double[neuronOutputs.size()][neuronOutputs.get(0).length];
+    private void initCache() {
+        mOutputDiff = new ArrayList<>();
+        mNeuronOutputs = new ArrayList<>();
+
+
+        for (double[][] data : mDataset) {
+            double[] outputs = new double[mFfann.getOutputDimension()];
+            mFfann.calcOutputs(data[0], mWeights, outputs);
+
+            for (int i = 0; i < outputs.length; i++) {
+                outputs[i] -= data[1][i];
+            }
+
+            mOutputDiff.add(outputs);
+            mNeuronOutputs.add(Arrays.copyOf(mFfann.mNeuronOutputs, mFfann.mNeuronOutputs.length));
+        }
+
+        mDeltas = new double[mNeuronOutputs.size()][mNeuronOutputs.get(0).length];
+    }
+
+    private double getInnerDelta(int s, int j, int k) {
+        double y = getY(s, j, k);
+        double sum = 0;
+        for (int o = 0; o < mFfann.getLayers()[k + 1]; o++) {
+            sum += getPrecalculatedDelta(s, o, k + 1) * getW(j, o, k);
+        }
+        double delta = y * (1 - y) * sum;
+        setPrecalculatedDelta(s, j, k, delta);
+        return delta;
+    }
+
+    private double getPrecalculatedDelta(int s, int j, int k) {
+        return mDeltas[s][mFfann.getLayerStartIdx(k) + j];
+    }
+
+    private void setPrecalculatedDelta(int s, int j, int k, double val) {
+        mDeltas[s][mFfann.getLayerStartIdx(k) + j] = val;
+    }
+
+    private double getW(int i, int j, int k) {
+        return mWeights[getWIdx(i, j, k)];
+    }
+
+    private double getOuterDelta(int s, int j, int k) {
+        double outDiff = -mOutputDiff.get(s)[j];
+        double y = getY(s, j, k);
+        double delta = y * (1 - y) * outDiff;
+        setPrecalculatedDelta(s, j, k, delta);
+        return delta;
+    }
+
+    private double getY(int s, int i, int k) {
+        return mNeuronOutputs.get(s)[mFfann.getLayerStartIdx(k) + i];
+    }
+
+    private int getWIdx(int i, int j, int k) {
+        return mFfann.mNeurons[mFfann.getLayerStartIdx(k + 1) + j].getWeightFrom() + i;
     }
 
     public double calculateError(List<double[][]> whole, double[] weights) {
         int outputDimension = mDataset.getOutputDimension();
-        return whole.stream().parallel().mapToDouble(data->{
-            double[] output = new double[outputDimension];
+        double[] output = new double[outputDimension];
+        double sum = 0;
+        double count = 0;
+        for (double[][] data : whole) {
+            count++;
             mFfann.calcOutputs(data[0], weights, output);
             double[] realOutput = data[1];
-            double sum = 0;
             for (int i = 0; i < outputDimension; i++) {
-                final double v = output[i] - realOutput[i];
+                double v = output[i] - realOutput[i];
                 sum += v * v;
             }
-            return sum;
-        }).average().getAsDouble()/mFfann.getOutputDimension();
+        }
+        return sum / count / mFfann.getOutputDimension();// / 2;
     }
 }
