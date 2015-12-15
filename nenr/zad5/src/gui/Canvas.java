@@ -48,6 +48,8 @@ public class Canvas extends JComponent implements MouseListener, MouseMotionList
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
+        Graphics2D g2d = (Graphics2D)g;
+        g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
         g.setColor(Color.black);
 
         int[] xes = mPointList.stream().mapToInt(x -> x.x).toArray();

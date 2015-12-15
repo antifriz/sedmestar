@@ -1,6 +1,7 @@
 package ann;
 
 import model.BatchReadOnlyDataset;
+import model.Model;
 import org.junit.Test;
 
 import java.util.ArrayList;
@@ -22,7 +23,7 @@ public class BackpropAlgTest {
         IReadOnlyDataset dataset = new BatchReadOnlyDataset(rawDataset,1);
 
         FFANN ffann = FFANN.create(new int[]{dataset.getInputDimension(), 6, dataset.getOutputDimension()}, new SigmoidTransferFunction());
-        BackpropAlg backpropAlg = new BackpropAlg(ffann, dataset);
+        BackpropAlg backpropAlg = new BackpropAlg(ffann, dataset, 1/dataset.getWhole().size());
         double[] weights = backpropAlg.run(0, 1000);
         System.out.println(Arrays.toString(weights));
         double[] out = new double[1];
@@ -32,4 +33,10 @@ public class BackpropAlgTest {
         }
     }
 
+    @Test
+    public void testModel() throws Exception {
+        Model model = new Model();
+        model.preloadFromDisk();
+        model.onTrainSelected(1, 0.0001, 30000);
+    }
 }

@@ -30,8 +30,8 @@ public class Model {
 
     public Model() {
         mCharacters = new ArrayList<>();
-        mFeatureSize = 20;
-        mFfann = FFANN.create(new int[]{mFeatureSize, 20, 20, Clazz.values().length}, new SigmoidTransferFunction());
+        mFeatureSize = 10;
+        mFfann = FFANN.create(new int[]{mFeatureSize, mFeatureSize/2, Clazz.values().length}, new SigmoidTransferFunction());
         Path path = Paths.get(ROOT_PATH, WEIGHTS_FILE);
         try {
             if (Files.exists(path)) {
@@ -45,29 +45,33 @@ public class Model {
     }
 
 
-    public void onPointsCollected(Clazz canvasClazz, int[] xes, int[] yes) {
+    public void onPointsCollected(Clazz canvasClazz, int[] xes, int[] yes, boolean isTest) {
         CharacterObject character = new CharacterObject(canvasClazz, xes, yes);
-        mCharacters.add(character);
-        try {
-            character.toFile(Paths.get(ROOT_PATH,canvasClazz.name(),Long.toHexString(System.currentTimeMillis())+SUFFIX).toFile());
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        if(mWeights!=null){
-            double[] outputs = new double[Clazz.values().length];
-            mFfann.calcOutputs(character.getFeatures(mFeatureSize),mWeights,outputs);
-
-            int argmax = 0;
-            double max = 0;
-            for (int i = 0; i < outputs.length; i++) {
-                if(max < outputs[i]){
-                    max = outputs[i];
-                    argmax = i;
-                }
+        if(!isTest) {
+            mCharacters.add(character);
+            try {
+                character.toFile(Paths.get(ROOT_PATH, canvasClazz.name(), Long.toHexString(System.currentTimeMillis()) + SUFFIX).toFile());
+            } catch (IOException e) {
+                e.printStackTrace();
             }
-            System.out.println(Clazz.values()[argmax].name() + " | "+ max);
+        }
+        else {
+            if (mWeights != null) {
+                double[] outputs = new double[Clazz.values().length];
+                mFfann.calcOutputs(character.getFeatures(mFeatureSize), mWeights, outputs);
 
-            System.out.println(Arrays.toString(outputs));
+                int argmax = 0;
+                double max = 0;
+                for (int i = 0; i < outputs.length; i++) {
+                    if (max < outputs[i]) {
+                        max = outputs[i];
+                        argmax = i;
+                    }
+                }
+                System.out.println(Clazz.values()[argmax].name() + " | " + max);
+
+                System.out.println(Arrays.toString(outputs));
+            }
         }
     }
 
@@ -77,7 +81,7 @@ public class Model {
         }
     }
 
-    public void onTrainSelected() {
+    public void onTrainSelected(double eta, double epsilon, int maxIterCount) {
         if(mCharacters.size()>0) {
 
             List<double[][]> rawDataset = mCharacters.stream().map(x -> {
@@ -86,22 +90,10 @@ public class Model {
                 return new double[][]{x.getFeatures(mFeatureSize), output};
             }).collect(Collectors.toList());
 
-            StringBuilder sb = new StringBuilder();
-            int length = rawDataset.get(0)[0].length/2;
-            for (int i = 0; i < length; i++) {
-                sb.append(rawDataset.get(0)[0][i]);
-                sb.append(",");
-                sb.append(rawDataset.get(0)[0][length+i]);
-                sb.append(",");
-            }
-            sb.deleteCharAt(sb.length()-1);
-            System.out.println(sb);
-            rawDataset.stream().forEach(x-> System.out.println(Arrays.toString(x[0])+" -> " + Arrays.toString(x[1])));
-
             BatchReadOnlyDataset batchReadOnlyDataset = new BatchReadOnlyDataset(rawDataset, 1);
 
-            BackpropAlg alg = new BackpropAlg(mFfann, batchReadOnlyDataset);
-            mWeights = alg.run(0.001, 3000);
+            BackpropAlg alg = new BackpropAlg(mFfann, batchReadOnlyDataset,eta);
+            mWeights = alg.run(epsilon, maxIterCount);
             System.out.println(Arrays.toString(mWeights));
 
             double error = alg.calculateError(batchReadOnlyDataset.getWhole(), mWeights);
@@ -116,13 +108,13 @@ public class Model {
         }
     }
 
-    public void onTestSelected() {
-        if(mWeights!=null){
-            double[] outputs = new double[Clazz.values().length];
-            mFfann.calcOutputs(mCharacters.get(mCharacters.size()-1).getFeatures(mFeatureSize),mWeights,outputs);
-            System.out.println(Arrays.toString(outputs));
-        }
-    }
+//    public void onTestSelected() {
+//        if(mWeights!=null){
+//            double[] outputs = new double[Clazz.values().length];
+//            mFfann.calcOutputs(mCharacters.get(mCharacters.size()-1).getFeatures(mFeatureSize),mWeights,outputs);
+//            System.out.println(Arrays.toString(outputs));
+//        }
+//    }
 
     public String getDatasetInfo() {
         int[] count = new int[Clazz.values().length];
@@ -152,5 +144,9 @@ public class Model {
                 }
             }
         }
+    }
+
+    public double getSize() {
+        return mCharacters.size();
     }
 }

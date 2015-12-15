@@ -15,12 +15,13 @@ public class BackpropAlg {
     private List<double[]> mOutputDiff;
     private List<double[]> mNeuronOutputs;
     private double[] mWeights;
-    private double mEta = 1;
+    private double mEta;
     private double[][] mDeltas;
 
-    public BackpropAlg(FFANN ffann, IReadOnlyDataset dataset) {
+    public BackpropAlg(FFANN ffann, IReadOnlyDataset dataset, double eta) {
         mFfann = ffann;
         mDataset = dataset;
+        mEta = eta;
     }
 
     public double[] run(double epsilon, int maxIterCount) {
@@ -35,15 +36,12 @@ public class BackpropAlg {
         mEta = 1.0 / mDataset.getWhole().size() * 2;
 
         double etaRatio = Math.exp((Math.log(0.1) - Math.log(mEta)) / maxIterCount);
-        long start = System.currentTimeMillis();
-        System.out.println(start);
         int iterCount = 1;
         while (true) {
             double error = calculateError(mDataset.getWhole(), mWeights);
 
             if (iterCount % 100 == 0) {
                 System.out.printf("[%5d] %6.4f %6.4f %8.4f\n", iterCount, error, mEta, Math.sqrt(Arrays.stream(mWeights).map(x -> x * x).sum())/*, Arrays.toString(mWeights)*/);
-                System.out.println(System.currentTimeMillis() - start);
             }
 
             if (error <= epsilon || iterCount > maxIterCount) {
