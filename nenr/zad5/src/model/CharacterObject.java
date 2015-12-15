@@ -34,24 +34,16 @@ public class CharacterObject {
         double averageX = Arrays.stream(xes).average().getAsDouble();
         double averageY = Arrays.stream(yes).average().getAsDouble();
 
-
         double[] xs = Arrays.stream(xes).mapToDouble(x -> (x - averageX)).toArray();
         double[] ys = Arrays.stream(yes).mapToDouble(y -> (y - averageY)).toArray();
 
-        double minX = Arrays.stream(xs).min().getAsDouble();
-        double maxX = Arrays.stream(xs).max().getAsDouble();
+        double size = Math.max(
+                Arrays.stream(xs).map(Math::abs).max().getAsDouble(),
+                Arrays.stream(ys).map(Math::abs).max().getAsDouble()
+        );
 
-        double diffX = (maxX - minX);
-
-        double minY = Arrays.stream(ys).min().getAsDouble();
-        double maxY = Arrays.stream(ys).max().getAsDouble();
-
-        double diffY = (maxY - minY);
-
-        double diff = Math.max(diffX, diffY);
-
-        mXes = Arrays.stream(xs).map(x -> x / diff * 2).toArray();
-        mYes = Arrays.stream(ys).map(y -> y / diff * 2).toArray();
+        mXes = Arrays.stream(xs).map(x -> x / size).toArray();
+        mYes = Arrays.stream(ys).map(y -> y / size).toArray();
     }
 
     private CharacterObject(Clazz clazz, double[] xes, double[] yes) {
@@ -83,7 +75,7 @@ public class CharacterObject {
                 double desiredDistance = step * i;
                 if (desiredDistance >= D) {
                     xesReduced[i] = mXes[mXes.length - 1];
-                    yesReduced[i] = mXes[mYes.length - 1];
+                    yesReduced[i] = mYes[mYes.length - 1];
                 } else {
                     double realIdx;
                     while (distances[pointIdx] < desiredDistance) pointIdx++;
@@ -95,8 +87,17 @@ public class CharacterObject {
                     int floorIdx = (int) Math.floor(realIdx);
                     double decimalPart = realIdx - floorIdx;
 
-                    xesReduced[i] = mXes[floorIdx] + (floorIdx + 1 < distances.length ? decimalPart * (mXes[floorIdx + 1] - mXes[floorIdx]) : 0);
-                    yesReduced[i] = mYes[floorIdx] + (floorIdx + 1 < distances.length ? decimalPart * (mYes[floorIdx + 1] - mYes[floorIdx]) : 0);
+                    double decX;
+                    if ((floorIdx + 1) < distances.length) {
+                        double v = mXes[floorIdx + 1] - mXes[floorIdx];
+                        decX = decimalPart * v;
+                    }
+                    else {
+                        decX = 0;
+                    }
+                    xesReduced[i] = mXes[floorIdx] + decX;
+                    double decY = floorIdx + 1 < distances.length ? decimalPart * (mYes[floorIdx + 1] - mYes[floorIdx]) : 0;
+                    yesReduced[i] = mYes[floorIdx] + decY;
                     if (Double.isNaN(xesReduced[i])) {
                         xesReduced[i] = 0;
                     }

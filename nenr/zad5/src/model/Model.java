@@ -6,6 +6,7 @@ import ann.SigmoidTransferFunction;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -21,10 +22,16 @@ public class Model {
 
     public static final String SUFFIX = ".char";
     public static final String ROOT_PATH = "res";
+    private static final String WEIGHTS_FILE = "weights.dat";
     private List<CharacterObject> mCharacters;
+    private double[] mWeights;
+    private FFANN mFfann;
+    private int mFeatureSize;
 
     public Model() {
         mCharacters = new ArrayList<>();
+        mFeatureSize = 20;
+        mFfann = FFANN.create(new int[]{mFeatureSize, 20,20, Clazz.values().length}, new SigmoidTransferFunction());
     }
 
 
@@ -46,20 +53,19 @@ public class Model {
 
     public void onTrainSelected() {
         if(mCharacters.size()>0) {
-            int featureSize = 20;
-            FFANN ffann = FFANN.create(new int[]{featureSize, 6, Clazz.values().length}, new SigmoidTransferFunction());
 
             List<double[][]> rawDataset = mCharacters.stream().map(x -> {
                 double[] output = new double[Clazz.values().length];
                 output[x.getClazzId()] = 1;
-                return new double[][]{x.getFeatures(featureSize), output};
+                return new double[][]{x.getFeatures(mFeatureSize), output};
             }).collect(Collectors.toList());
 
             StringBuilder sb = new StringBuilder();
-            for (int i = 0; i < rawDataset.get(0)[0].length / 2; i++) {
+            int length = rawDataset.get(0)[0].length/2;
+            for (int i = 0; i < length; i++) {
                 sb.append(rawDataset.get(0)[0][i]);
                 sb.append(",");
-                sb.append(rawDataset.get(0)[0][i*2]);
+                sb.append(rawDataset.get(0)[0][length+i]);
                 sb.append(",");
             }
             sb.deleteCharAt(sb.length()-1);
@@ -68,14 +74,28 @@ public class Model {
 
             BatchReadOnlyDataset batchReadOnlyDataset = new BatchReadOnlyDataset(rawDataset, 1);
 
-            BackpropAlg alg = new BackpropAlg(ffann, batchReadOnlyDataset);
-            double[] weights = alg.run(0.01, 100000);
-            System.out.println(Arrays.toString(weights));
+            BackpropAlg alg = new BackpropAlg(mFfann, batchReadOnlyDataset);
+            mWeights = alg.run(0.01, 1000);
+            System.out.println(Arrays.toString(mWeights));
+
+            double error = alg.calculateError(batchReadOnlyDataset.getWhole(), mWeights);
+            List<String> strings = new ArrayList<>();
+            strings.add(String.join(",",String.join(",", Arrays.stream(mWeights).mapToObj(Double::toString).collect(Collectors.toList()))));
+            strings.add(Double.toString(error));
+            try {
+                Files.write(Paths.get(ROOT_PATH,WEIGHTS_FILE),strings, Charset.defaultCharset());
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
 
     public void onTestSelected() {
-
+        if(mWeights!=null){
+            double[] outputs = new double[Clazz.values().length];
+            mFfann.calcOutputs(mCharacters.get(mCharacters.size()-1).getFeatures(mFeatureSize),mWeights,outputs);
+            System.out.println(Arrays.toString(outputs));
+        }
     }
 
     public String getDatasetInfo() {

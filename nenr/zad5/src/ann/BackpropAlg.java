@@ -31,6 +31,8 @@ public class BackpropAlg {
         mDataset.reset();
         int[] layers = mFfann.getLayers();
 
+        mEta = 1.0/mDataset.getWhole().size();
+
         double etaRatio = Math.exp((Math.log(0.1)-Math.log(mEta))/maxIterCount);
 
         int iterCount = 1;
@@ -38,7 +40,7 @@ public class BackpropAlg {
             double error = calculateError(mDataset.getWhole(), mWeights);
 
             //if(iterCount%1000 == 0) {
-                System.out.printf("[%5d] %f %f\n", iterCount, error,mEta/*, Arrays.toString(mWeights)*/);
+                System.out.printf("[%5d] %6.4f %6.4f %8.4f\n", iterCount, error,mEta, Math.sqrt(Arrays.stream(mWeights).map(x->x*x).sum())/*, Arrays.toString(mWeights)*/);
             //}
 
             if (error <= epsilon || iterCount> maxIterCount) {
@@ -125,7 +127,7 @@ public class BackpropAlg {
         return mWeights[getWIdx(i, j, k)] += val;
     }
 
-    private double calculateError(List<double[][]> whole, double[] weights) {
+    public double calculateError(List<double[][]> whole, double[] weights) {
         int outputDimension = mDataset.getOutputDimension();
         double[] output = new double[outputDimension];
         double sum = 0;
