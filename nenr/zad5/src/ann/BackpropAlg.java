@@ -3,6 +3,7 @@ package ann;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.ThreadLocalRandom;
 
 /**
  * Created by ivan on 12/13/15.
@@ -14,7 +15,7 @@ public class BackpropAlg {
     private List<double[]> mOutputDiff;
     private List<double[]> mNeuronOutputs;
     private double[] mWeights;
-    private double mEta = 0.01;
+    private double mEta = 1;
 
     public BackpropAlg(FFANN ffann, IReadOnlyDataset dataset) {
         mFfann = ffann;
@@ -23,13 +24,22 @@ public class BackpropAlg {
 
     public double[] run(double epsilon, int maxIterCount) {
         mWeights = new double[mFfann.getWeightsCount()];
+        for (int i = 0; i < mWeights.length; i++) {
+            mWeights[i] = i+1;
+        }
+        mWeights = ThreadLocalRandom.current().doubles().limit(mWeights.length).map(x->2*x-1).toArray();
         mDataset.reset();
         int[] layers = mFfann.getLayers();
 
-        int iterCount = 0;
+        double etaRatio = Math.exp((Math.log(0.1)-Math.log(mEta))/maxIterCount);
+
+        int iterCount = 1;
         while (true) {
             double error = calculateError(mDataset.getWhole(), mWeights);
-            System.out.printf("[%5d] %f\n", iterCount, error);
+
+            //if(iterCount%1000 == 0) {
+                System.out.printf("[%5d] %f %f\n", iterCount, error,mEta/*, Arrays.toString(mWeights)*/);
+            //}
 
             if (error <= epsilon || iterCount> maxIterCount) {
                 break;
@@ -49,16 +59,20 @@ public class BackpropAlg {
 
                 mOutputDiff.add(outputs);
                 mNeuronOutputs.add(Arrays.copyOf(mFfann.mNeuronOutputs, mFfann.mNeuronOutputs.length));
+//                System.out.println(Arrays.toString(mFfann.mNeuronOutputs));
             }
 
             for (int k = layers.length - 2; k >= 0; k--) {
-                for (int i = 0; i < layers[k]; i++) {
+                for (int i = 0; i < layers[k] + 1; i++) {
                     for (int j = 0; j < layers[k + 1]; j++) {
                         double val = 0;
                         for (int s = 0; s < mDataset.getSize(); s++) {
-                            val += getDelta(s, j, k);
+                            double delta = getDelta(s, j, k+1);
+                            double y = getY(s, i, k);
+                            val += delta * y;
                         }
                         val *= mEta;
+//                        System.out.println(val);
                         incW(i, j, k, val);
                     }
                 }
@@ -66,13 +80,14 @@ public class BackpropAlg {
 
             mDataset.next();
             iterCount++;
+            mEta*=etaRatio;
         }
 
         return mWeights;
     }
 
     private double getDelta(int s, int j, int k) {
-        if (k == mFfann.getLayers().length - 2) {
+        if (k == mFfann.getLayers().length - 1) {
             return getOuterDelta(s, j, k);
         } else {
             return getInnerDelta(s, j, k);
@@ -82,8 +97,8 @@ public class BackpropAlg {
     private double getInnerDelta(int s, int j, int k) {
         double y = getY(s, j, k);
         double sum = 0;
-        for (int o = 0; o < mFfann.getLayers()[k + 2]; o++) {
-            sum += getDelta(s, o, k + 1) * getW(j, o, k + 1);
+        for (int o = 0; o < mFfann.getLayers()[k + 1]; o++) {
+            sum += getDelta(s, o, k + 1) * getW(j, o, k);
         }
         return y * (1 - y) * sum;
     }
@@ -94,7 +109,7 @@ public class BackpropAlg {
 
     private double getOuterDelta(int s, int j, int k) {
         double outDiff = -mOutputDiff.get(s)[j];
-        double y = mNeuronOutputs.get(s)[mFfann.getLayerStartIdx(k) + j];
+        double y = getY(s,j,k);
         return y * (1 - y) * outDiff;
     }
 

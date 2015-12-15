@@ -18,7 +18,6 @@ public class BatchReadOnlyDataset implements IReadOnlyDataset {
 
     public BatchReadOnlyDataset(List<double[][]> rawDataset, int split) {
         assert split != 0;
-        assert split == 1;
         if (split == -1) {
             split = rawDataset.size();
         }

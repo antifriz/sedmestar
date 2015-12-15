@@ -1,8 +1,11 @@
 package ann;
 
+import model.BatchReadOnlyDataset;
 import org.junit.Test;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * Created by ivan on 12/14/15.
@@ -12,51 +15,26 @@ public class BackpropAlgTest {
     @Test
     public void testRun() throws Exception {
         final List<double[][]> rawDataset = new ArrayList<>();
-        rawDataset.add(new double[][]{{0,0},{0}});
-        rawDataset.add(new double[][]{{1,1},{1}});
-        //rawDataset.add(new double[][]{{0,1},{1}});
-        //rawDataset.add(new double[][]{{1,0},{1}});
+        for (double i = -1; i <= 1; i += 0.2) {
+            rawDataset.add(new double[][]{{i}, {i * i}});
+        }
 
-        IReadOnlyDataset dataset = new IReadOnlyDataset() {
-            List<double[][]> mDataset = rawDataset;
+        IReadOnlyDataset dataset = new BatchReadOnlyDataset(rawDataset,1);
 
-            @Override
-            public int getInputDimension() {
-                return mDataset.get(0)[0].length;
-            }
-
-            @Override
-            public int getOutputDimension() {
-                return mDataset.get(0)[1].length;
-            }
-
-            @Override
-            public void reset() {
-
-            }
-
-            @Override
-            public void next() {
-
-            }
-
-            @Override
-            public List<double[][]> getWhole() {
-                return Collections.unmodifiableList(mDataset);
-            }
-
-            @Override
-            public int getSize() {
-                return mDataset.size();
-            }
-
-            @Override
-            public Iterator<double[][]> iterator() {
-                return mDataset.iterator();
-            }
-        };
-        FFANN ffann = FFANN.create(new int[]{dataset.getInputDimension(), dataset.getOutputDimension()}, new SigmoidTransferFunction());
+        FFANN ffann = FFANN.create(new int[]{dataset.getInputDimension(), 6,6,6,6,6,6, dataset.getOutputDimension()}, new SigmoidTransferFunction());
         BackpropAlg backpropAlg = new BackpropAlg(ffann, dataset);
-        backpropAlg.run(0.000000, 10000000);
+        double[] weights = backpropAlg.run(0, 1000);
+        System.out.println(Arrays.toString(weights));
+
+        System.out.println(Arrays.toString(getOutput(ffann, weights)));
+    }
+
+    private double[] getOutput(FFANN ffann, double[] weights) {
+        double[] out = new double[1];
+        for (double i = -1; i <= 1; i += 0.1) {
+            ffann.calcOutputs(new double[]{i}, weights, out);
+            System.out.println(Arrays.toString(out));
+        }
+        return out;
     }
 }
