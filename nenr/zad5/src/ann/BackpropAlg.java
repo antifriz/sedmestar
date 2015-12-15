@@ -16,6 +16,7 @@ public class BackpropAlg {
     private List<double[]> mNeuronOutputs;
     private double[] mWeights;
     private double mEta = 1;
+    private double[][] mDeltas;
 
     public BackpropAlg(FFANN ffann, IReadOnlyDataset dataset) {
         mFfann = ffann;
@@ -31,17 +32,19 @@ public class BackpropAlg {
         mDataset.reset();
         int[] layers = mFfann.getLayers();
 
-        mEta = 1.0/mDataset.getWhole().size();
+        mEta = 1.0/mDataset.getWhole().size()*2;
 
         double etaRatio = Math.exp((Math.log(0.1)-Math.log(mEta))/maxIterCount);
-
+        long start = System.currentTimeMillis();
+        System.out.println(start);
         int iterCount = 1;
         while (true) {
             double error = calculateError(mDataset.getWhole(), mWeights);
 
-            //if(iterCount%1000 == 0) {
+            if(true ||iterCount%100 == 0) {
                 System.out.printf("[%5d] %6.4f %6.4f %8.4f\n", iterCount, error,mEta, Math.sqrt(Arrays.stream(mWeights).map(x->x*x).sum())/*, Arrays.toString(mWeights)*/);
-            //}
+                System.out.println(System.currentTimeMillis()-start);
+            }
 
             if (error <= epsilon || iterCount> maxIterCount) {
                 break;
@@ -63,6 +66,8 @@ public class BackpropAlg {
                 mNeuronOutputs.add(Arrays.copyOf(mFfann.mNeuronOutputs, mFfann.mNeuronOutputs.length));
 //                System.out.println(Arrays.toString(mFfann.mNeuronOutputs));
             }
+
+            mDeltas = new double[mNeuronOutputs.size()][mNeuronOutputs.get(0).length];
 
             for (int k = layers.length - 2; k >= 0; k--) {
                 for (int i = 0; i < layers[k] + 1; i++) {
@@ -100,9 +105,19 @@ public class BackpropAlg {
         double y = getY(s, j, k);
         double sum = 0;
         for (int o = 0; o < mFfann.getLayers()[k + 1]; o++) {
-            sum += getDelta(s, o, k + 1) * getW(j, o, k);
+            sum += getPrecalculatedDelta(s, o, k + 1) * getW(j, o, k);
         }
-        return y * (1 - y) * sum;
+        double delta = y * (1 - y) * sum;
+        setPrecalculatedDelta(s,j,k,delta);
+        return delta;
+    }
+
+    private double getPrecalculatedDelta(int s, int j, int k){
+        return mDeltas[s][mFfann.getLayerStartIdx(k) + j];
+    }
+
+    private void setPrecalculatedDelta(int s, int j, int k, double val){
+        mDeltas[s][mFfann.getLayerStartIdx(k) + j] = val;
     }
 
     private double getW(int i, int j, int k) {
@@ -112,7 +127,9 @@ public class BackpropAlg {
     private double getOuterDelta(int s, int j, int k) {
         double outDiff = -mOutputDiff.get(s)[j];
         double y = getY(s,j,k);
-        return y * (1 - y) * outDiff;
+        double delta = y * (1 - y) * outDiff;
+        setPrecalculatedDelta(s,j,k,delta);
+        return delta;
     }
 
     private double getY(int s, int i, int k) {
