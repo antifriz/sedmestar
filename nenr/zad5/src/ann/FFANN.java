@@ -67,7 +67,7 @@ public class FFANN {
         assert inputs.length == mLayers[0];
 
         int neuronsCount = mNeurons.length;
-        mNeuronOutputs = new double[mNeurons.length];
+        mNeuronOutputs = new double[neuronsCount];
 
         for (int i1 = 0; i1 < inputs.length; i1++) {
             mNeurons[i1].setOutput(inputs[i1]);
