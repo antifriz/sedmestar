@@ -31,7 +31,17 @@ public class Model {
     public Model() {
         mCharacters = new ArrayList<>();
         mFeatureSize = 20;
-        mFfann = FFANN.create(new int[]{mFeatureSize, 20,20, Clazz.values().length}, new SigmoidTransferFunction());
+        mFfann = FFANN.create(new int[]{mFeatureSize, 20, 20, Clazz.values().length}, new SigmoidTransferFunction());
+        Path path = Paths.get(ROOT_PATH, WEIGHTS_FILE);
+        try {
+            if (Files.exists(path)) {
+                List<String> strings = Files.readAllLines(path);
+                mWeights = Arrays.stream(strings.get(0).trim().split(",")).mapToDouble(Double::valueOf).toArray();
+            }
+        } catch (IOException e) {
+
+        }
+
     }
 
 
@@ -42,6 +52,22 @@ public class Model {
             character.toFile(Paths.get(ROOT_PATH,canvasClazz.name(),Long.toHexString(System.currentTimeMillis())+SUFFIX).toFile());
         } catch (IOException e) {
             e.printStackTrace();
+        }
+        if(mWeights!=null){
+            double[] outputs = new double[Clazz.values().length];
+            mFfann.calcOutputs(character.getFeatures(mFeatureSize),mWeights,outputs);
+
+            int argmax = 0;
+            double max = 0;
+            for (int i = 0; i < outputs.length; i++) {
+                if(max < outputs[i]){
+                    max = outputs[i];
+                    argmax = i;
+                }
+            }
+            System.out.println(Clazz.values()[argmax].name() + " | "+ max);
+
+            System.out.println(Arrays.toString(outputs));
         }
     }
 
@@ -75,7 +101,7 @@ public class Model {
             BatchReadOnlyDataset batchReadOnlyDataset = new BatchReadOnlyDataset(rawDataset, 1);
 
             BackpropAlg alg = new BackpropAlg(mFfann, batchReadOnlyDataset);
-            mWeights = alg.run(0.01, 1000);
+            mWeights = alg.run(0.001, 3000);
             System.out.println(Arrays.toString(mWeights));
 
             double error = alg.calculateError(batchReadOnlyDataset.getWhole(), mWeights);
