@@ -14,10 +14,10 @@ import java.util.stream.Collectors;
 /**
  * Created by ivan on 12/13/15.
  */
-public class CharacterObject{
+public class CharacterObject {
 
-    private final double[] mXes;
-    private final double[] mYes;
+    final double[] mXes;
+    final double[] mYes;
 
     private final HashMap<Integer, double[]> mCache;
     private final Clazz mClazz;
@@ -30,21 +30,28 @@ public class CharacterObject{
 
         mClazz = clazz;
 
-        int minX = Arrays.stream(xes).min().getAsInt();
-        int maxX = Arrays.stream(xes).max().getAsInt();
 
         double averageX = Arrays.stream(xes).average().getAsDouble();
+        double averageY = Arrays.stream(yes).average().getAsDouble();
+
+
+        double[] xs = Arrays.stream(xes).mapToDouble(x -> (x - averageX)).toArray();
+        double[] ys = Arrays.stream(yes).mapToDouble(y -> (y - averageY)).toArray();
+
+        double minX = Arrays.stream(xs).min().getAsDouble();
+        double maxX = Arrays.stream(xs).max().getAsDouble();
+
         double diffX = (maxX - minX);
 
-        int minY = Arrays.stream(xes).min().getAsInt();
-        int maxY = Arrays.stream(xes).max().getAsInt();
+        double minY = Arrays.stream(ys).min().getAsDouble();
+        double maxY = Arrays.stream(ys).max().getAsDouble();
 
-        double averageY = Arrays.stream(xes).average().getAsDouble();
         double diffY = (maxY - minY);
 
         double diff = Math.max(diffX, diffY);
-        mXes = Arrays.stream(xes).mapToDouble(x -> (x - averageX) / diff * 2).toArray();
-        mYes = Arrays.stream(yes).mapToDouble(y -> (y - averageY) / diff * 2).toArray();
+
+        mXes = Arrays.stream(xs).map(x -> x / diff * 2).toArray();
+        mYes = Arrays.stream(ys).map(y -> y / diff * 2).toArray();
     }
 
     private CharacterObject(Clazz clazz, double[] xes, double[] yes) {
@@ -76,7 +83,7 @@ public class CharacterObject{
                 double desiredDistance = step * i;
                 if (desiredDistance >= D) {
                     xesReduced[i] = mXes[mXes.length - 1];
-                    xesReduced[i] = mXes[mYes.length - 1];
+                    yesReduced[i] = mXes[mYes.length - 1];
                 } else {
                     double realIdx;
                     while (distances[pointIdx] < desiredDistance) pointIdx++;
@@ -118,7 +125,7 @@ public class CharacterObject{
             Clazz clazz = Clazz.valueOf(lines.get(0).trim());
             double xes[] = Arrays.stream(lines.get(1).trim().split(",")).mapToDouble(Double::valueOf).toArray();
             double yes[] = Arrays.stream(lines.get(2).trim().split(",")).mapToDouble(Double::valueOf).toArray();
-            return new CharacterObject(clazz,xes,yes);
+            return new CharacterObject(clazz, xes, yes);
         } catch (IllegalArgumentException | IndexOutOfBoundsException e) {
             throw new IOException(file.getName() + ": " + e.toString());
         }
@@ -128,10 +135,10 @@ public class CharacterObject{
         mFile = file;
         List<String> lines = new ArrayList<>();
         lines.add(mClazz.name());
-        lines.add(String.join(",",Arrays.stream(mXes).mapToObj(Double::toString).collect(Collectors.toList())));
-        lines.add(String.join(",",Arrays.stream(mYes).mapToObj(Double::toString).collect(Collectors.toList())));
+        lines.add(String.join(",", Arrays.stream(mXes).mapToObj(Double::toString).collect(Collectors.toList())));
+        lines.add(String.join(",", Arrays.stream(mYes).mapToObj(Double::toString).collect(Collectors.toList())));
 
-        Files.write(file.toPath(),lines, Charset.defaultCharset());
+        Files.write(file.toPath(), lines, Charset.defaultCharset());
     }
 
     public void deleteFromDisk() {
