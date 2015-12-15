@@ -31,4 +31,5 @@ public class BackpropAlgTest {
             System.out.println(Arrays.toString(out));
         }
     }
+
 }

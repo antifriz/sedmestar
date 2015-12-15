@@ -5,6 +5,7 @@ import model.Model;
 
 import javax.swing.*;
 import java.awt.*;
+import java.io.IOException;
 
 /**
  * Created by ivan on 6/16/15.
@@ -19,7 +20,7 @@ public class GUI extends JFrame implements Canvas.IListener {
     private final JPanel mToolsPanel;
     private Clazz mCanvasClazz = Clazz.values()[0];
 
-    public GUI(Model model) {
+    public GUI(Model model) throws IOException {
         mModel = model;
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
@@ -39,9 +40,6 @@ public class GUI extends JFrame implements Canvas.IListener {
         JButton testButton = new JButton("Test");
         testButton.addActionListener(e -> mModel.onTestSelected());
         mToolsPanel.add(testButton);
-
-
-        mToolsPanel.add(new JButton("jej2"));
 
         JButton undoButton = new JButton("Undo");
         undoButton.addActionListener(e -> undo());
@@ -67,6 +65,9 @@ public class GUI extends JFrame implements Canvas.IListener {
         panel.add(mCanvas, BorderLayout.CENTER);
         mCanvas.setBackground(Color.red);
         mCanvas.setListener(this);
+
+        mModel.preloadFromDisk();
+        updateGUI();
     }
 
     private void undo() {
@@ -90,4 +91,11 @@ public class GUI extends JFrame implements Canvas.IListener {
         updateGUI();
     }
 
+
+    public static void main(String[] arg) throws IOException {
+        Model model = new Model();
+        GUI gui = new GUI(model);
+        gui.setBounds(100, 100, 500, 400);
+        gui.setVisible(true);
+    }
 }

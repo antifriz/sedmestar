@@ -1,19 +1,27 @@
 package model;
 
 import java.awt.*;
+import java.io.File;
+import java.io.IOException;
+import java.nio.charset.Charset;
+import java.nio.file.Files;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Created by ivan on 12/13/15.
  */
-public class CharacterObject {
+public class CharacterObject{
 
     private final double[] mXes;
     private final double[] mYes;
 
     private final HashMap<Integer, double[]> mCache;
     private final Clazz mClazz;
+    private File mFile;
 
     public CharacterObject(Clazz clazz, int[] xes, int[] yes) {
         assert xes.length == yes.length;
@@ -37,6 +45,15 @@ public class CharacterObject {
         double diff = Math.max(diffX, diffY);
         mXes = Arrays.stream(xes).mapToDouble(x -> (x - averageX) / diff * 2).toArray();
         mYes = Arrays.stream(yes).mapToDouble(y -> (y - averageY) / diff * 2).toArray();
+    }
+
+    private CharacterObject(Clazz clazz, double[] xes, double[] yes) {
+        assert xes.length == yes.length;
+        mCache = new HashMap<>();
+
+        mClazz = clazz;
+        mXes = xes;
+        mYes = yes;
     }
 
     public double[] getFeatures(int featureSize) {
@@ -73,10 +90,10 @@ public class CharacterObject {
 
                     xesReduced[i] = mXes[floorIdx] + (floorIdx + 1 < distances.length ? decimalPart * (mXes[floorIdx + 1] - mXes[floorIdx]) : 0);
                     yesReduced[i] = mYes[floorIdx] + (floorIdx + 1 < distances.length ? decimalPart * (mYes[floorIdx + 1] - mYes[floorIdx]) : 0);
-                    if(Double.isNaN(xesReduced[i])){
+                    if (Double.isNaN(xesReduced[i])) {
                         xesReduced[i] = 0;
                     }
-                    if(Double.isNaN(yesReduced[i])){
+                    if (Double.isNaN(yesReduced[i])) {
                         yesReduced[i] = 0;
                     }
                 }
@@ -94,4 +111,32 @@ public class CharacterObject {
         return mClazz.ordinal();
     }
 
+    public static CharacterObject fromFile(File file) throws IOException {
+        List<String> lines = Files.readAllLines(file.toPath());
+
+        try {
+            Clazz clazz = Clazz.valueOf(lines.get(0).trim());
+            double xes[] = Arrays.stream(lines.get(1).trim().split(",")).mapToDouble(Double::valueOf).toArray();
+            double yes[] = Arrays.stream(lines.get(2).trim().split(",")).mapToDouble(Double::valueOf).toArray();
+            return new CharacterObject(clazz,xes,yes);
+        } catch (IllegalArgumentException | IndexOutOfBoundsException e) {
+            throw new IOException(file.getName() + ": " + e.toString());
+        }
+    }
+
+    public void toFile(File file) throws IOException {
+        mFile = file;
+        List<String> lines = new ArrayList<>();
+        lines.add(mClazz.name());
+        lines.add(String.join(",",Arrays.stream(mXes).mapToObj(Double::toString).collect(Collectors.toList())));
+        lines.add(String.join(",",Arrays.stream(mYes).mapToObj(Double::toString).collect(Collectors.toList())));
+
+        Files.write(file.toPath(),lines, Charset.defaultCharset());
+    }
+
+    public void deleteFromDisk() {
+        if (mFile != null && !mFile.delete()) {
+            mFile.deleteOnExit();
+        }
+    }
 }

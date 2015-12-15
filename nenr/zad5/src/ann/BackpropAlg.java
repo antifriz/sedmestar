@@ -139,6 +139,6 @@ public class BackpropAlg {
                 sum += v * v;
             }
         }
-        return sum / count;// / 2;
+        return sum / count/mFfann.getOutputDimension();// / 2;
     }
 }
