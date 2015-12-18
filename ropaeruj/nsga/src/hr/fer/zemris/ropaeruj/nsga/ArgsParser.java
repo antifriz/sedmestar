@@ -11,7 +11,7 @@ final class ArgsParser {
     private final int mProblemIdx;
     private final double mShareSigma;
     private final double mEpsilon;
-    private final boolean mUseSolutionSpaceDensity;
+    private final boolean mUseDecisionSpaceDensity;
 
     public ArgsParser(String[] args) {
         if (args.length !=6) {
@@ -23,13 +23,13 @@ final class ArgsParser {
 
         mPopulationCount = Integer.valueOf(args[1]);
 
-        mUseSolutionSpaceDensity = true;
+        mUseDecisionSpaceDensity = args[2].equals("decision-space");
 
         mMaxIterCount = Integer.valueOf(args[3]);
 
-        mShareSigma = 0.1;
+        mShareSigma = Double.valueOf(args[4]);
 
-        mEpsilon = 0.01;
+        mEpsilon = Double.valueOf(args[5]);
 
         mMutationSigma = mShareSigma;
 
@@ -55,8 +55,8 @@ final class ArgsParser {
         return mEpsilon;
     }
 
-    public boolean useSolutionSpaceDensity() {
-        return mUseSolutionSpaceDensity;
+    public boolean useDecisionSpaceDensity() {
+        return mUseDecisionSpaceDensity;
     }
 
     public int getProblemIdx() {

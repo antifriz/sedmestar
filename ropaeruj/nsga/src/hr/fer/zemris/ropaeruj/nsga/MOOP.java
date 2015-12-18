@@ -2,16 +2,21 @@ package hr.fer.zemris.ropaeruj.nsga;
 
 
 import java.awt.*;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.*;
 import java.util.List;
 
 /**
  * Created by ivan on 10/31/15.
+ * dodana su dva parametra, sigma i epsilon (parametri opisani u algoritmu)
+ * Preporucam parametre: 2 1000 decision-space 100 0.01 0.1
  */
 public class MOOP {
     static PointsFrame ex;
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException, InterruptedException {
 
         ArgsParser argsParser = new ArgsParser(args);
 
@@ -87,9 +92,12 @@ public class MOOP {
 
         geneticAlgorithmLoop(argsParser, random, currentPopulation, nextPopulation, problem);
 
+        if(ex!=null) {
+            while(true);
+        }
     }
 
-    private static void geneticAlgorithmLoop(ArgsParser argsParser, Random random, Chromosome[] currentPopulation, Chromosome[] nextPopulation, MOOPProblem problem) {
+    private static void geneticAlgorithmLoop(ArgsParser argsParser, Random random, Chromosome[] currentPopulation, Chromosome[] nextPopulation, MOOPProblem problem) throws IOException{
         int iterCount = 0;
         while (true) {
             System.out.println(++iterCount);
@@ -99,15 +107,17 @@ public class MOOP {
                     problem,
                     argsParser.getShareSigma(),
                     argsParser.getEpsilon(),
-                    argsParser.useSolutionSpaceDensity()
+                    argsParser.useDecisionSpaceDensity()
             );
 
             if (isFinished(iterCount, argsParser)) {
-                System.out.printf("Ended with %d iterations\n", iterCount);
+                System.out.printf("Ended with %d iterations\nSolutions per bucket: %s", iterCount, Arrays.toString(undominantlySort(currentPopulation, problem).stream().mapToLong(x -> x.stream().count()).toArray()));
+                Files.write(Paths.get("izlaz-dec.txt"),Arrays.stream(currentPopulation).map(x->Arrays.toString(x.values)+"\n").reduce((a,b)->a+b).get().getBytes());
+                Files.write(Paths.get("izlaz-obj.txt"),Arrays.stream(currentPopulation).map(x->Arrays.toString(x.evaluation )+"\n").reduce((a,b)->a+b).get().getBytes());
                 return;
             }
 
-            nextPopulationUsingRouletteWheelSelection(problem, iterCount, argsParser, random, currentPopulation, nextPopulation);
+            nextPopulationUsingRouletteWheelSelection(problem, argsParser, random, currentPopulation, nextPopulation);
 
             Chromosome[] k = currentPopulation;
             currentPopulation = nextPopulation;
@@ -115,7 +125,7 @@ public class MOOP {
         }
     }
 
-    private static void calculateFitness(Chromosome[] currentPopulation, MOOPProblem problem, double sigmaShare, double epsilon, boolean isSolutionSpaceDensity) {
+    private static void calculateFitness(Chromosome[] currentPopulation, MOOPProblem problem, double sigmaShare, double epsilon, boolean isDecisionSpaceDensity) {
         int N = currentPopulation.length;
         double fmin = N + epsilon;
         List<List<Chromosome>> fronts = undominantlySort(currentPopulation, problem);
@@ -123,11 +133,11 @@ public class MOOP {
 
         for (List<Chromosome> front : fronts) {
             double[][] frontValues;
-            frontValues = isSolutionSpaceDensity ? front.stream().map(chromosome -> chromosome.values).toArray(double[][]::new) : front.stream().map(chromosome -> chromosome.evaluation).toArray(double[][]::new);
+            frontValues = isDecisionSpaceDensity ? front.stream().map(chromosome -> chromosome.values).toArray(double[][]::new) : front.stream().map(chromosome -> chromosome.evaluation).toArray(double[][]::new);
             double fminNew = fmin;
             for (Chromosome q : front) {
                 q.fitness = fmin - epsilon;
-                q.fitness /= density(isSolutionSpaceDensity ? q.values : q.evaluation, frontValues, sigmaShare, problem);
+                q.fitness /= density(isDecisionSpaceDensity ? q.values : q.evaluation, frontValues, sigmaShare, problem);
                 if (q.fitness < fminNew) {
                     fminNew = q.fitness;
                 }
@@ -151,10 +161,8 @@ public class MOOP {
 
     private static double density(double[] q, double[][] arrays, double sigmaShare, MOOPProblem problem) {
         int dim = q.length;
-        double[] maxs =new  double[]{1,5};
-        double[] mins = new double[] {0.1,1};
-        //double[] maxs = problem.getSolutionMaxs();
-        //double[] mins = problem.getSolutionMins();
+        double[] maxs = problem.getSolutionMaxs();
+        double[] mins = problem.getSolutionMins();
         double d = 0;
         for (double[] array : arrays) {
             for (int i = 0; i < dim; i++) {
@@ -252,16 +260,16 @@ public class MOOP {
         return cnt > 0;
     }
 
-    private static void nextPopulationUsingRouletteWheelSelection(MOOPProblem problem, int iterCount, ArgsParser argsParser, Random random, Chromosome[] currentPopulation, Chromosome[] nextPopulation) {
+    private static void nextPopulationUsingRouletteWheelSelection(MOOPProblem problem, ArgsParser argsParser, Random random, Chromosome[] currentPopulation, Chromosome[] nextPopulation) {
         for (int i = 0; i < nextPopulation.length; i++) {
             Chromosome mama = rouletteWheelSelection(currentPopulation, random);
             Chromosome papa = rouletteWheelSelection(currentPopulation, random);
 
-            tweakChild(problem, iterCount, argsParser, random, nextPopulation, i, mama, papa);
+            tweakChild(problem, argsParser, random, nextPopulation, i, mama, papa);
         }
     }
 
-    private static void tweakChild(MOOPProblem problem, int iterCount, ArgsParser argsParser, Random random, Chromosome[] nextPopulation, int i, Chromosome mama, Chromosome papa) {
+    private static void tweakChild(MOOPProblem problem, ArgsParser argsParser, Random random, Chromosome[] nextPopulation, int i, Chromosome mama, Chromosome papa) {
         Chromosome child = mama.newLikeThis();
 
         double[] maxs = problem.getSolutionMaxs();
@@ -269,14 +277,14 @@ public class MOOP {
         for (int j = 0; j < child.values.length; j++) {
             double min = Math.min(mama.values[j], papa.values[j]);
             double max = Math.max(mama.values[j], papa.values[j]);
-            child.values[j] = min + (max - min) * random.nextDouble() + random.nextGaussian() * argsParser.getMutationSigma() * Math.pow(1 - iterCount / (double) argsParser.getMaxIterCount(), 10);
+            child.values[j] = min + (max - min) * random.nextDouble() + random.nextGaussian() * argsParser.getMutationSigma();
             child.values[j] = Math.max(Math.min(child.values[j], maxs[j]), mins[j]);
         }
         nextPopulation[i] = child;
     }
 
     private static boolean isFinished(int iterCount, ArgsParser argsParser) {
-        return iterCount > argsParser.getMaxIterCount();
+        return iterCount >= argsParser.getMaxIterCount();
     }
 
     private static Chromosome rouletteWheelSelection(Chromosome[] array, Random random) {

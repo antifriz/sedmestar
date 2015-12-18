@@ -36,7 +36,7 @@ class Surface extends JPanel implements ActionListener {
             g2d.setColor(Color.getHSBColor(cl,1,1));
             cl+=clstep;
             for(Chromosome c:front) {
-                int x1 = (int) (c.evaluation[0]/1 * w);
+                int x1 = (int) ((c.evaluation[0]/0.9-0.1) * w);
                 int y1 = h-(int) (c.evaluation[1] / 10* h);
                 g2d.drawLine(x1, y1, x1,y1);
 
