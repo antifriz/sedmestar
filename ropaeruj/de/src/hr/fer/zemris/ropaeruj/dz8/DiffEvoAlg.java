@@ -42,7 +42,7 @@ public class DiffEvoAlg {
 
                 // differential mutation
                 for (int j = 0; j < dimension; j++) {
-                    mutantVector.genes[j] +=random.nextDouble()* (bVector.genes[j] - cVector.genes[j]);
+                    mutantVector.genes[j] += random.nextDouble() * (bVector.genes[j] - cVector.genes[j]);
                 }
 
                 // crossover
@@ -59,16 +59,15 @@ public class DiffEvoAlg {
                     newOnes.incrementAndGet();
                     //System.out.println("Improvement "+(goalVector.error - mutantVector.error));
                     return mutantVector;
-                }
-                else {
+                } else {
                     return goalVector;
                 }
             }).toArray(Chromosome[]::new);
-            if(counter%100 == 0){
-                System.out.printf("[%5d] Best: %6.4f | Worst: %6.4f | New ones: %4d (%6.2f%%)\n", counter, getBest(population).error, getWorst(population).error, newOnes.get(), newOnes.get() /(float) populationSize*100);
+            if (counter % 100 == 0) {
+                System.out.printf("[%5d] Best: %6.4f\n", counter, getBest(population).error);
             }
         }
-
+        System.out.printf("[%5d] Best: %6.4f\n", counter, getBest(population).error);
         return getBest(population).genes;
     }
 
