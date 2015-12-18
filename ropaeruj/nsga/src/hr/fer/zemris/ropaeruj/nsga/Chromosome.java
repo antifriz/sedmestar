@@ -46,7 +46,16 @@ final class Chromosome implements Comparable<Chromosome> {
 
     @Override
     public String toString() {
-        double[] a = values;
+        StringBuilder b = new StringBuilder();
+        DecimalFormat df = new DecimalFormat("#.##");
+
+
+        b.append(df.format(fitness));
+        return b.append(arrayToString(values)).append(arrayToString(evaluation)).toString();
+    }
+
+    public String arrayToString(double[] array){
+        double[] a = array;
         if (a == null)
             return "null";
         int iMax = a.length - 1;
@@ -55,8 +64,6 @@ final class Chromosome implements Comparable<Chromosome> {
 
         DecimalFormat df = new DecimalFormat("#.##");
         StringBuilder b = new StringBuilder();
-
-        b.append(df.format(-fitness));
         b.append(" [");
         for (int i = 0; ; i++) {
             b.append(df.format(a[i]));
@@ -64,7 +71,6 @@ final class Chromosome implements Comparable<Chromosome> {
                 return b.append(']').toString();
             b.append(", ");
         }
-
     }
 
 

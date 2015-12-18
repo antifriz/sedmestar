@@ -10,4 +10,8 @@ public interface MOOPProblem {
     double[] getSolutionMaxs();
 
     double[] getSolutionMins();
+
+    default int getDimension(){
+        return getSolutionMaxs().length;
+    }
 }

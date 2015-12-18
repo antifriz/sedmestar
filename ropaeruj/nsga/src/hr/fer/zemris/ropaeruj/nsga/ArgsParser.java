@@ -6,7 +6,6 @@ package hr.fer.zemris.ropaeruj.nsga;
  */
 final class ArgsParser {
     private final int mPopulationCount;
-    private final double mDesiredError;
     private final int mMaxIterCount;
     private final double mMutationSigma;
     private final int mProblemIdx;
@@ -15,8 +14,8 @@ final class ArgsParser {
     private final boolean mUseSolutionSpaceDensity;
 
     public ArgsParser(String[] args) {
-        if (args.length != 6) {
-            System.err.println("Parameters: problem_idx pop_size {decision-space|objective-space} maxiter");
+        if (args.length !=6) {
+            System.err.println("Parameters: problem_idx pop_size {decision-space|objective-space} maxiter share_sigma epsilon");
             System.exit(1);
         }
 
@@ -28,22 +27,16 @@ final class ArgsParser {
 
         mMaxIterCount = Integer.valueOf(args[3]);
 
-        mShareSigma = 1;
+        mShareSigma = 0.1;
 
         mEpsilon = 0.01;
 
-        mDesiredError = 0.01;//Double.valueOf(args[2]);
-
-        mMutationSigma = 1;
+        mMutationSigma = mShareSigma;
 
     }
 
     public Integer getPopulationCount() {
         return mPopulationCount;
-    }
-
-    public Double getDesiredError() {
-        return mDesiredError;
     }
 
     public Integer getMaxIterCount() {
@@ -64,5 +57,9 @@ final class ArgsParser {
 
     public boolean useSolutionSpaceDensity() {
         return mUseSolutionSpaceDensity;
+    }
+
+    public int getProblemIdx() {
+        return mProblemIdx;
     }
 }
