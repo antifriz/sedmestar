@@ -22,9 +22,9 @@ public class BackpropAlgTest {
 
         IReadOnlyDataset dataset = new BatchReadOnlyDataset(rawDataset,1);
 
-        FFANN ffann = FFANN.create(new int[]{dataset.getInputDimension(), 6, dataset.getOutputDimension()}, new SigmoidTransferFunction());
+        FFANN ffann = FFANN.create(new int[]{dataset.getInputDimension(), 3,3, dataset.getOutputDimension()}, new SigmoidTransferFunction());
         BackpropAlg backpropAlg = new BackpropAlg(ffann, dataset, 1/dataset.getWhole().size());
-        double[] weights = backpropAlg.run(0, 1000);
+        double[] weights = backpropAlg.run(0.00001, 1000000);
         System.out.println(Arrays.toString(weights));
         double[] out = new double[1];
         for (double i = -1; i <= 1; i += 0.1) {

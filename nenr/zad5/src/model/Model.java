@@ -41,7 +41,6 @@ public class Model {
         } catch (IOException e) {
 
         }
-
     }
 
 
@@ -83,6 +82,7 @@ public class Model {
 
     public void onTrainSelected(double eta, double epsilon, int maxIterCount) {
         if(mCharacters.size()>0) {
+            Thread.currentThread().setPriority(Thread.MAX_PRIORITY);
 
             List<double[][]> rawDataset = mCharacters.stream().map(x -> {
                 double[] output = new double[Clazz.values().length];
@@ -105,16 +105,9 @@ public class Model {
             } catch (IOException e) {
                 e.printStackTrace();
             }
+            Thread.currentThread().setPriority(Thread.MIN_PRIORITY);
         }
     }
-
-//    public void onTestSelected() {
-//        if(mWeights!=null){
-//            double[] outputs = new double[Clazz.values().length];
-//            mFfann.calcOutputs(mCharacters.get(mCharacters.size()-1).getFeatures(mFeatureSize),mWeights,outputs);
-//            System.out.println(Arrays.toString(outputs));
-//        }
-//    }
 
     public String getDatasetInfo() {
         int[] count = new int[Clazz.values().length];

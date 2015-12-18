@@ -2,10 +2,7 @@ package model;
 
 import ann.IReadOnlyDataset;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 
 /**
  * Created by ivan on 12/13/15.
@@ -23,6 +20,7 @@ public class BatchReadOnlyDataset implements IReadOnlyDataset {
         }
         mSplit = split;
         mRawDataset = new ArrayList<>(rawDataset);
+        Collections.shuffle(mRawDataset,new Random(69));
     }
 
     @Override
