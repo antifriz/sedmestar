@@ -1,0 +1,947 @@
+<?xml version="1.0" encoding="utf-8"?>
+<kml xmlns="http://www.opengis.net/kml/2.2">
+  <Document id="Exported bookmarks">
+    <name>Exported bookmarks</name>
+    <Placemark>
+      <name>Austrian Parliament Building, Dr.-Karl-Renner-Ring 3, 1017 Wien</name>
+      <Point>
+        <coordinates>16.3586083,48.2080884</coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Gefechtsturm Augarten, 1020 Wien, Austria</name>
+      <Point>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Burger King, Annagasse 3, 1010 Wien</name>
+      <Point>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>, Murter</name>
+      <Point>
+        <coordinates>15.576907,43.816909</coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name><![CDATA[St. Paul's Cathedral, St. Paul's Churchyard, London EC4M 8AD]]></name>
+      <Point>
+        <coordinates>-0.0983506,51.5138453</coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Oxford Circus Station, Oxford St, London W1B 3AG, United Kingdom</name>
+      <Point>
+        <coordinates>-0.1418366,51.515212</coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Pakoštane, Croatia</name>
+      <Point>
+        <coordinates>15.5088842,43.9071991</coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>HMV Head Office, Mermaid House, Puddle Dock, London EC4V 3DB</name>
+      <Point>
+        <coordinates>-0.1017049,51.5117661</coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Vienna International Busterminal (VIB), Erdbergstraße 200A, 1030 Wien, Austria</name>
+      <Point>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Église Saint-Sulpice, 2 Rue Palatine, 75006 Paris</name>
+      <Point>
+        <coordinates>2.3344431,48.8509424</coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Île Saint-Louis, 75004 Paris, France</name>
+      <Point>
+        <coordinates>2.3574207,48.8515572</coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Szimpla Kert, Budapest, Kazinczy u. 14, 1075</name>
+      <Point>
+        <coordinates>19.0633846,47.4970109</coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Montmartre, 75018 Paris, France</name>
+      <Point>
+        <coordinates>2.3388895,48.8867148</coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Gartenpalais Liechtenstein, Fürstengasse 1, 1090 Wien</name>
+      <Point>
+        <coordinates>16.3595868,48.2225328</coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Odmorište Krka, 22000, Bilice, Croatia</name>
+      <Point>
+        <coordinates>15.9165598,43.8053467</coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Piccadilly Circus Travel Information Centre, Piccadilly, London W1J 9HS</name>
+      <Point>
+        <coordinates>-0.1340744,51.510124</coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Danube Tower, Donauturmstraße 4, 1220 Wien</name>
+      <Point>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Regierungsgebäude, Stubenring 1, 1010 Wien</name>
+      <Point>
+        <coordinates>16.3830164,48.2099152</coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Adventmarkt Am Hof, Am Hof, 1010 Wien</name>
+      <Point>
+        <coordinates>16.3679123,48.2114048</coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Stade de France, 93216 Saint-Denis</name>
+      <Point>
+        <coordinates>2.3601645,48.9244592</coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Pathologisch-anatomische Sammlung im Narrenturm des NHM Wien, Spitalgasse 2, 1090 Wien, Austria</name>
+      <Point>
+        <coordinates>16.3531816,48.218511</coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Fogasház, Budapest, Akácfa u. 51, 1073</name>
+      <Point>
+        <coordinates>19.0651224,47.5005573</coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Tower of London, London EC3N 4AB</name>
+      <Point>
+        <coordinates>-0.0759493,51.5081124</coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Äußeres Burgtor, Heldenplatz, 1010 Wien</name>
+      <Point>
+        <coordinates>16.362741,48.205621</coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Bank of England, Threadneedle St, London EC2R 8AH</name>
+      <Point>
+        <coordinates>-0.0883581,51.5139287</coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name><![CDATA[Pont de l'Archevêché, 75005 Paris, France]]></name>
+      <Point>
+        <coordinates>2.3516016,48.8516064</coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Liechtenstein Park, 1090 Vienna</name>
+      <Point>
+        <coordinates>16.3590592,48.2233496</coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Kärntner Straße, Kärntner Str., 1010 Wien</name>
+      <Point>
+        <coordinates>16.3706115,48.2043938</coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name><![CDATA[McDonald's, Singerstraße 4, 1010 Wien]]></name>
+      <Point>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Viennese Giant Ferris Wheel, Riesenradplatz 1, 1020 Wien</name>
+      <Point>
+        <coordinates>16.3958889,48.2166205</coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Ankeruhr Clock, 1010 Vienna, Austria</name>
+      <Point>
+        <coordinates>16.3735231,48.2106624</coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>The National Gallery, Trafalgar Square, London WC2N 5DN</name>
+      <Point>
+        <coordinates>-0.128299,51.508929</coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Buckingham Palace, London SW1A 1AA</name>
+      <Point>
+        <coordinates>-0.14189,51.501364</coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>MuseumsQuartier, Museumsplatz 1, 1070 Wien</name>
+      <Point>
+        <coordinates>16.3586166,48.2033369</coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>British Museum Reading Room, Great Russell St, London WC1B, UK</name>
+      <Point>
+        <coordinates>-0.1267113,51.5193104</coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Ambassade de la Croatie, 7 Square Thiers, 75116 Paris, France</name>
+      <Point>
+        <coordinates>2.2790717,48.8663068</coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Disney Store, 44 Av. des Champs-Élysées, 75008 Paris</name>
+      <Point>
+        <coordinates>2.3074287,48.8702095</coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Leadenhall Market, London EC3V 1LT</name>
+      <Point>
+        <coordinates>-0.0835414,51.5127731</coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Starbucks Coffee Company, Schottengasse 9, 1010 Wien</name>
+      <Point>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Vapiano, Herrengasse 6-8, 1010 Wien</name>
+      <Point>
+        <coordinates>16.3662205,48.2094446</coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Albertina, Albertinaplatz 1, 1010 Wien</name>
+      <Point>
+        <coordinates>16.3681824,48.2046992</coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name><![CDATA[Paris Observatory, 61 Avenue de l'Observatoire, 75014 Paris, France]]></name>
+      <Point>
+        <coordinates>2.3365123,48.8358925</coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Verkehrsmuseum Remise, Ludwig-Kössler-Platz, 1030 Wien</name>
+      <Point>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Foyer de la Madeleine, Place de la Madeleine, 75008 Paris, France</name>
+      <Point>
+        <coordinates>2.324822,48.869852</coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name><![CDATA[Le mur des je t'aime, Square Jehan Rictus, Place des Abesses, 75018 Paris]]></name>
+      <Point>
+        <coordinates>2.3384652,48.8848292</coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Parc Monceau, 35 Boulevard de Courcelles, 75008 Paris</name>
+      <Point>
+        <coordinates>2.308955,48.8796835</coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Trafalgar Square, Westminster, London WC2N 5DN</name>
+      <Point>
+        <coordinates>-0.128069,51.508039</coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Schubert-Denkmal, 1010 Wien</name>
+      <Point>
+        <coordinates>16.3796358,48.2050107</coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Kninska tvrđava, Croatia</name>
+      <Point>
+        <coordinates>16.1933997,44.0342242</coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Corvintető, Budapest, Blaha Lujza tér 1-2, 1085</name>
+      <Point>
+        <coordinates>19.0694106,47.4960593</coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name><![CDATA[M\u0026M's World, Swiss Court, 1 Leicester Square, London W1D 6AP]]></name>
+      <Point>
+        <coordinates>-0.1312887,51.5106715</coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Sikló u., Budapest, 1013 Hungary</name>
+      <Point>
+        <coordinates>19.0399279,47.4978786</coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Obeliskbrunnen, Wien</name>
+      <Point>
+        <coordinates>16.3161102,48.1799953</coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Madame Tussauds London, Marylebone Rd, London NW1 5LR</name>
+      <Point>
+        <coordinates>-0.1549671,51.5228901</coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>The Albert Memorial, Kensington Gardens, London W2 2UH</name>
+      <Point>
+        <coordinates>-0.177707,51.5023516</coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Pont Alexandre III, Paris, France</name>
+      <Point>
+        <coordinates>2.313559,48.8638995</coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Westminster Abbey, 20 Deans Yd, London SW1P 3PA</name>
+      <Point>
+        <coordinates>-0.1273097,51.4992921</coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name><![CDATA[St. Stephen's Basilica, Budapest, Szent István tér 1, 1051]]></name>
+      <Point>
+        <coordinates>19.0539887,47.5008902</coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>ZSL London Zoo, London NW1 4RY</name>
+      <Point>
+        <coordinates>-0.1534303,51.5352875</coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Dédé la Frite, 52 Rue Notre Dame des Victoires, 75002 Paris</name>
+      <Point>
+        <coordinates>2.3426961,48.869824</coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Medizinische Universität Wien, Spitalgasse 23, 1090 Wien</name>
+      <Point>
+        <coordinates>16.3515713,48.2196734</coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Science Museum, Exhibition Rd, London SW7 2DD</name>
+      <Point>
+        <coordinates>-0.1745235,51.4978095</coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Wiener Opernball, Opernring 2, 1010 Wien, Austria</name>
+      <Point>
+        <coordinates>16.3691569,48.2032752</coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Biograd na Moru, Croatia</name>
+      <Point>
+        <coordinates>15.4435586,43.9373047</coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Karlsplatz Stadtbahn Station, Vienna</name>
+      <Point>
+        <coordinates>16.3704605,48.2002572</coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Royal Museums Greenwich, Romney Rd, Greenwich, London SE10 9NF</name>
+      <Point>
+        <coordinates>-0.0053214,51.4808452</coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Prater, 1020 Vienna</name>
+      <Point>
+        <coordinates>16.3980286,48.2167269</coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Austrian National Library, Josefsplatz 1, 1015 Wien</name>
+      <Point>
+        <coordinates>16.3666489,48.2061623</coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Esplanade des Invalides, 75007 Paris</name>
+      <Point>
+        <coordinates>2.3132654,48.8612598</coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Stravinsky Fountain, Rue Brisemiche, 75004 Paris, France</name>
+      <Point>
+        <coordinates>2.351546,48.859478</coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Big Ben, London SW1A 0AA</name>
+      <Point>
+        <coordinates>-0.1246254,51.5007292</coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name><![CDATA[St. Stephen's Cathedral, Stephansplatz 3, 1010 Wien]]></name>
+      <Point>
+        <coordinates>16.3734707,48.2084114</coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Tribunj, Croatia</name>
+      <Point>
+        <coordinates>15.7475655,43.7569503</coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Disneyland Paris, 77777 Marne-la-Vallée</name>
+      <Point>
+        <coordinates>2.7758079,48.8722344</coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Karlskirche, Kreuzherrengasse 1, 1040 Wien</name>
+      <Point>
+        <coordinates>16.3718284,48.1982453</coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Rathaus, Friedrich-Schmidt-Platz 1, 1010 Wien</name>
+      <Point>
+        <coordinates>16.3572486,48.2108685</coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Kaiser Franz I. Denkmal, Löwelstraße, 1010 Wien</name>
+      <Point>
+        <coordinates>16.3650598,48.2075565</coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>London Eye, London SE1 7PB</name>
+      <Point>
+        <coordinates>-0.119543,51.503324</coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Neue Burg, Heldenplatz, 1010 Wien</name>
+      <Point>
+        <coordinates>16.3647635,48.2055321</coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Kunsthistorisches Museum Wien, Maria-Theresien-Platz, 1010 Wien</name>
+      <Point>
+        <coordinates>16.3617874,48.2038016</coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name><![CDATA[Odéon Theatre, Place de l'Odéon, 75006 Paris]]></name>
+      <Point>
+        <coordinates>2.338703,48.849495</coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Burggarten, Josefsplatz 1, 1010 Wien</name>
+      <Point>
+        <coordinates>16.3653614,48.2040577</coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Ljubljana, Slovenia</name>
+      <Point>
+        <coordinates>14.5057515,46.0569465</coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Keleti Tourist Info Bt., Budapest, Baross tér 11/c, 1087 Hungary</name>
+      <Point>
+        <coordinates>19.0837177,47.5007481</coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Hard Rock Café Vienna, Rotenturmstraße 25, 1010 Wien</name>
+      <Point>
+        <coordinates>16.3755632,48.2113062</coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Kamp Kosirina, Betina</name>
+      <Point>
+        <coordinates>15.6100018,43.7971455</coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name><![CDATA[City Hall, The Queen's Walk, London SE1 2AA]]></name>
+      <Point>
+        <coordinates>-0.0786264,51.504827</coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>The Army Museum, 129 Rue de Grenelle, 75007 Paris</name>
+      <Point>
+        <coordinates>2.3125934,48.8557933</coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name><![CDATA[HMS Belfast, The Queen's Walk, London SE1 2JH]]></name>
+      <Point>
+        <coordinates>-0.081389,51.506579</coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Harry Potter Shop, 9 3/4, Kings Cross Station, London N1 9AP</name>
+      <Point>
+        <coordinates>-0.1238738,51.5321633</coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Starbucks, AKH, Währinger Gürtel 18-20, 1090 Wien</name>
+      <Point>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Skradin, Croatia</name>
+      <Point>
+        <coordinates>15.923255,43.8176375</coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Elizabeth Lookout, Budapest, János-hegy, 1121</name>
+      <Point>
+        <coordinates>18.9591,47.5184</coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Andrássy út, Budapest, Hungary</name>
+      <Point>
+        <coordinates>19.0661169,47.507102</coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Le Pré Verre, 8 Rue Thénard, 75005 Paris</name>
+      <Point>
+        <coordinates>2.345958,48.849988</coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Sacré-Cœur, 35 Rue du Chevalier de la Barre, 75018 Paris</name>
+      <Point>
+        <coordinates>2.3431043,48.8867046</coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Starbucks, Karlsplatz 1, 1010 Wien</name>
+      <Point>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Schönbrunn Palace Garden Gloriette, Schönbrunner Schloßstraße 47-49, 1130 Wien, Austria</name>
+      <Point>
+        <coordinates>16.3087053,48.1782883</coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Budapest, Margeret Island Water Tower</name>
+      <Point>
+        <coordinates>19.0501881,47.5302624</coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Schoenborn Park, Alservorstadt, 1080 Wien</name>
+      <Point>
+        <coordinates>16.3509257,48.2122471</coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Transport Museum, Budapest, Városligeti körút 11, 1146</name>
+      <Point>
+        <coordinates>19.0912231,47.514541</coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Tunnel Vienna Live, Florianigasse 39, 1080 Wien</name>
+      <Point>
+        <coordinates>16.348163,48.211864</coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Air and Space Museum, 93350 Le Bourget</name>
+      <Point>
+        <coordinates>2.4346183,48.946587</coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>255 Rue Saint-Denis, 75002 Paris, France</name>
+      <Point>
+        <coordinates>2.3513399,48.8682909</coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Liverpool Street Station, Liverpool St, London EC2M 7QH, United Kingdom</name>
+      <Point>
+        <coordinates>-0.0814374,51.5187516</coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Instant, Budapest, Nagymező u. 38, 1065</name>
+      <Point>
+        <coordinates>19.0584013,47.504555</coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Marble Arch Underground Station, Oxford St, London W1C 1CX, United Kingdom</name>
+      <Point>
+        <coordinates>-0.15893,51.51342</coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Naschmarkt, 1060 Vienna</name>
+      <Point>
+        <coordinates>16.3641357,48.1990204</coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Starbucks Coffee, Kärntner Str. 49, 1010 Wien</name>
+      <Point>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Restaurants du Monde, Autogrill Carrousel du Louvre, 99 Rue de Rivoli, 75001 Paris</name>
+      <Point>
+        <coordinates>2.3347021,48.8626909</coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>HOFBURG Vienna, Heldenplatz, 1014 Wien</name>
+      <Point>
+        <coordinates>16.365283,48.206156</coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Lozovac, Croatia</name>
+      <Point>
+        <coordinates>15.9601136,43.8002947</coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Museum of Natural History Vienna, Burgring 7, 1010 Wien</name>
+      <Point>
+        <coordinates>16.3598451,48.205212</coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Nooï, 50 Boulevard Saint-Michel, 75006 Paris</name>
+      <Point>
+        <coordinates>2.3413616,48.8485101</coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>The Centre Pompidou, Place Georges-Pompidou, 75004 Paris</name>
+      <Point>
+        <coordinates>2.352245,48.860642</coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Wien Museum, Karlsplatz 8, 1040 Wien</name>
+      <Point>
+        <coordinates>16.3730998,48.1992028</coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Natural History Museum, Cromwell Rd, London SW7 5BD</name>
+      <Point>
+        <coordinates>-0.1763672,51.496715</coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Burgtheater, Universitätsring 2, 1010 Wien</name>
+      <Point>
+        <coordinates>16.36146,48.2102962</coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Tower Bridge, Tower Bridge Rd, London SE1 2UP, United Kingdom</name>
+      <Point>
+        <coordinates>-0.0753565,51.5054564</coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Schönbrunn Palace, Schönbrunner Schloßstraße 47, 1130 Wien</name>
+      <Point>
+        <coordinates>16.3122398,48.1848648</coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Starbucks, Rotenturmstraße 22, 1010 Wien</name>
+      <Point>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Starbucks, Budapest, Erzsébet krt. 53, 1073</name>
+      <Point>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Palais Brongniart, 28 Place de la Bourse, 75002 Paris</name>
+      <Point>
+        <coordinates>2.3413326,48.8691452</coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Šibenik, Croatia</name>
+      <Point>
+        <coordinates>15.8952045,43.7350196</coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>The Sherlock Holmes Museum, 221b Baker St, London NW1 6XE</name>
+      <Point>
+        <coordinates>-0.1585354,51.5237562</coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Admiralty Arch, The Mall, London SW1A 2WH</name>
+      <Point>
+        <coordinates>-0.1286584,51.5067898</coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Viennatour, Michaelerplatz, 1010 Wien</name>
+      <Point>
+        <coordinates>16.3667572,48.2080186</coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Volksgarten, 1010 Vienna</name>
+      <Point>
+        <coordinates>16.3614554,48.2081133</coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Belvedere Palace, Prinz Eugen-Straße 27, 1030 Wien</name>
+      <Point>
+        < coordinates>16.3809547,48.1915585</coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Tropicarium, Budapest, Nagytétényi út 37-43, 1222</name>
+      <Point>
+        <coordinates>19.0180796,47.4078293</coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Universitätsbibliothek der Medizinischen Universität Wien, Medizinische Universität Wien, Währinger Gürtel 18-20, 1097 Wien</name>
+      <Point>
+        <coordinates>16.3460577,48.2205519</coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Akácfa u. 26, Budapest, 1072 Hungary</name>
+      <Point>
+        <coordinates>19.0668422,47.4988624</coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Monument to the Great Fire of London, Fish St Hill, London EC3R 8AH</name>
+      <Point>
+        <coordinates>-0.085942,51.510143</coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Horse Guards Parade, The Household Division, Horse Guards, Whitehall, London SW1A 2AX, United Kingdom</name>
+      <Point>
+        <coordinates>-0.1273738,51.5046005</coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name><![CDATA[Fisherman's Bastion, Budapest, Szentháromság tér 5, 1014 Hungary]]></name>
+      <Point>
+        <coordinates>19.0347813,47.5021827</coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Dürer Kert, Budapest, Ajtósi Dürer sor 19-21, 1146</name>
+      <Point>
+        <coordinates>19.089944,47.509834</coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Museum of London, 150 London Wall, London EC2Y 5HN</name>
+      <Point>
+        <coordinates>-0.0967782,51.5176183</coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Pestsäule, Graben, 1010 Wien</name>
+      <Point>
+        <coordinates>16.3697947,48.2087183</coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Kuplung, Budapest, Király u. 46, 1061</name>
+      <Point>
+        <coordinates>19.0616093,47.5013946</coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Royal Albert Hall, Kensington Gore, London SW7 2AP</name>
+      <Point>
+        <coordinates>-0.177366,51.5009088</coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name><![CDATA[Musée d'Orsay, 1 Rue de la Légion d'Honneur, 75007 Paris]]></name>
+      <Point>
+        <coordinates>2.3265614,48.8599614</coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Archeological Crypt of the Parvis of Notre-Dame, 7 Parvis Notre-Dame - Pl. Jean-Paul II, 75004 Paris, France</name>
+      <Point>
+        <coordinates>2.3477146,48.8536518</coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Csodák Palotája, Budapest, Nagytétényi út 37-43, 1222</name>
+      <Point>
+        <coordinates>19.0153363,47.4063136</coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Március 15. tér, Hungary</name>
+      <Point>
+        <coordinates>19.051507,47.491045</coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>PIZZERIA LANTANA, Put Čigrade, 22243, Murter</name>
+      <Point>
+        <coordinates>15.589172,43.806193</coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>30 St Mary Axe (The Gherkin), 30 St Mary Axe, London, EC3A 8EP</name>
+      <Point>
+        <coordinates>-0.0803065,51.5144918</coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Goldfisch Apartment Vienna Opera House, Walfischgasse 6/1/7, 1010 Wien, Austria</name>
+      <Point>
+        <coordinates>16.3713836,48.2032229</coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Central Market Hall, Budapest, Vámház krt. 1-3, 1093 Hungary</name>
+      <Point>
+        <coordinates>19.058493,47.4870848</coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>10 Downing Street, 10 Downing St, London SW1A 2AA</name>
+      <Point>
+        <coordinates>-0.1276248,51.5033635</coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Abbey Road Studios, 3 Abbey Rd, London NW8 9AY</name>
+      <Point>
+        <coordinates>-0.1782557,51.5319953</coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Hundertwasser House, Kegelgasse 36-38, 1030 Wien</name>
+      <Point>
+        < coordinates>16.394294,48.207337</coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Judenplatz Holocaust Memorial, Judenpl., 1010 Wien</name>
+      <Point>
+        <coordinates>16.3694847,48.2116831</coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name><![CDATA[McDonald's, U-Bahnpassage, Karlsplatz, 1010 Wien]]></name>
+      <Point>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Schönbrunn Zoo, Maxingstraße 13b, 1130 Wien</name>
+      <Point>
+        <coordinates>16.3027845,48.1820863</coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Wellington Arch, Apsley Way, Hyde Park Corner, London W1J 7JZ</name>
+      <Point>
+        <coordinates>-0.150869,51.50253</coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name><![CDATA[Basilica Cathedral of Saint Denis, 1 Rue de la Légion d'Honneur, 93200 Saint-Denis]]></name>
+      <Point>
+        <coordinates>2.3598354,48.9354612</coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Champ de Mars, 2 Allée Adrienne Lecouvreur, 75007 Paris</name>
+      <Point>
+        <coordinates>2.2986304,48.8556475</coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Weihnachtsdorf Altes AKH, Universitätscampus - Hof 1, Altes AKH, Alserstraße, 1090 Wien, Austria</name>
+      <Point>
+        <coordinates>16.3526077,48.215573</coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Shakespeare \u0026 Company, 37 Rue de la Bûcherie, 75005 Paris</name>
+      <Point>
+        <coordinates>2.3471197,48.852547</coordinates>
+      </Point>
+    </Placemark>
+  </Document>
+</kml>
