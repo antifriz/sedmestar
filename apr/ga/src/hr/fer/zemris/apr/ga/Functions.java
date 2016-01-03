@@ -7,6 +7,7 @@ package hr.fer.zemris.apr.ga;
 public class Functions {
 
     private static AbstractFunctionToOptimize[] functions = new AbstractFunctionToOptimize[]{
+            null,
             new AbstractFunctionToOptimize() {
                 @Override
                 public double internalValueAt(Point point) {
@@ -33,6 +34,7 @@ public class Functions {
                     return 2;
                 }
             },
+            null,
             new AbstractFunctionToOptimize() {
                 @Override
                 public double internalValueAt(Point point) {
@@ -53,6 +55,8 @@ public class Functions {
                     return Point.from(1, n, x -> x);
                 }
             },
+            null,
+            null,
             new AbstractFunctionToOptimize() {
                 @Override
                 public double internalValueAt(Point point) {
