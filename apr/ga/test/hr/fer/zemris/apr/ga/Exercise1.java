@@ -49,7 +49,7 @@ public class Exercise1 {
                 { 1,2, isBinary},
                 { 3,5, isBinary},
                 { 6,2, isBinary},
-                { 7,2, isBinary}
+                { 7,2, true}
         });
     }
 }
