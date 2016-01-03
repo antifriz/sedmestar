@@ -11,7 +11,7 @@ import java.util.List;
 /**
  * Created by ivan on 1/3/16.
  */
-public class Exercise4 {
+public class Exercise5 {
     public static final double DESIRED_ERROR = Math.pow(10, -6);
     public static final int TEST_CNT = 100;
 
@@ -21,18 +21,20 @@ public class Exercise4 {
     }
 
     @Test
-    public void testPopCnt() throws Exception {
-        Integer[] params = new Integer[]{3,5,10,15,20,30,50,100,200};
+    public void testTournamentK() throws Exception {
+        Integer[] params = new Integer[]{3,4,5,10,15,20,30,50};
         Tweaker<Integer> tweaker = (holder, param) -> {
-            holder.popCnt = param;
-            holder.maxIter = 7000/param;
+            holder.tournamentCnt = param;
+            holder.maxIter = 1000/param;
         };
         ArgsHolder argsHolder = new ArgsHolder();
+        argsHolder.popCnt = 10;
+        argsHolder.mutationProba = 0.9;
         argsHolder.functionIdx = 6;
         argsHolder.desiredError = -1;
         argsHolder.verbose = false;
         argsHolder.isRoulette = false;
-        argsHolder.tournamentCnt=3;
+        argsHolder.maxIter = 100;
         tweakParam(argsHolder, params, tweaker);
     }
 
@@ -67,21 +69,4 @@ public class Exercise4 {
             System.out.println();
         }
     }
-
-    @Test
-    public void testMutation() throws Exception {
-        Double[] params = new Double[]{.2,.3,.6,.9};
-        Tweaker<Double> tweaker = (holder, param) -> holder.mutationProba = param;
-        ArgsHolder argsHolder = new ArgsHolder();
-        argsHolder.functionIdx = 6;
-        argsHolder.desiredError = -1;
-        argsHolder.verbose = false;
-        argsHolder.isRoulette = false;
-        argsHolder.tournamentCnt=3;
-        argsHolder.maxIter = 250;
-        argsHolder.popCnt=10;
-        tweakParam(argsHolder,params, tweaker);
-    }
-
-    // idealni VEL_POP = 50, mutation_proba = 0.4
 }
