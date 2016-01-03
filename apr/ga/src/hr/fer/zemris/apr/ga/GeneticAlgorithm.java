@@ -145,10 +145,6 @@ public class GeneticAlgorithm {
         currentPopulation[maxFitnessIndex] = s;
     }
 
-    private static double myexp(double v) {
-        return Math.min(Math.exp(v), MAX_EXP);
-    }
-
     private static <Chromosome extends SingleObjectiveSolution> void evaluate(AbstractFunctionToOptimize function, SingleObjectiveSolution[] population, IDecoder<Chromosome> decoder) {
         Arrays.stream(population).parallel().forEach(solution -> solution.fitness = -function.valueAt(new Point(decoder.decode((Chromosome) solution))));
     }

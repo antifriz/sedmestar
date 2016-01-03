@@ -17,9 +17,4 @@ public abstract class AbstractFunction {
         return desired;
     }
 
-    public int getAfterOptimizationCallCount() {
-        int callCount = this.callCount;
-        this.callCount = 0;
-        return callCount;
-    }
 }

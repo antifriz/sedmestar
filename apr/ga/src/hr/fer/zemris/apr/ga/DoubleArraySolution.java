@@ -17,12 +17,6 @@ public final class DoubleArraySolution extends SingleObjectiveSolution {
 
     }
 
-    public DoubleArraySolution duplicate() {
-        DoubleArraySolution doubleArraySolution = newLikeThis();
-        System.arraycopy(values, 0, doubleArraySolution.values, 0, values.length);
-        return doubleArraySolution;
-    }
-
     public DoubleArraySolution randomize(Random random, double[] lowerLimits, double[] upperLimits) {
         for (int i = 0; i < values.length; i++) {
             values[i] = lowerLimits[i] + (upperLimits[i] - lowerLimits[i]) * random.nextFloat();

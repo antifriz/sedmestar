@@ -5,7 +5,6 @@ package hr.fer.zemris.apr.ga;
  */
 public abstract class SingleObjectiveSolution implements Comparable<SingleObjectiveSolution> {
     public double fitness;
-    public double value;
 
     public SingleObjectiveSolution() {
     }

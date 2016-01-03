@@ -19,12 +19,6 @@ public final class BitvectorSolution extends SingleObjectiveSolution {
         return new BitvectorSolution(mBytes.length);
     }
 
-    public BitvectorSolution duplicate() {
-        BitvectorSolution bitvectorSolution = newLikeThis();
-        System.arraycopy(mBytes, 0, bitvectorSolution.mBytes, 0, mBytes.length);
-        return bitvectorSolution;
-    }
-
     public BitvectorSolution randomize(Random random) {
         random.nextBytes(mBytes);
         return this;

@@ -88,8 +88,4 @@ public class Functions {
         return functions[idx];
     }
 
-    public static int size() {
-        return functions.length;
-    }
-
 }
