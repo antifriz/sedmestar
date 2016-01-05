@@ -9,7 +9,8 @@ import java.util.Random;
  */
 final class Chromosome implements Comparable<Chromosome> {
     public double[] values;
-    public double fitness;
+    public double rang;
+    public double crowding;
     public int eta;
     public List<Chromosome> S;
     public double[] evaluation;
@@ -35,9 +36,9 @@ final class Chromosome implements Comparable<Chromosome> {
      */
     @Override
     public int compareTo(Chromosome other) {
-        if (fitness < other.fitness) {
+        if (rang < other.rang) {
             return -1;
-        } else if (fitness == other.fitness) {
+        } else if (rang == other.rang) {
             return 0;
         } else {
             return 1;
@@ -50,8 +51,8 @@ final class Chromosome implements Comparable<Chromosome> {
         DecimalFormat df = new DecimalFormat("#.##");
 
 
-        b.append(df.format(fitness));
-        return b.append(arrayToString(values)).append(arrayToString(evaluation)).toString();
+        b.append(df.format(rang));
+        return b.append(arrayToString(values)).append(arrayToString(evaluation)).append(crowding).toString();
     }
 
     public String arrayToString(double[] array){

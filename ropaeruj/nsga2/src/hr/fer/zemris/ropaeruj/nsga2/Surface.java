@@ -31,7 +31,7 @@ class Surface extends JPanel implements ActionListener {
         float cl = 0;
         float clstep =0.75f/mFronts.size();
 
-        g2d.setStroke(new BasicStroke(4));
+        g2d.setStroke(new BasicStroke(5,BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND));
         for(List<Chromosome> front:mFronts){
             g2d.setColor(Color.getHSBColor(cl,1,1));
             cl+=clstep;

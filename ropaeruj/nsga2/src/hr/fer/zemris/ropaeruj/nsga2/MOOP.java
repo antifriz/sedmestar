@@ -10,8 +10,7 @@ import java.util.List;
 
 /**
  * Created by ivan on 10/31/15.
- * dodana su dva parametra, sigma i epsilon (parametri opisani u algoritmu)
- * Preporucam parametre: 2 1000 decision-space 100 0.01 0.1
+ * Preporucam parametre: 2 1000 100
  */
 public class MOOP {
     static PointsFrame ex;
@@ -83,69 +82,54 @@ public class MOOP {
         double[] lower = problem.getSolutionMins();
         double[] upper = problem.getSolutionMaxs();
 
-        Chromosome[] currentPopulation = new Chromosome[argsParser.getPopulationCount()];
-        for (int i = 0; i < currentPopulation.length; i++) {
-            currentPopulation[i] = new Chromosome(problem.getDimension());
-            currentPopulation[i].randomize(random, lower, upper);
+        List<Chromosome> currentPopulation = new ArrayList<>();
+        for (int i = 0; i < argsParser.getPopulationCount(); i++) {
+            Chromosome chromosome = new Chromosome(problem.getDimension());
+            chromosome.randomize(random, lower, upper);
+            currentPopulation.add(chromosome);
         }
-        Chromosome[] nextPopulation = new Chromosome[currentPopulation.length];
+        List<Chromosome> nextPopulation = new ArrayList<>();
 
         geneticAlgorithmLoop(argsParser, random, currentPopulation, nextPopulation, problem);
 
-        if(ex!=null) {
-            while(true);
+        if (ex != null) {
+            while (true) ;
         }
     }
 
-    private static void geneticAlgorithmLoop(ArgsParser argsParser, Random random, Chromosome[] currentPopulation, Chromosome[] nextPopulation, MOOPProblem problem) throws IOException{
+    private static void geneticAlgorithmLoop(ArgsParser argsParser, Random random, List<Chromosome> currentPopulation, List<Chromosome> nextPopulation, MOOPProblem problem) throws IOException {
         int iterCount = 0;
         while (true) {
             System.out.println(++iterCount);
 
             calculateFitness(
                     currentPopulation,
-                    problem,
-                    argsParser.getShareSigma(),
-                    argsParser.getEpsilon(),
-                    argsParser.useDecisionSpaceDensity()
+                    argsParser.getPopulationCount(),
+                    problem
             );
 
             if (isFinished(iterCount, argsParser)) {
-                System.out.printf("Ended with %d iterations\nSolutions per bucket: %s", iterCount, Arrays.toString(undominantlySort(currentPopulation, problem).stream().mapToLong(x -> x.stream().count()).toArray()));
-                Files.write(Paths.get("izlaz-dec.txt"),Arrays.stream(currentPopulation).map(x->Arrays.toString(x.values)+"\n").reduce((a,b)->a+b).get().getBytes());
-                Files.write(Paths.get("izlaz-obj.txt"),Arrays.stream(currentPopulation).map(x->Arrays.toString(x.evaluation )+"\n").reduce((a,b)->a+b).get().getBytes());
+                System.out.printf("Ended with %d iterations\nSolutions per bucket: %s", iterCount, Arrays.toString(undominantlySort(currentPopulation, argsParser.getPopulationCount(), problem).stream().mapToLong(x -> x.stream().count()).toArray()));
+                Files.write(Paths.get("izlaz-dec.txt"), currentPopulation.stream().map(x -> Arrays.toString(x.values) + "\n").reduce((a, b) -> a + b).get().getBytes());
+                Files.write(Paths.get("izlaz-obj.txt"), currentPopulation.stream().map(x -> Arrays.toString(x.evaluation) + "\n").reduce((a, b) -> a + b).get().getBytes());
                 return;
             }
 
-            nextPopulationUsingRouletteWheelSelection(problem, argsParser, random, currentPopulation, nextPopulation);
+            nextPopulationUsingKTournament(problem, random, currentPopulation, nextPopulation);
 
-            Chromosome[] k = currentPopulation;
-            currentPopulation = nextPopulation;
-            nextPopulation = k;
+            currentPopulation.addAll(nextPopulation);
         }
     }
 
-    private static void calculateFitness(Chromosome[] currentPopulation, MOOPProblem problem, double sigmaShare, double epsilon, boolean isDecisionSpaceDensity) {
-        int N = currentPopulation.length;
-        double fmin = N + epsilon;
-        List<List<Chromosome>> fronts = undominantlySort(currentPopulation, problem);
+    private static void calculateFitness(List<Chromosome> currentPopulation, int populationCount, MOOPProblem problem) {
+        List<List<Chromosome>> fronts = undominantlySort(currentPopulation, populationCount, problem);
 
-
-        for (List<Chromosome> front : fronts) {
-            double[][] frontValues;
-            frontValues = isDecisionSpaceDensity ? front.stream().map(chromosome -> chromosome.values).toArray(double[][]::new) : front.stream().map(chromosome -> chromosome.evaluation).toArray(double[][]::new);
-            double fminNew = fmin;
-            for (Chromosome q : front) {
-                q.fitness = fmin - epsilon;
-                q.fitness /= density(isDecisionSpaceDensity ? q.values : q.evaluation, frontValues, sigmaShare, problem);
-                if (q.fitness < fminNew) {
-                    fminNew = q.fitness;
-                }
+        for (int i = 0; i < fronts.size(); i++) {
+            for (Chromosome q : fronts.get(i)) {
+                q.rang = i;
             }
-
-            fmin = fminNew;
         }
-        Arrays.sort(currentPopulation, Comparator.<Chromosome>comparingDouble(x -> x.fitness).reversed());
+        currentPopulation.sort(Comparator.<Chromosome>comparingDouble(x -> x.rang).<Chromosome>thenComparingDouble(x -> -x.crowding));
 
         if (problem.getDimension() == 2) {
             if (ex != null) {
@@ -159,36 +143,8 @@ public class MOOP {
         }
     }
 
-    private static double density(double[] q, double[][] arrays, double sigmaShare, MOOPProblem problem) {
-        int dim = q.length;
-        double[] maxs = problem.getSolutionMaxs();
-        double[] mins = problem.getSolutionMins();
-        double d = 0;
-        for (double[] array : arrays) {
-            for (int i = 0; i < dim; i++) {
-                if (array[i] > maxs[i]) {
-                    maxs[i] = array[i];
-                } else if (array[i] < mins[i]) {
-                    mins[i] = array[i];
-                }
-            }
-        }
-        for (double[] array : arrays) {
-            double dd = 0;
-            for (int j = 0; j < dim; j++) {
-                double diff = q[j] - array[j];
-
-                diff /= Math.abs(maxs[j] - mins[j] + 0.01);
-                diff *= diff;
-                dd += diff;
-            }
-            dd = Math.sqrt(dd);
-            d += sigmaShare >= dd ? 1 - (dd / sigmaShare) * (dd / sigmaShare) : 0;
-        }
-        return d;
-    }
-
-    private static List<List<Chromosome>> undominantlySort(Chromosome[] currentPopulation, MOOPProblem problem) {
+    private static List<List<Chromosome>> undominantlySort(List<Chromosome> currentPopulation, int populationCount, MOOPProblem problem) {
+        List<Chromosome> pop = new ArrayList<>();
         List<List<Chromosome>> fronts = new ArrayList<>();
         int k = 0;
         for (Chromosome chromosome : currentPopulation) {
@@ -215,26 +171,65 @@ public class MOOP {
                 k = 0;
             }
         }
+        List<Chromosome> f1 = fronts.get(0);
+        calcCrowding(f1);
+        if (f1.size() > populationCount) {
+            f1.sort(Comparator.comparing(c -> -c.crowding));
+            f1 = f1.subList(0, populationCount - pop.size());
+        }
+        pop.addAll(f1);
 
         while (true) {
-            List<Chromosome> Q = new ArrayList<>();
+            List<Chromosome> fi = new ArrayList<>();
             for (int i = 0; i < fronts.get(k).size(); i++) {
                 Chromosome frontChromosome = fronts.get(k).get(i);
                 for (int j = 0; j < frontChromosome.S.size(); j++) {
                     Chromosome c = frontChromosome.S.get(j);
                     c.eta--;
                     if (c.eta == 0) {
-                        Q.add(c);
+                        fi.add(c);
                     }
                 }
             }
             k++;
-            if (Q.isEmpty()) {
+            if (fi.isEmpty()) {
                 break;
             }
-            fronts.add(Q);
+            calcCrowding(fi);
+            if (fi.size() + pop.size() > populationCount) {
+                fi.sort(Comparator.comparing(c -> -c.crowding));
+                fi = fi.subList(0, populationCount - pop.size());
+            }
+            fronts.add(fi);
+            pop.addAll(fi);
         }
+        currentPopulation.clear();
+        currentPopulation.addAll(pop);
+
         return fronts;
+    }
+
+    private static void calcCrowding(List<Chromosome> chromosomes) {
+        for (Chromosome c : chromosomes) {
+            c.crowding = 0;
+        }
+
+
+        Chromosome chromosome1 = chromosomes.get(0);
+        for (int i = 0; i < chromosome1.evaluation.length; i++) {
+
+            final int idx = i;
+            Collections.sort(chromosomes, Comparator.comparing(c -> c.evaluation[idx]));
+            chromosomes.get(0).crowding = Double.MAX_VALUE;
+            chromosomes.get(chromosomes.size() - 1).crowding = Double.MAX_VALUE;
+
+            double delta = chromosomes.get(chromosomes.size() - 1).evaluation[i] - chromosomes.get(0).evaluation[i];
+            if (delta != 0) {
+                for (int j = 1; j < chromosomes.size() - 1; j++) {
+                    chromosomes.get(j).crowding = (chromosomes.get(j + 1).evaluation[i] - chromosomes.get(j - 1).evaluation[i]) / delta;
+                }
+            }
+        }
     }
 
     private static boolean isDominant(Chromosome a, Chromosome b, MOOPProblem problem) {
@@ -260,16 +255,32 @@ public class MOOP {
         return cnt > 0;
     }
 
-    private static void nextPopulationUsingRouletteWheelSelection(MOOPProblem problem, ArgsParser argsParser, Random random, Chromosome[] currentPopulation, Chromosome[] nextPopulation) {
-        for (int i = 0; i < nextPopulation.length; i++) {
-            Chromosome mama = rouletteWheelSelection(currentPopulation, random);
-            Chromosome papa = rouletteWheelSelection(currentPopulation, random);
+    private static void nextPopulationUsingKTournament(MOOPProblem problem, Random random, List<Chromosome> currentPopulation, List<Chromosome> nextPopulation) {
+        nextPopulation.clear();
+        for (int i = 0; i < currentPopulation.size(); i++) {
+            List<Chromosome> candidates = new ArrayList<>();
+            for (int j = 0; j < 3; j++) {
+                Chromosome randomChromosome;
+                do{
+                    randomChromosome = getRandomChromosome(random, currentPopulation);
+                }while (candidates.contains(randomChromosome));
+                candidates.add(randomChromosome);
+            }
+            candidates.sort(Comparator.<Chromosome>comparingDouble(c->c.rang).<Chromosome>thenComparingDouble(c->-c.crowding));
 
-            tweakChild(problem, argsParser, random, nextPopulation, i, mama, papa);
+            Chromosome mama = candidates.get(0);
+            Chromosome papa = candidates.get(1);
+
+            tweakChild(problem, random, nextPopulation, mama, papa);
         }
     }
 
-    private static void tweakChild(MOOPProblem problem, ArgsParser argsParser, Random random, Chromosome[] nextPopulation, int i, Chromosome mama, Chromosome papa) {
+    private static Chromosome getRandomChromosome(Random random, List<Chromosome> currentPopulation) {
+        return currentPopulation.get(random.nextInt(currentPopulation.size()));
+    }
+
+
+    private static void tweakChild(MOOPProblem problem, Random random, List<Chromosome> nextPopulation, Chromosome mama, Chromosome papa) {
         Chromosome child = mama.newLikeThis();
 
         double[] maxs = problem.getSolutionMaxs();
@@ -277,35 +288,13 @@ public class MOOP {
         for (int j = 0; j < child.values.length; j++) {
             double min = Math.min(mama.values[j], papa.values[j]);
             double max = Math.max(mama.values[j], papa.values[j]);
-            child.values[j] = min + (max - min) * random.nextDouble() + random.nextGaussian() * argsParser.getMutationSigma();
+            child.values[j] = min + (max - min) * random.nextDouble() + random.nextGaussian() * 0.05;
             child.values[j] = Math.max(Math.min(child.values[j], maxs[j]), mins[j]);
         }
-        nextPopulation[i] = child;
+        nextPopulation.add(child);
     }
 
     private static boolean isFinished(int iterCount, ArgsParser argsParser) {
         return iterCount >= argsParser.getMaxIterCount();
     }
-
-    private static Chromosome rouletteWheelSelection(Chromosome[] array, Random random) {
-        double minimal = Double.MAX_VALUE;
-        double sum = 0;
-        for (Chromosome anArray : array) {
-            sum += anArray.fitness;
-            minimal = Math.min(minimal, anArray.fitness);
-        }
-        sum -= minimal * array.length;
-
-        double roulletePick = random.nextDouble() * sum;
-
-        double it = 0;
-        for (Chromosome a : array) {
-            it += a.fitness - minimal;
-            if (it > roulletePick) {
-                return a;
-            }
-        }
-        return array[random.nextInt(array.length)];
-    }
-
 }

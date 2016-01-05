@@ -9,6 +9,6 @@ public class MOOPTest {
 
     @Test
     public void testMain() throws Exception {
-        MOOP.main("2 1000 decision-space 1000 0.1 0.1".split(" "));
+        MOOP.main("2 1000 100".split(" "));
     }
 }
