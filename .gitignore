@@ -50,3 +50,7 @@ local.properties
 *.zip
 
 .recommenders
+
+*.aux
+*.log
+*.gz
