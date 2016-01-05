@@ -21,7 +21,7 @@ Ako $x$ je $A_{m}$ i $y$ je $B_{m}$ tada $z_{m}=p_{m}x+q_{m}y+r_{m}$\\
 \\
 Prijenosna funkcija koju sustav koristi definirane su izrazima:
 $$\mu_{A_{i}}(x)=\frac{1}{1+e^{b_{i}(x-a_{i})}}$$
-$$\mu_{B_{i}}(x)=\frac{1}{1+e^{c_{i}(x-d_{i})}}$$
+$$\mu_{B_{i}}(x)=\frac{1}{1+e^{c_{i}(y-d_{i})}}$$
 Opcenito greska je definirana izrazom:
 $$E_{k}=\frac{1}{2}(y_{k}-o_{k})^{2}$$
 Azuriranje parametra gradijentnim spustom:
@@ -71,22 +71,22 @@ Potrebno je jos izracunati slijedece:
 \newcommand{\dalphadb}{\sigmoidalphad (x - a_{i})}
 \newcommand{\sigmoidbetad}{\beta_{i}(1-\beta_{i})}
 \newcommand{\dbetadc}{\sigmoidbetad d_{i}}
-\newcommand{\dbetadd}{\sigmoidbetad (x - c_{i})}
+\newcommand{\dbetadd}{\sigmoidbetad (y - c_{i})}
 $$\frac{\partial \alpha_{i}}{\partial a_{i}} = \dalphada$$
 $$\frac{\partial \alpha_{i}}{\partial b_{i}} = \dalphadb$$
 Pomocu gore navedenih izraza dobivamo:
 $$\frac{\partial E_{k}}{\partial a_{i}}=-\minusdEkdok \dokdgamma \dgammadalpha \dalphada$$
 $$\frac{\partial E_{k}}{\partial b_{i}}=-\minusdEkdok \dokdgamma \dgammadalpha \dalphadb$$
 Izvod derivacija za parametre $c_{i}$ i $d_{i}$ analogan je izvodu za parametre $a_{i}$ i $b_{i}$ 
-$$\frac{\partial E_{k}}{\partial a_{i}}=-\minusdEkdok \dokdgamma \dgammadbeta \dbetadc$$
-$$\frac{\partial E_{k}}{\partial b_{i}}=-\minusdEkdok \dokdgamma \dgammadbeta \dbetadd$$
+$$\frac{\partial E_{k}}{\partial c_{i}}=-\minusdEkdok \dokdgamma \dgammadbeta \dbetadc$$
+$$\frac{\partial E_{k}}{\partial d_{i}}=-\minusdEkdok \dokdgamma \dgammadbeta \dbetadd$$
 Iz cega dobivamo izraze za azuriranje parametara:
-$$a_{i}(t+1) =a_{i}(t)-\eta\minusdEkdok \dokdgamma \dgammadalpha \dalphada$$
-$$b_{i}(t+1) =b_{i}(t)-\eta\minusdEkdok \dokdgamma \dgammadbeta \dbetadc$$
-$$c_{i}(t+1) =c_{i}(t)-\eta\minusdEkdok \dokdgamma \dgammadbeta \dbetadc$$
-$$d_{i}(t+1) =d_{i}(t)-\eta\minusdEkdok \dokdgamma \dgammadbeta \dbetadd	$$
-$$p_{i}(t+1) =p_{i}(t)-\eta\minusdEkdok\dokdzi x$$
-$$q_{i}(t+1) =q_{i}(t)-\eta\minusdEkdok\dokdzi y$$
-$$r_{i}(t+1) =r_{i}(t)-\eta\minusdEkdok\dokdzi $$
+$$a_{i}(t+1) =a_{i}(t)+\eta\minusdEkdok \dokdgamma \dgammadalpha \dalphada$$
+$$b_{i}(t+1) =b_{i}(t)+\eta\minusdEkdok \dokdgamma \dgammadalpha \dalphadb$$
+$$c_{i}(t+1) =c_{i}(t)+\eta\minusdEkdok \dokdgamma \dgammadbeta \dbetadc$$
+$$d_{i}(t+1) =d_{i}(t)+\eta\minusdEkdok \dokdgamma \dgammadbeta \dbetadd	$$
+$$p_{i}(t+1) =p_{i}(t)+\eta\minusdEkdok\dokdzi x$$
+$$q_{i}(t+1) =q_{i}(t)+\eta\minusdEkdok\dokdzi y$$
+$$r_{i}(t+1) =r_{i}(t)+\eta\minusdEkdok\dokdzi $$
 
 \end{document}
