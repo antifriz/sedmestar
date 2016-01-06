@@ -82,33 +82,10 @@ public class Main {
         }));
 
         final Random random = new Random();
-        List<Rule> rules = IntStream.range(0, RULE_CNT).mapToObj(i -> new Rule(random)).collect(Collectors.toList());
+        List<Rule> rules = IntStream.range(0, RULE_CNT).mapToObj(i -> new Rule()).collect(Collectors.toList());
 
 
-        Rule rule1 = rules.get(0);
-        rule1.a = 0;
-        rule1.b = 0;
-        rule1.c = 0;
-        rule1.d = 0;
-        rule1.p = 0;
-        rule1.q = 0;
-        rule1.r = 0;
-
-        if (rules.size() > 1) {
-            Rule rule2 = rules.get(1);
-
-            rule2.a = 0;
-            rule2.b = 0;
-            rule2.c = 0;
-            rule2.d = 0;
-            rule2.p = 0;
-            rule2.q = 0;
-            rule2.r = 0;
-        }
         while (true) {
-//            List<Rule> fakeRules = rules.stream().map(rule -> new Rule()).collect(Collectors.toList());
-
-
 //            System.out.println(calcualteError(trainSamples, rules));
             for (Pair<Input, Double> trainSample : trainSamples) {
 
@@ -133,10 +110,11 @@ public class Main {
                     upper += gamma * z;
                     lower += gamma;
                 }
-                if(lower == 0){
-                    x=x;
+                if (lower == 0) {
+                    x = x;
                 }
                 double o = upper / lower;
+                System.out.println(o);
                 double yDiff = yReal - o;
 
                 double gammaSum = gammas.stream().mapToDouble(i -> i).sum();
@@ -146,19 +124,17 @@ public class Main {
 
                 for (int i = 0; i < rules.size(); i++) {
                     Rule rule = rules.get(i);
-//                    Rule fakeRule = fakeRules.get(i);
-                    Rule fakeRule = rules.get(i);
                     double etaDiff = ETA * yDiff;
                     double alphai = alphas.get(i);
                     double betai = betas.get(i);
                     double gammai = gammas.get(i);
                     double abcdSame = etaDiff * (gammai * zeds.get(i) * rules.size() - gammaZedSum) / (gammaSum * gammaSum);
-if(Double.isNaN(abcdSame )){
-    x=x;
-}
+                    if (Double.isNaN(abcdSame)) {
+                        x = x;
+                    }
 
                     double da = abcdSame * betai * alphai * (1 - alphai) * rule.b;
-                    double db = abcdSame * betai * alphai * (1 - alphai) *- (x - rule.a);
+                    double db = abcdSame * betai * alphai * (1 - alphai) * -(x - rule.a);
                     double dc = abcdSame * alphai * betai * (1 - betai) * rule.d;
                     double dd = abcdSame * alphai * betai * (1 - betai) * -(y - rule.c);
 
@@ -169,22 +145,16 @@ if(Double.isNaN(abcdSame )){
                     double dr = pqrSame;
 
 
-                    fakeRule.p += dp;
-                    fakeRule.q += dq;
-                    fakeRule.r += dr;
+                    rule.p += dp;
+                    rule.q += dq;
+                    rule.r += dr;
 
-                    fakeRule.a += da;
-                    fakeRule.b += db;
-                    fakeRule.c += dc;
-                    fakeRule.d += dd;
+                    rule.a += da;
+                    rule.b += db;
+                    rule.c += dc;
+                    rule.d += dd;
 
-                    fakeRule.a = Math.max(-4,Math.min(fakeRule.a,4));
-                    fakeRule.b = Math.max(-4,Math.min(fakeRule.b,4));
-                    fakeRule.c = Math.max(-4,Math.min(fakeRule.c,4));
-                    fakeRule.d = Math.max(-4,Math.min(fakeRule.d,4));
                     System.out.println(rule);
-
-
                 }
                 break;
             }
@@ -264,6 +234,6 @@ if(Double.isNaN(abcdSame )){
     private static double realOutput(double x, double y) {
         double cos = Math.cos(x / 5);
 //        return ((x - 1) * (x - 1) + (y + 2) * (y + 2) - 5 * x * y + 3) * cos * cos;
-        return 2*x+y;
+        return 2 * x + y;
     }
 }
