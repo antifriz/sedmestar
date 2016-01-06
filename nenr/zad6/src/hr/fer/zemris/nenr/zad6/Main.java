@@ -11,9 +11,12 @@ import java.util.stream.IntStream;
 
 public class Main {
 
-    private static final int RULE_CNT = 6;
-    private static final double ETA = 0.001;
-    public static final int RANGE = 4;
+    private static final int RULE_CNT = 1;
+    private static final double ETA = 0.000001;
+
+    private static final double DESIRED_ERROR = -10e-2;
+    private static final boolean STOHASTIC = true;
+    public static final int ITER_COUNT = 200000;
 
     static class Input {
         double x;
@@ -26,7 +29,7 @@ public class Main {
     }
 
     static class Rule {
-        private static final double INIT = 1;
+        private static final double INIT = 0;
         double a, b, c, d, p, q, r;
 
         public Rule(Random random) {
@@ -71,110 +74,132 @@ public class Main {
                     ", r=" + r +
                     '}';
         }
+
+        public void addDivided(Rule other, double d) {
+            a += other.a / d;
+            b += other.b / d;
+            c += other.c / d;
+            d += other.d / d;
+            p += other.p / d;
+            q += other.q / d;
+            r += other.r / d;
+            other.a = 0;
+            other.b = 0;
+            other.c = 0;
+            other.d = 0;
+            other.p = 0;
+            other.q = 0;
+            other.r = 0;
+        }
     }
 
     public static void main(String[] args) {
         // write your code here
 
         Collection<Pair<Input, Double>> trainSamples = new ArrayList<>();
-        IntStream.rangeClosed(-RANGE, RANGE).forEach(x -> IntStream.rangeClosed(-RANGE, RANGE).forEach(y -> {
+        IntStream.rangeClosed(-4, 4).forEach(x -> IntStream.rangeClosed(-4, 4).forEach(y -> {
             trainSamples.add(new Pair<>(new Input(x, y), realOutput(x, y)));
         }));
 
         final Random random = new Random();
-        List<Rule> rules = IntStream.range(0, RULE_CNT).mapToObj(i -> new Rule()).collect(Collectors.toList());
+        List<Rule> rules = IntStream.range(0, RULE_CNT).mapToObj(i -> new Rule(random)).collect(Collectors.toList());
+        double eta = ETA;
+        List<Rule> fakeRules;
+        if (!STOHASTIC) {
+            fakeRules = rules.stream().map(r -> new Rule()).collect(Collectors.toList());
+        }
 
+        int n = trainSamples.size();
+        double[] alphas = new double[n];
+        double[] betas = new double[n];
+        double[] gammas = new double[n];
+        double[] zeds = new double[n];
 
-        while (true) {
-//            System.out.println(calcualteError(trainSamples, rules));
+        for (int ii = 0; ii <= ITER_COUNT; ii++) {
+            double err = 0;
+
             for (Pair<Input, Double> trainSample : trainSamples) {
 
                 Input input = trainSample.getKey();
                 double x = input.x;
                 double y = input.y;
                 double yReal = trainSample.getValue();
-                double upper = 0, lower = 0;
-                List<Double> alphas = new ArrayList<>();
-                List<Double> betas = new ArrayList<>();
-                List<Double> gammas = new ArrayList<>();
-                List<Double> zeds = new ArrayList<>();
-                for (Rule rule : rules) {
-                    double alpha = membershipFunction(rule.a, rule.b, input.x);
-                    double beta = membershipFunction(rule.c, rule.d, input.y);
-                    alphas.add(alpha);
-                    betas.add(beta);
-                    double gamma = alpha * beta;
-                    gammas.add(gamma);
-                    double z = calculateZ(input, rule);
-                    zeds.add(z);
-                    upper += gamma * z;
-                    lower += gamma;
-                }
-                if (lower == 0) {
-                    x = x;
-                }
-                double o = upper / lower;
-                System.out.println(o);
-                double yDiff = yReal - o;
+                double upper = 0, gammaSum = 0;
 
-                double gammaSum = gammas.stream().mapToDouble(i -> i).sum();
-                double gammaZedSum = IntStream.range(0, rules.size()).mapToDouble(i -> gammas.get(i) * zeds.get(i)).sum();
-
-                System.out.println(calcualteError(trainSamples, rules));
 
                 for (int i = 0; i < rules.size(); i++) {
                     Rule rule = rules.get(i);
-                    double etaDiff = ETA * yDiff;
-                    double alphai = alphas.get(i);
-                    double betai = betas.get(i);
-                    double gammai = gammas.get(i);
-                    double abcdSame = etaDiff * (gammai * zeds.get(i) * rules.size() - gammaZedSum) / (gammaSum * gammaSum);
-                    if (Double.isNaN(abcdSame)) {
-                        x = x;
-                    }
-
-                    double da = abcdSame * betai * alphai * (1 - alphai) * rule.b;
-                    double db = abcdSame * betai * alphai * (1 - alphai) * -(x - rule.a);
-                    double dc = abcdSame * alphai * betai * (1 - betai) * rule.d;
-                    double dd = abcdSame * alphai * betai * (1 - betai) * -(y - rule.c);
-
-                    double pqrSame = etaDiff * gammai / gammaSum;
-
-                    double dp = pqrSame * x;
-                    double dq = pqrSame * y;
-                    double dr = pqrSame;
-
-
-                    rule.p += dp;
-                    rule.q += dq;
-                    rule.r += dr;
-
-                    rule.a += da;
-                    rule.b += db;
-                    rule.c += dc;
-                    rule.d += dd;
-
-                    System.out.println(rule);
+                    double alpha = membershipFunction(rule.a, rule.b, x);
+                    double beta = membershipFunction(rule.c, rule.d, y);
+                    alphas[i] = alpha;
+                    betas[i] = beta;
+                    double gamma = alpha * beta;
+                    gammas[i] = gamma;
+                    double z = calculateZ(input, rule);
+                    zeds[i] = z;
+                    upper += gamma * z;
+                    gammaSum += gamma;
                 }
-                break;
+                double o = upper / gammaSum;
+                double yDiff = yReal - o;
+                err += yDiff * yDiff;
+
+                for (int i = 0; i < rules.size(); i++) {
+
+                    double zi = zeds[i];
+                    double sum_big1 = 0;
+                    for (int j = 0; j < rules.size(); j++) {
+                        sum_big1 += gammas[j] * (zi - calculateZ(input,rules.get(j)));
+                    }
+                    double sum_big = sum_big1;
+
+                    double dr = eta * yDiff * gammas[i] / gammaSum;
+                    double abcdSame = dr * sum_big / gammaSum;
+
+                    double oneMinusAlpha = 1 - alphas[i];
+                    double oneMinusBeta = 1 - betas[i];
+
+                    Rule rule = rules.get(i);
+
+                    update(STOHASTIC ? rule : fakeRules.get(i),
+                            abcdSame * oneMinusAlpha * rule.b,
+                            abcdSame * oneMinusAlpha * (rule.a - x),
+                            abcdSame * oneMinusBeta * rule.d,
+                            abcdSame * oneMinusBeta * (rule.c - y),
+                            dr * x,
+                            dr * y,
+                            dr);
+
+                }
+                if (!STOHASTIC) {
+                    for (int i = 0; i < rules.size(); i++) {
+                        rules.get(i).addDivided(fakeRules.get(i), n);
+
+                    }
+                }
             }
+            err /= n;
+            if (ii % 10000 == 0 || err <= DESIRED_ERROR) {
 
-//            for (int i = 0; i < rules.size(); i++) {
-//                Rule rule = rules.get(i);
-//                Rule fakeRule = fakeRules.get(i);
-//                int size = trainSamples.size();
-//                fakeRule.a /= size;
-//                fakeRule.b /= size;
-//                fakeRule.c /= size;
-//                fakeRule.d /= size;
-//                fakeRule.p /= size;
-//                fakeRule.q /= size;
-//                fakeRule.r /= size;
-//                rule.add(fakeRule);
-//            }
-            break;
+                System.out.printf("[%7d] %6.4f\n", ii, err);
+                if (err <= DESIRED_ERROR) {
+                    break;
+                }
+            }
         }
+        rules.forEach(System.out::println);
 
+    }
+
+    private static void update(Rule fakeRule, double da, double db, double dc, double dd, double dp, double dq, double dr) {
+        fakeRule.p += dp;
+        fakeRule.q += dq;
+        fakeRule.r += dr;
+
+        fakeRule.a += da;
+        fakeRule.b += db;
+        fakeRule.c += dc;
+        fakeRule.d += dd;
     }
 
 
@@ -212,18 +237,7 @@ public class Main {
     }
 
     private static double membershipFunction(double a, double b, double x) {
-        double v2 = b * (x - a);
-        double myexp = myexp(v2);
-        double v1 = 1 + myexp;
-        double v = 1 / v1;
-        if (Double.isNaN(v)) {
-            x = x;
-        }
-        return v;
-    }
-
-    private static double myexp(double v) {
-        return Math.exp(v);
+        return 1 / (1 + Math.exp(b * (x - a)));
     }
 
     private static double calculateZ(Input input, Rule rule) {
@@ -233,7 +247,7 @@ public class Main {
 
     private static double realOutput(double x, double y) {
         double cos = Math.cos(x / 5);
-//        return ((x - 1) * (x - 1) + (y + 2) * (y + 2) - 5 * x * y + 3) * cos * cos;
-        return 2 * x + y;
+        return ((x - 1) * (x - 1) + (y + 2) * (y + 2) - 5 * x * y + 3) * cos * cos;
+//        return  x +2* y;
     }
 }
