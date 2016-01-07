@@ -15,7 +15,6 @@ public class GeneticAlgorithm {
 
     private static final double LOWER_LIMITS = -50;
     private static final double UPPER_LIMITS = 150;
-    public static final double MAX_EXP = Math.pow(10, 50);
 
 
     public static void main(String[] args) {
@@ -40,12 +39,13 @@ public class GeneticAlgorithm {
         }
         SingleObjectiveSolution[] nextPopulation = new SingleObjectiveSolution[currentPopulation.length];
 
+
+
         double result;
         if (argsHolder.isBinary) {
             int[] bits = new int[argsHolder.desiredDim];
             Arrays.fill(bits, argsHolder.bitCount);
             result = geneticAlgorithmLoop(argsHolder, function, random, currentPopulation, nextPopulation, new GreyBinaryDecoderA(lower, upper, bits, argsHolder.desiredDim));
-
         } else {
             result = geneticAlgorithmLoop(argsHolder, function, random, currentPopulation, nextPopulation, new PassThroughDecoderA());
         }
@@ -82,7 +82,7 @@ public class GeneticAlgorithm {
             if (argsHolder.isRoulette) {
                 nextPopulationUsingRouletteWheelSelection(iterCount, argsHolder, random, currentPopulation, nextPopulation, decoder);
             } else {
-                nextPopulationUsingKTournament(iterCount, argsHolder, random, currentPopulation, nextPopulation, decoder);
+                nextPopulationUsingKTournament(iterCount,argsHolder, random, currentPopulation, nextPopulation, decoder);
             }
 
             SingleObjectiveSolution[] k = currentPopulation;
@@ -104,7 +104,7 @@ public class GeneticAlgorithm {
         }
     }
 
-    private static <Chromosome extends SingleObjectiveSolution> void nextPopulationUsingKTournament(int iterCount, ArgsHolder argsHolder, Random random, SingleObjectiveSolution[] currentPopulation, SingleObjectiveSolution[] nextPopulation, IDecoder<Chromosome> decoder) {
+    private static <Chromosome extends SingleObjectiveSolution> void nextPopulationUsingKTournament(int iterCount,ArgsHolder argsHolder, Random random, SingleObjectiveSolution[] currentPopulation, SingleObjectiveSolution[] nextPopulation, IDecoder<Chromosome> decoder) {
         for (int i = 1; i < nextPopulation.length; i++) {
             SingleObjectiveSolution[] candidates = new SingleObjectiveSolution[argsHolder.tournamentCnt];
             for (int j = 0; j < argsHolder.tournamentCnt; j++) {
@@ -115,7 +115,7 @@ public class GeneticAlgorithm {
             SingleObjectiveSolution mama = candidates[0];
             SingleObjectiveSolution papa = candidates[1];
 
-            SingleObjectiveSolution child = decoder.crossoverAndMutate((Chromosome) mama, (Chromosome) papa, random, argsHolder.mutationProba /* * Math.pow(1 - iterCount / (double) argsHolder.maxIter,10)*/);
+            SingleObjectiveSolution child = decoder.crossoverAndMutate((Chromosome) mama, (Chromosome) papa, random, argsHolder.mutationProba, 1);
 
             nextPopulation[i] = child;
         }

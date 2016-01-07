@@ -23,10 +23,11 @@ public class Exercise1 {
         argsHolder.functionIdx = mFunctionIdx;
         argsHolder.desiredDim = mDesiredDim;
         argsHolder.isBinary = mIsBinary;
-
+        argsHolder.mutationProba = 0.1;
 
         for (int i = 0; i < 10; i++) {
-            if(GeneticAlgorithm.run(argsHolder)<Math.pow(10,-6)){
+            if(GeneticAlgorithm.run(argsHolder)<=Math.pow(10,-6)){
+                System.out.println("Number of attempts: "+(i+1));
                 return;
             }
         }
@@ -49,7 +50,7 @@ public class Exercise1 {
                 { 1,2, isBinary},
                 { 3,5, isBinary},
                 { 6,2, isBinary},
-                { 7,2, true}
+                { 7,2, isBinary}
         });
     }
 }

@@ -11,12 +11,12 @@ public class GreyBinaryDecoderA extends GreyBinaryDecoder {
     }
 
     @Override
-    public BitvectorSolution crossoverAndMutate(BitvectorSolution mama, BitvectorSolution papa, Random random, double mutationParam) {
+    public BitvectorSolution crossoverAndMutate(BitvectorSolution mama, BitvectorSolution papa, Random random, double... mutationParams) {
         BitvectorSolution child = mama.newLikeThis();
         for (int i = 0; i < child.mBytes.length; i++) {
             for (int j = 0; j < 8; j++) {
                 child.mBytes[i] |=(random.nextBoolean()?mama.mBytes[i]:papa.mBytes[i]) & (1<<j);
-                child.mBytes[i] ^=(random.nextInt(2))<<j;
+                child.mBytes[i] ^=(random.nextDouble()<=mutationParams[0]?1:0)<<j;
             }
         }
         return child;

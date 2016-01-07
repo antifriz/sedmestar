@@ -19,7 +19,7 @@ public interface IDecoder<T extends SingleObjectiveSolution> {
         if (iMax == -1)
             return "[]";
 
-        DecimalFormat df = new DecimalFormat("#.##");
+        DecimalFormat df = new DecimalFormat(" 0.0000000;-0.0000000");
         StringBuilder b = new StringBuilder();
         b.append('[');
         for (int i = 0; ; i++) {
@@ -30,5 +30,5 @@ public interface IDecoder<T extends SingleObjectiveSolution> {
         }
     }
 
-    T crossoverAndMutate(T mama, T papa, Random random, double mutationParam);
+    T crossoverAndMutate(T mama, T papa, Random random, double... mutationParams);
 }

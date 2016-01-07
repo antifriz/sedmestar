@@ -10,7 +10,7 @@ final class ArgsHolder {
     public Integer popCnt = 15;
     public boolean isBinary=false;
     public int bitCount = 10;
-    public double mutationProba = 0.2;
+    public double mutationProba = 0.1;
     public int maxIter = 100000;
     public boolean isRoulette = false;
     public int tournamentCnt = 3;

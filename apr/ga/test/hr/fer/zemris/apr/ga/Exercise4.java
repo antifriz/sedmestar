@@ -26,7 +26,7 @@ public class Exercise4 extends TweakableExercise {
 
     @Test
     public void testMutation() throws Exception {
-        Double[] params = new Double[]{.2, .3, .6, .9};
+        Double[] params = new Double[]{.05,.1,.2, .3, .6, .9};
         Tweaker<Double> tweaker = (holder, param) -> holder.mutationProba = param;
         ArgsHolder argsHolder = new ArgsHolder();
         argsHolder.functionIdx = 6;

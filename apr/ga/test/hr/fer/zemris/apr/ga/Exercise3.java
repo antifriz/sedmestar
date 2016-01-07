@@ -8,14 +8,18 @@ import org.junit.Test;
 public class Exercise3 extends TweakableExercise {
     public void test(int idx) throws Exception {
         Boolean[] params = new Boolean[]{false, true};
-        Tweaker<Boolean> tweaker = (holder, param) -> holder.isBinary = param;
         ArgsHolder argsHolder = new ArgsHolder();
+        final double defaultProba = argsHolder.mutationProba;
+        Tweaker<Boolean> tweaker = (holder, param) -> {
+            holder.isBinary = param;
+            holder.mutationProba = param ? 0.05 : defaultProba;
+        };
         argsHolder.functionIdx = idx;
         argsHolder.desiredError = -1;
         argsHolder.verbose = false;
         argsHolder.isRoulette = false;
         argsHolder.tournamentCnt = 3;
-        argsHolder.bitCount = 4;
+        argsHolder.bitCount = 21;
         argsHolder.maxIter = 10000;
         argsHolder.popCnt = 10;
         tweakParam(argsHolder, params, tweaker);

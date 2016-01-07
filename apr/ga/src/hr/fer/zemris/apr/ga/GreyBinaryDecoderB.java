@@ -11,7 +11,7 @@ public class GreyBinaryDecoderB extends GreyBinaryDecoder {
     }
 
     @Override
-    public BitvectorSolution crossoverAndMutate(BitvectorSolution mama, BitvectorSolution papa, Random random, double mutationParam) {
+    public BitvectorSolution crossoverAndMutate(BitvectorSolution mama, BitvectorSolution papa, Random random, double ...mutationParams) {
         BitvectorSolution child = mama.newLikeThis();
         int limit = random.nextInt(mTotalBits);
         boolean firstPapa = random.nextBoolean();

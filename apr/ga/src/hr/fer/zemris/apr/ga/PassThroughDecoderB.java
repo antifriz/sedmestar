@@ -7,10 +7,10 @@ import java.util.Random;
  */
 public class PassThroughDecoderB extends PassThroughDecoder {
     @Override
-    public DoubleArraySolution crossoverAndMutate(DoubleArraySolution mama, DoubleArraySolution papa, Random random, double mutationParam) {
+    public DoubleArraySolution crossoverAndMutate(DoubleArraySolution mama, DoubleArraySolution papa, Random random, double ... mutationParams) {
         DoubleArraySolution child = mama.newLikeThis();
         for (int j = 0; j < child.values.length; j++) {
-            child.values[j] = random.nextBoolean()?mama.values[j]:papa.values[j] + random.nextGaussian() * mutationParam;
+            child.values[j] = random.nextBoolean()?mama.values[j]:papa.values[j] + random.nextGaussian() * mutationParams[0];
         }
         return child;
     }
