@@ -2,6 +2,10 @@ package hr.fer.zemris.nenr.zad6;
 
 import javafx.util.Pair;
 
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -9,14 +13,15 @@ import java.util.Random;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
+// 6,0.005,stoha
 public class Main {
 
-    private static final int RULE_CNT = 1;
+    private static final int RULE_CNT = 6;
     private static final double ETA = 0.000001;
 
-    private static final double DESIRED_ERROR = -10e-2;
-    private static final boolean STOHASTIC = true;
-    public static final int ITER_COUNT = 200000;
+    private static final double DESIRED_ERROR = 0.034;
+    private static final boolean STOCHASTIC = false;
+    public static final int ITER_COUNT = 16000000;
 
     static class Input {
         double x;
@@ -29,7 +34,7 @@ public class Main {
     }
 
     static class Rule {
-        private static final double INIT = 0;
+        private static final double INIT = 0.1;
         double a, b, c, d, p, q, r;
 
         public Rule(Random random) {
@@ -93,19 +98,19 @@ public class Main {
         }
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
         // write your code here
+        PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter("batch-small.txt", true)));
 
         Collection<Pair<Input, Double>> trainSamples = new ArrayList<>();
         IntStream.rangeClosed(-4, 4).forEach(x -> IntStream.rangeClosed(-4, 4).forEach(y -> {
             trainSamples.add(new Pair<>(new Input(x, y), realOutput(x, y)));
         }));
-
         final Random random = new Random();
         List<Rule> rules = IntStream.range(0, RULE_CNT).mapToObj(i -> new Rule(random)).collect(Collectors.toList());
         double eta = ETA;
         List<Rule> fakeRules;
-        if (!STOHASTIC) {
+        if (!STOCHASTIC) {
             fakeRules = rules.stream().map(r -> new Rule()).collect(Collectors.toList());
         }
 
@@ -114,7 +119,8 @@ public class Main {
         double[] betas = new double[n];
         double[] gammas = new double[n];
         double[] zeds = new double[n];
-
+        List<Rule> lastRules = rules;
+        double lastErr = 10e10;
         for (int ii = 0; ii <= ITER_COUNT; ii++) {
             double err = 0;
 
@@ -149,7 +155,7 @@ public class Main {
                     double zi = zeds[i];
                     double sum_big1 = 0;
                     for (int j = 0; j < rules.size(); j++) {
-                        sum_big1 += gammas[j] * (zi - calculateZ(input,rules.get(j)));
+                        sum_big1 += gammas[j] * (zi - calculateZ(input, rules.get(j)));
                     }
                     double sum_big = sum_big1;
 
@@ -161,7 +167,8 @@ public class Main {
 
                     Rule rule = rules.get(i);
 
-                    update(STOHASTIC ? rule : fakeRules.get(i),
+                    update(STOCHASTIC ? rule : fakeRules.get(i),
+                            random,
                             abcdSame * oneMinusAlpha * rule.b,
                             abcdSame * oneMinusAlpha * (rule.a - x),
                             abcdSame * oneMinusBeta * rule.d,
@@ -171,27 +178,69 @@ public class Main {
                             dr);
 
                 }
-                if (!STOHASTIC) {
-                    for (int i = 0; i < rules.size(); i++) {
-                        rules.get(i).addDivided(fakeRules.get(i), n);
-
-                    }
+            }
+            if (!STOCHASTIC) {
+                for (int i = 0; i < rules.size(); i++) {
+                    rules.get(i).addDivided(fakeRules.get(i), n);
                 }
             }
             err /= n;
-            if (ii % 10000 == 0 || err <= DESIRED_ERROR) {
+//            if(err>lastErr) {
+//                if(random.nextDouble()<0.0001 && lastErr*10<err) {
+//                    rules = lastRules;
+//                    eta*=0.9;
+//                    System.out.println("tweaked");
+//                }
+//            }else{
+//                lastRules = rules;
+//
+//                lastErr = err;
+//            }
 
-                System.out.printf("[%7d] %6.4f\n", ii, err);
+            if (ii % 1000 == 0 || err <= DESIRED_ERROR) {
+                System.out.printf("[%7d] %f \n", ii, err/2);
+                out.printf("%f\n",err/2);
+                out.flush();
+//                if(ii%100000==0){
+//                    rules.stream().forEach((x) -> System.out.println(x.toString().replaceAll("=",":")));
+//                    final List<Rule> r = rules;
+//                    List<Double> collect = trainSamples.stream().map(trainSample -> {
+//                        Input input = trainSample.getKey();
+//                        double x = input.x;
+//                        double y = input.y;
+//                        double yReal = trainSample.getValue();
+//                        double upper = 0, gammaSum = 0;
+//                        for (int i = 0; i < r.size(); i++) {
+//                            Rule rule = r.get(i);
+//                            double alpha = membershipFunction(rule.a, rule.b, x);
+//                            double beta = membershipFunction(rule.c, rule.d, y);
+//                            alphas[i] = alpha;
+//                            betas[i] = beta;
+//                            double gamma = alpha * beta;
+//                            gammas[i] = gamma;
+//                            double z = calculateZ(input, rule);
+//                            zeds[i] = z;
+//                            upper += gamma * z;
+//                            gammaSum += gamma;
+//                        }
+//
+//                        return upper / gammaSum-yReal;
+//                    }).collect(Collectors.toList());
+//                    System.out.println(Arrays.toString(collect.toArray()));
+//
+//
+//                }
                 if (err <= DESIRED_ERROR) {
                     break;
                 }
             }
         }
+
         rules.forEach(System.out::println);
 
     }
 
-    private static void update(Rule fakeRule, double da, double db, double dc, double dd, double dp, double dq, double dr) {
+    private static void update(Rule fakeRule, Random random, double da, double db, double dc, double dd, double dp, double dq, double dr) {
         fakeRule.p += dp;
         fakeRule.q += dq;
         fakeRule.r += dr;

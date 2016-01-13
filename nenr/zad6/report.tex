@@ -2,7 +2,8 @@
 \usepackage{comment} % enables the use of multi-line comments (\ifx \fi) 
 \usepackage{lipsum} %This package just generates Lorem Ipsum filler text. 
 \usepackage{fullpage} % changes the margin
-
+\usepackage{graphicx}
+\graphicspath{ {.} }
 \begin{document}
 %Header-Make sure you update this information!!!!
 \noindent
@@ -68,10 +69,10 @@ $$\frac{\partial E_{k}}{\partial b_{i}}=\frac{\partial E_{k}}{\partial o_{k}}\fr
 Potrebno je jos izracunati slijedece:
 \newcommand{\sigmoidalphad}{\alpha_{i}(1-\alpha_{i})}
 \newcommand{\dalphada}{\sigmoidalphad b_{i}}
-\newcommand{\dalphadb}{\sigmoidalphad (x - a_{i})}
+\newcommand{\dalphadb}{\sigmoidalphad (a_{i}-x)}
 \newcommand{\sigmoidbetad}{\beta_{i}(1-\beta_{i})}
 \newcommand{\dbetadc}{\sigmoidbetad d_{i}}
-\newcommand{\dbetadd}{\sigmoidbetad (y - c_{i})}
+\newcommand{\dbetadd}{\sigmoidbetad (c_{i}-y)}
 $$\frac{\partial \alpha_{i}}{\partial a_{i}} = \dalphada$$
 $$\frac{\partial \alpha_{i}}{\partial b_{i}} = \dalphadb$$
 Pomocu gore navedenih izraza dobivamo:
@@ -88,5 +89,21 @@ $$d_{i}(t+1) =d_{i}(t)+\eta\minusdEkdok \dokdgamma \dgammadbeta \dbetadd	$$
 $$p_{i}(t+1) =p_{i}(t)+\eta\minusdEkdok\dokdzi x$$
 $$q_{i}(t+1) =q_{i}(t)+\eta\minusdEkdok\dokdzi y$$
 $$r_{i}(t+1) =r_{i}(t)+\eta\minusdEkdok\dokdzi $$
+\section*{Pravila}
+\includegraphics[width=\textwidth]{set1}
+\includegraphics[width=\textwidth]{set2}
+\includegraphics[width=\textwidth]{set3}
+\includegraphics[width=\textwidth]{set4}
+\includegraphics[width=\textwidth]{set5}
+\includegraphics[width=\textwidth]{set6}
+\section*{Analiza pogresaka}
+\includegraphics[width=\textwidth]{diff}
+\section*{Usporedba batch i stochastic metoda}
+\includegraphics[width=\textwidth]{cmp1}
+\section*{Usporedba stochastic metoda}
+\includegraphics[width=\textwidth]{cmp2}
+\section*{Usporedba batch metoda}
+\includegraphics[width=\textwidth]{cmp3}
+
 
 \end{document}
