@@ -57,6 +57,9 @@ public interface IRNG {
      * @return slučajno generirani cijeli broj
      */
     default int nextInt(int min, int max){
+        if(max<=min){
+            System.out.println("nooo");
+        }
         return Math.abs(nextInt() %(max-min)) +min;
     }
 
