@@ -1,0 +1,888 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Test Results &mdash; All in ga</title>
+<style type="text/css">
+          html {
+            height: 100%
+          }
+
+          body {
+            margin: 0 auto;
+            padding: 0;
+            text-align: left;
+            height: 100%;
+            font-family: myriad, arial, tahoma, verdana, sans-serif;
+            color: #151515;
+            font-size: 90%;
+            line-height: 1.3em;
+            background-color: #fff;
+          }
+
+          * {
+            margin: 0;
+            padding: 0
+          }
+
+          .clr {
+            clear: both;
+            overflow: hidden;
+          }
+
+          img {
+            border: none
+          }
+
+          a {
+            color: #0046b0;
+            text-decoration: none;
+          }
+
+          a:hover {
+            text-decoration: none;
+          }
+
+          a:focus, a:active {
+            outline: none
+          }
+
+          .noborder {
+            border: none
+          }
+
+          h1 {
+            color: #151515;
+            font-size: 180%;
+            line-height: 1.1em;
+            font-weight: bold;
+          }
+
+          h2 {
+            color: #393D42;
+            font-size: 160%;
+            font-weight: normal
+          }
+
+          h3 {
+            font-size: 120%;
+            font-weight: bold;
+            margin-bottom: .5em
+          }
+
+          h4 {
+            font-size: 110%;
+          }
+
+          h5 {
+            font-size: 110%;
+          }
+
+          span.failed {
+            color: #ff0000
+          }
+
+          span.error {
+            color: #ff0000
+          }
+
+          span.passed {
+            color: #1d9d01
+          }
+
+          span.ignored {
+            color: #fff600
+          }
+
+          span.skipped {
+            color: #fff600
+          }
+
+          hr {
+            background-color: blue
+          }
+
+          #container {
+            min-width: 30em;
+          }
+
+          #header {
+            padding: 0;
+            position: fixed;
+            width: 100%;
+            z-index: 10;
+            background-color: #c7ceda;
+          }
+
+          #header h1 {
+            margin: 1em 3em 1em 1.7em;
+          }
+
+          #header h1 strong {
+            white-space: nowrap;
+          }
+
+          #header .time {
+            margin-top: 2.2em;
+            margin-right: 3.4em;
+            float: right;
+          }
+
+          #treecontrol {
+            margin: 0;
+            padding: .5em 3em .5em 0;
+            text-align: right;
+            background-color: #fff;
+          }
+
+          #treecontrol ul li {
+            display: inline;
+            list-style: none;
+            color: #666;
+          }
+
+          #content {
+            padding: 0 2.5em 2em 1.7em;
+          }
+
+          #content ul {
+            margin: .4em 0 .1em 2em;
+            list-style: none;
+          }
+
+          #content ul li.level {
+            cursor: pointer;
+          }
+
+          #content ul li.level span {
+            display: block;
+            font-weight: bold;
+          }
+
+          #content ul li.level.top {
+            margin-bottom: .3em;
+          }
+
+          #content ul li.level.top > span {
+            padding: .5em 0 .5em 1em;
+            font-size: 120%;
+            color: #151515;
+            background-color: #f2f2f2;
+            border-left: solid 10px #93e078;
+          }
+
+          #content ul li.level.top.failed > span {
+            border-left: solid 10px #f02525;
+          }
+
+          #content ul li.level.top.ignored > span {
+            border-left: solid 10px #f8d216;
+          }
+
+          #content ul li.level.suite > span {
+            margin-bottom: .8em;
+            padding: 0 0 0 .8em;
+            display: block;
+            font-size: 110%;
+            line-height: 1em;
+            color: #151515;
+            border-left: solid 15px #93e078;
+          }
+
+          #content ul li.level.suite.failed > span {
+            border-left: solid 15px #f02525;
+          }
+
+          #content ul li.level.suite.ignored > span {
+            border-left: solid 15px #f8d216;
+          }
+
+          #content ul li.level.suite > ul {
+            margin-bottom: 1.5em;
+          }
+
+          #content ul li.level.test > span {
+            padding: .3em 0 .3em 1em;
+            color: #0046b0;
+            font-size: 100%;
+            border-left: solid 6px #93e078;
+            border-bottom: solid 1px #dbdbdb;
+          }
+
+          #content ul li.level.test.failed > span {
+            border-left: solid 6px #f02525;
+          }
+
+          #content ul li.level.test.ignored > span {
+            border-left: solid 6px #f8d216;
+          }
+
+          #content ul li.text p, #content ul li.text span {
+            margin-bottom: 1.5em;
+            color: #151515 !important;
+            font-size: 90% !important;
+            font-weight: normal !important;
+            overflow-x: auto;
+            cursor: auto !important;
+            background: none !important;
+            border: none !important;
+          }
+
+          #content ul li.text span {
+            margin-bottom: 0;
+            display: block;
+          }
+
+          #content ul li.text span.stderr {
+            color: #8b0000 !important;
+          }
+
+          #content ul li .time {
+            margin-right: .5em;
+            width: 5em;
+            text-align: right;
+            font-size: 13px;
+            color: #151515;
+            font-style: normal;
+            font-weight: normal;
+            float: right;
+          }
+
+          #content ul li span .status {
+            width: 6em;
+            font-size: 90%;
+            color: #1d9d01;
+            font-style: normal;
+            font-weight: normal;
+            float: right;
+            text-align: right;
+          }
+
+          #content ul li.failed > span .status {
+            color: #ff0000;
+          }
+
+          #content ul li.ignored > span .status {
+            color: #d6b000;
+          }
+
+          #footer {
+              height: 2em;
+              background-color: #c7ceda;
+          }
+          #footer p {
+              padding: .4em 0 0 3.6em;
+              font-size: 80%;
+          }
+        </style>
+
+<script type="text/javascript">
+eval(function(p,a,c,k,e,r){e=function(c){return(c<a?'':e(parseInt(c/a)))+((c=c%a)>35?String.fromCharCode(c+29):c.toString(36))};if(!''.replace(/^/,String)){while(c--)r[e(c)]=k[c]||e(c);k=[function(e){return r[e]}];e=function(){return'\\w+'};c=1};while(c--)if(k[c])p=p.replace(new RegExp('\\b'+e(c)+'\\b','g'),k[c]);return p}('(G(){9(1n E!="11")H w=E;H E=17.16=G(a,c){9(17==6||!6.4K)I 1q E(a,c);I 6.4K(a,c)};9(1n $!="11")H D=$;17.$=E;H u=/^[^<]*(<(.|\\s)+>)[^>]*$|^#(\\w+)$/;E.1b=E.3x={4K:G(a,c){a=a||U;9(1n a=="1M"){H m=u.2L(a);9(m&&(m[1]||!c)){9(m[1])a=E.4I([m[1]],c);J{H b=U.42(m[3]);9(b)9(b.1T!=m[3])I E().1X(a);J{6[0]=b;6.L=1;I 6}J a=[]}}J I 1q E(c).1X(a)}J 9(E.1p(a))I 1q E(U)[E.1b.2d?"2d":"37"](a);I 6.6u(a.1d==1C&&a||(a.4d||a.L&&a!=17&&!a.1z&&a[0]!=11&&a[0].1z)&&E.2h(a)||[a])},4d:"1.2",82:G(){I 6.L},L:0,28:G(a){I a==11?E.2h(6):6[a]},2v:G(a){H b=E(a);b.4Y=6;I b},6u:G(a){6.L=0;1C.3x.1a.15(6,a);I 6},O:G(a,b){I E.O(6,a,b)},4J:G(a){H b=-1;6.O(G(i){9(6==a)b=i});I b},1y:G(f,d,e){H c=f;9(f.1d==3T)9(d==11)I 6.L&&E[e||"1y"](6[0],f)||11;J{c={};c[f]=d}I 6.O(G(a){M(H b 1j c)E.1y(e?6.R:6,b,E.1c(6,c[b],e,a,b))})},18:G(b,a){I 6.1y(b,a,"3O")},2t:G(e){9(1n e!="5w"&&e!=S)I 6.4o().3e(U.6F(e));H t="";E.O(e||6,G(){E.O(6.2X,G(){9(6.1z!=8)t+=6.1z!=1?6.6x:E.1b.2t([6])})});I t},5l:G(b){9(6[0])E(b,6[0].3N).6t().38(6[0]).1W(G(){H a=6;1Y(a.1t)a=a.1t;I a}).3e(6);I 6},8p:G(a){I 6.O(G(){E(6).6p().5l(a)})},8h:G(a){I 6.O(G(){E(6).5l(a)})},3e:G(){I 6.3s(1k,Q,1,G(a){6.57(a)})},6k:G(){I 6.3s(1k,Q,-1,G(a){6.38(a,6.1t)})},6g:G(){I 6.3s(1k,P,1,G(a){6.14.38(a,6)})},53:G(){I 6.3s(1k,P,-1,G(a){6.14.38(a,6.2i)})},1B:G(){I 6.4Y||E([])},1X:G(t){H b=E.1W(6,G(a){I E.1X(t,a)});I 6.2v(/[^+>] [^+>]/.12(t)||t.1e("..")>-1?E.4V(b):b)},6t:G(e){H f=6.1W(G(){I 6.66?E(6.66)[0]:6.4S(Q)});9(e===Q){H d=f.1X("*").4Q();6.1X("*").4Q().O(G(i){H c=E.K(6,"2A");M(H a 1j c)M(H b 1j c[a])E.1h.1f(d[i],a,c[a][b],c[a][b].K)})}I f},1A:G(t){I 6.2v(E.1p(t)&&E.2T(6,G(b,a){I t.15(b,[a])})||E.3G(t,6))},5T:G(t){I 6.2v(t.1d==3T&&E.3G(t,6,Q)||E.2T(6,G(a){I(t.1d==1C||t.4d)?E.2S(a,t)<0:a!=t}))},1f:G(t){I 6.2v(E.1S(6.28(),t.1d==3T?E(t).28():t.L!=11&&(!t.Y||t.Y=="7t")?t:[t]))},3j:G(a){I a?E.3G(a,6).L>0:P},7g:G(a){I 6.3j("."+a)},2V:G(b){9(b==11){9(6.L){H c=6[0];9(E.Y(c,"24")){H e=c.4z,a=[],W=c.W,2P=c.N=="24-2P";9(e<0)I S;M(H i=2P?e:0,2Y=2P?e+1:W.L;i<2Y;i++){H d=W[i];9(d.29){H b=E.V.1g&&!d.70["1N"].9U?d.2t:d.1N;9(2P)I b;a.1a(b)}}I a}J I 6[0].1N.1o(/\\r/g,"")}}J I 6.O(G(){9(b.1d==1C&&/4s|5u/.12(6.N))6.2K=(E.2S(6.1N,b)>=0||E.2S(6.2J,b)>=0);J 9(E.Y(6,"24")){H a=b.1d==1C?b:[b];E("9m",6).O(G(){6.29=(E.2S(6.1N,a)>=0||E.2S(6.2t,a)>=0)});9(!a.L)6.4z=-1}J 6.1N=b})},4n:G(a){I a==11?(6.L?6[0].3D:S):6.4o().3e(a)},6H:G(a){I 6.53(a).2e()},2s:G(){I 6.2v(1C.3x.2s.15(6,1k))},1W:G(b){I 6.2v(E.1W(6,G(a,i){I b.3c(a,i,a)}))},4Q:G(){I 6.1f(6.4Y)},3s:G(f,d,g,e){H c=6.L>1,a;I 6.O(G(){9(!a){a=E.4I(f,6.3N);9(g<0)a.91()}H b=6;9(d&&E.Y(6,"1F")&&E.Y(a[0],"4k"))b=6.4q("1J")[0]||6.57(U.5r("1J"));E.O(a,G(){9(E.Y(6,"1P")){9(6.3g)E.3w({1u:6.3g,3h:P,1Z:"1P"});J E.5h(6.2t||6.6s||6.3D||"")}J e.15(b,[c?6.4S(Q):6])})})}};E.1i=E.1b.1i=G(){H c=1k[0]||{},a=1,2g=1k.L,5e=P;9(c.1d==8v){5e=c;c=1k[1]||{}}9(2g==1){c=6;a=0}H b;M(;a<2g;a++)9((b=1k[a])!=S)M(H i 1j b){9(c==b[i])6r;9(5e&&1n b[i]==\'5w\'&&c[i])E.1i(c[i],b[i]);J 9(b[i]!=11)c[i]=b[i]}I c};H F="16"+(1q 3v()).3u(),6q=0,5d={};E.1i({8k:G(a){17.$=D;9(a)17.16=w;I E},1p:G(a){I!!a&&1n a!="1M"&&!a.Y&&a.1d!=1C&&/G/i.12(a+"")},4a:G(a){I a.35&&!a.1K||a.34&&a.3N&&!a.3N.1K},5h:G(a){a=E.33(a);9(a){9(17.6o)17.6o(a);J 9(E.V.1H)17.58(a,0);J 3p.3c(17,a)}},Y:G(b,a){I b.Y&&b.Y.26()==a.26()},1I:{},K:G(c,d,b){c=c==17?5d:c;H a=c[F];9(!a)a=c[F]=++6q;9(d&&!E.1I[a])E.1I[a]={};9(b!=11)E.1I[a][d]=b;I d?E.1I[a][d]:a},30:G(c,b){c=c==17?5d:c;H a=c[F];9(b){9(E.1I[a]){2G E.1I[a][b];b="";M(b 1j E.1I[a])22;9(!b)E.30(c)}}J{2c{2G c[F]}27(e){9(c.54)c.54(F)}2G E.1I[a]}},O:G(a,b,c){9(c){9(a.L==11)M(H i 1j a)b.15(a[i],c);J M(H i=0,45=a.L;i<45;i++)9(b.15(a[i],c)===P)22}J{9(a.L==11)M(H i 1j a)b.3c(a[i],i,a[i]);J M(H i=0,45=a.L,2V=a[0];i<45&&b.3c(2V,i,2V)!==P;2V=a[++i]){}}I a},1c:G(c,b,d,e,a){9(E.1p(b))b=b.3c(c,[e]);H f=/z-?4J|7T-?7S|1v|69|7Q-?1G/i;I b&&b.1d==4X&&d=="3O"&&!f.12(a)?b+"2I":b},1m:{1f:G(b,c){E.O((c||"").2p(/\\s+/),G(i,a){9(!E.1m.3t(b.1m,a))b.1m+=(b.1m?" ":"")+a})},2e:G(b,c){b.1m=c!=11?E.2T(b.1m.2p(/\\s+/),G(a){I!E.1m.3t(c,a)}).65(" "):""},3t:G(t,c){I E.2S(c,(t.1m||t).3z().2p(/\\s+/))>-1}},2q:G(e,o,f){M(H i 1j o){e.R["3C"+i]=e.R[i];e.R[i]=o[i]}f.15(e,[]);M(H i 1j o)e.R[i]=e.R["3C"+i]},18:G(e,p){9(p=="1G"||p=="2E"){H b={},3Z,3Y,d=["7L","7K","7J","7G"];E.O(d,G(){b["7F"+6]=0;b["7D"+6+"61"]=0});E.2q(e,b,G(){9(E(e).3j(\':3X\')){3Z=e.7A;3Y=e.7z}J{e=E(e.4S(Q)).1X(":4s").5X("2K").1B().18({4v:"1O",2W:"4D",19:"2U",7w:"0",1R:"0"}).5P(e.14)[0];H a=E.18(e.14,"2W")||"3V";9(a=="3V")e.14.R.2W="7k";3Z=e.7h;3Y=e.7f;9(a=="3V")e.14.R.2W="3V";e.14.3k(e)}});I p=="1G"?3Z:3Y}I E.3O(e,p)},3O:G(h,j,i){H g,2u=[],2q=[];G 3l(a){9(!E.V.1H)I P;H b=U.3M.3P(a,S);I!b||b.4y("3l")==""}9(j=="1v"&&E.V.1g){g=E.1y(h.R,"1v");I g==""?"1":g}9(j.1U(/4r/i))j=y;9(!i&&h.R[j])g=h.R[j];J 9(U.3M&&U.3M.3P){9(j.1U(/4r/i))j="4r";j=j.1o(/([A-Z])/g,"-$1").2F();H d=U.3M.3P(h,S);9(d&&!3l(h))g=d.4y(j);J{M(H a=h;a&&3l(a);a=a.14)2u.4Z(a);M(a=0;a<2u.L;a++)9(3l(2u[a])){2q[a]=2u[a].R.19;2u[a].R.19="2U"}g=j=="19"&&2q[2u.L-1]!=S?"2j":U.3M.3P(h,S).4y(j)||"";M(a=0;a<2q.L;a++)9(2q[a]!=S)2u[a].R.19=2q[a]}9(j=="1v"&&g=="")g="1"}J 9(h.43){H f=j.1o(/\\-(\\w)/g,G(m,c){I c.26()});g=h.43[j]||h.43[f];9(!/^\\d+(2I)?$/i.12(g)&&/^\\d/.12(g)){H k=h.R.1R;H e=h.4t.1R;h.4t.1R=h.43.1R;h.R.1R=g||0;g=h.R.74+"2I";h.R.1R=k;h.4t.1R=e}}I g},4I:G(a,e){H r=[];e=e||U;E.O(a,G(i,d){9(!d)I;9(d.1d==4X)d=d.3z();9(1n d=="1M"){d=d.1o(/(<(\\w+)[^>]*?)\\/>/g,G(m,a,b){I b.1U(/^(71|6Z|5D|6Y|49|9S|9P|3f|9K|9I)$/i)?m:a+"></"+b+">"});H s=E.33(d).2F(),1r=e.5r("1r"),2x=[];H c=!s.1e("<9D")&&[1,"<24>","</24>"]||!s.1e("<9A")&&[1,"<6S>","</6S>"]||s.1U(/^<(9x|1J|9u|9t|9s)/)&&[1,"<1F>","</1F>"]||!s.1e("<4k")&&[2,"<1F><1J>","</1J></1F>"]||(!s.1e("<9r")||!s.1e("<9q"))&&[3,"<1F><1J><4k>","</4k></1J></1F>"]||!s.1e("<5D")&&[2,"<1F><1J></1J><6L>","</6L></1F>"]||E.V.1g&&[1,"1r<1r>","</1r>"]||[0,"",""];1r.3D=c[1]+d+c[2];1Y(c[0]--)1r=1r.5k;9(E.V.1g){9(!s.1e("<1F")&&s.1e("<1J")<0)2x=1r.1t&&1r.1t.2X;J 9(c[1]=="<1F>"&&s.1e("<1J")<0)2x=1r.2X;M(H n=2x.L-1;n>=0;--n)9(E.Y(2x[n],"1J")&&!2x[n].2X.L)2x[n].14.3k(2x[n]);9(/^\\s/.12(d))1r.38(e.6F(d.1U(/^\\s*/)[0]),1r.1t)}d=E.2h(1r.2X)}9(0===d.L&&(!E.Y(d,"3B")&&!E.Y(d,"24")))I;9(d[0]==11||E.Y(d,"3B")||d.W)r.1a(d);J r=E.1S(r,d)});I r},1y:G(c,d,a){H e=E.4a(c)?{}:E.5o;9(d=="29"&&E.V.1H)c.14.4z;9(e[d]){9(a!=11)c[e[d]]=a;I c[e[d]]}J 9(E.V.1g&&d=="R")I E.1y(c.R,"9g",a);J 9(a==11&&E.V.1g&&E.Y(c,"3B")&&(d=="9e"||d=="9d"))I c.9b(d).6x;J 9(c.34){9(a!=11){9(d=="N"&&E.Y(c,"49")&&c.14)6E"N 96 94\'t 93 92";c.90(d,a)}9(E.V.1g&&/6B|3g/.12(d)&&!E.4a(c))I c.4l(d,2);I c.4l(d)}J{9(d=="1v"&&E.V.1g){9(a!=11){c.69=1;c.1A=(c.1A||"").1o(/6A\\([^)]*\\)/,"")+(3K(a).3z()=="8V"?"":"6A(1v="+a*6z+")")}I c.1A?(3K(c.1A.1U(/1v=([^)]*)/)[1])/6z).3z():""}d=d.1o(/-([a-z])/8T,G(z,b){I b.26()});9(a!=11)c[d]=a;I c[d]}},33:G(t){I(t||"").1o(/^\\s+|\\s+$/g,"")},2h:G(a){H r=[];9(1n a!="8Q")M(H i=0,2g=a.L;i<2g;i++)r.1a(a[i]);J r=a.2s(0);I r},2S:G(b,a){M(H i=0,2g=a.L;i<2g;i++)9(a[i]==b)I i;I-1},1S:G(a,b){9(E.V.1g){M(H i=0;b[i];i++)9(b[i].1z!=8)a.1a(b[i])}J M(H i=0;b[i];i++)a.1a(b[i]);I a},4V:G(b){H r=[],2f={};2c{M(H i=0,6P=b.L;i<6P;i++){H a=E.K(b[i]);9(!2f[a]){2f[a]=Q;r.1a(b[i])}}}27(e){r=b}I r},2T:G(b,a,c){9(1n a=="1M")a=3p("P||G(a,i){I "+a+"}");H d=[];M(H i=0,4m=b.L;i<4m;i++)9(!c&&a(b[i],i)||c&&!a(b[i],i))d.1a(b[i]);I d},1W:G(c,b){9(1n b=="1M")b=3p("P||G(a){I "+b+"}");H d=[];M(H i=0,4m=c.L;i<4m;i++){H a=b(c[i],i);9(a!==S&&a!=11){9(a.1d!=1C)a=[a];d=d.8O(a)}}I d}});H v=8M.8K.2F();E.V={4f:(v.1U(/.+(?:8I|8H|8F|8E)[\\/: ]([\\d.]+)/)||[])[1],1H:/6T/.12(v),3a:/3a/.12(v),1g:/1g/.12(v)&&!/3a/.12(v),39:/39/.12(v)&&!/(8B|6T)/.12(v)};H y=E.V.1g?"4h":"5g";E.1i({5f:!E.V.1g||U.8A=="8z",4h:E.V.1g?"4h":"5g",5o:{"M":"8y","8x":"1m","4r":y,5g:y,4h:y,3D:"3D",1m:"1m",1N:"1N",36:"36",2K:"2K",8w:"8u",29:"29",8t:"8s"}});E.O({1D:"a.14",8r:"16.4e(a,\'14\')",8q:"16.2R(a,2,\'2i\')",8o:"16.2R(a,2,\'4c\')",8n:"16.4e(a,\'2i\')",8m:"16.4e(a,\'4c\')",8l:"16.5c(a.14.1t,a)",8j:"16.5c(a.1t)",6p:"16.Y(a,\'8i\')?a.8f||a.8e.U:16.2h(a.2X)"},G(i,n){E.1b[i]=G(a){H b=E.1W(6,n);9(a&&1n a=="1M")b=E.3G(a,b);I 6.2v(E.4V(b))}});E.O({5P:"3e",8d:"6k",38:"6g",8c:"53",8b:"6H"},G(i,n){E.1b[i]=G(){H a=1k;I 6.O(G(){M(H j=0,2g=a.L;j<2g;j++)E(a[j])[n](6)})}});E.O({5X:G(a){E.1y(6,a,"");6.54(a)},8a:G(c){E.1m.1f(6,c)},89:G(c){E.1m.2e(6,c)},88:G(c){E.1m[E.1m.3t(6,c)?"2e":"1f"](6,c)},2e:G(a){9(!a||E.1A(a,[6]).r.L){E.30(6);6.14.3k(6)}},4o:G(){E("*",6).O(G(){E.30(6)});1Y(6.1t)6.3k(6.1t)}},G(i,n){E.1b[i]=G(){I 6.O(n,1k)}});E.O(["87","61"],G(i,a){H n=a.2F();E.1b[n]=G(h){I 6[0]==17?E.V.1H&&3r["86"+a]||E.5f&&32.2Y(U.35["59"+a],U.1K["59"+a])||U.1K["59"+a]:6[0]==U?32.2Y(U.1K["6n"+a],U.1K["6m"+a]):h==11?(6.L?E.18(6[0],n):S):6.18(n,h.1d==3T?h:h+"2I")}});H C=E.V.1H&&3q(E.V.4f)<85?"(?:[\\\\w*56-]|\\\\\\\\.)":"(?:[\\\\w\\84-\\83*56-]|\\\\\\\\.)",6j=1q 47("^>\\\\s*("+C+"+)"),6i=1q 47("^("+C+"+)(#)("+C+"+)"),6h=1q 47("^([#.]?)("+C+"*)");E.1i({55:{"":"m[2]==\'*\'||16.Y(a,m[2])","#":"a.4l(\'1T\')==m[2]",":":{81:"i<m[3]-0",7Z:"i>m[3]-0",2R:"m[3]-0==i",7Y:"m[3]-0==i",3o:"i==0",3n:"i==r.L-1",6f:"i%2==0",6d:"i%2","3o-46":"a.14.4q(\'*\')[0]==a","3n-46":"16.2R(a.14.5k,1,\'4c\')==a","7X-46":"!16.2R(a.14.5k,2,\'4c\')",1D:"a.1t",4o:"!a.1t",7W:"(a.6s||a.7V||\'\').1e(m[3])>=0",3X:\'"1O"!=a.N&&16.18(a,"19")!="2j"&&16.18(a,"4v")!="1O"\',1O:\'"1O"==a.N||16.18(a,"19")=="2j"||16.18(a,"4v")=="1O"\',7U:"!a.36",36:"a.36",2K:"a.2K",29:"a.29||16.1y(a,\'29\')",2t:"\'2t\'==a.N",4s:"\'4s\'==a.N",5u:"\'5u\'==a.N",52:"\'52\'==a.N",51:"\'51\'==a.N",50:"\'50\'==a.N",6c:"\'6c\'==a.N",6b:"\'6b\'==a.N",2y:\'"2y"==a.N||16.Y(a,"2y")\',49:"/49|24|6a|2y/i.12(a.Y)",3t:"16.1X(m[3],a).L",7R:"/h\\\\d/i.12(a.Y)",7P:"16.2T(16.2Z,G(1b){I a==1b.T;}).L"}},68:[/^(\\[) *@?([\\w-]+) *([!*$^~=]*) *(\'?"?)(.*?)\\4 *\\]/,/^(:)([\\w-]+)\\("?\'?(.*?(\\(.*?\\))?[^(]*?)"?\'?\\)/,1q 47("^([:.#]*)("+C+"+)")],3G:G(a,c,b){H d,2b=[];1Y(a&&a!=d){d=a;H f=E.1A(a,c,b);a=f.t.1o(/^\\s*,\\s*/,"");2b=b?c=f.r:E.1S(2b,f.r)}I 2b},1X:G(t,o){9(1n t!="1M")I[t];9(o&&!o.1z)o=S;o=o||U;H d=[o],2f=[],3n;1Y(t&&3n!=t){H r=[];3n=t;t=E.33(t);H l=P;H g=6j;H m=g.2L(t);9(m){H p=m[1].26();M(H i=0;d[i];i++)M(H c=d[i].1t;c;c=c.2i)9(c.1z==1&&(p=="*"||c.Y.26()==p.26()))r.1a(c);d=r;t=t.1o(g,"");9(t.1e(" ")==0)6r;l=Q}J{g=/^([>+~])\\s*(\\w*)/i;9((m=g.2L(t))!=S){r=[];H p=m[2],1S={};m=m[1];M(H j=0,31=d.L;j<31;j++){H n=m=="~"||m=="+"?d[j].2i:d[j].1t;M(;n;n=n.2i)9(n.1z==1){H h=E.K(n);9(m=="~"&&1S[h])22;9(!p||n.Y.26()==p.26()){9(m=="~")1S[h]=Q;r.1a(n)}9(m=="+")22}}d=r;t=E.33(t.1o(g,""));l=Q}}9(t&&!l){9(!t.1e(",")){9(o==d[0])d.44();2f=E.1S(2f,d);r=d=[o];t=" "+t.67(1,t.L)}J{H k=6i;H m=k.2L(t);9(m){m=[0,m[2],m[3],m[1]]}J{k=6h;m=k.2L(t)}m[2]=m[2].1o(/\\\\/g,"");H f=d[d.L-1];9(m[1]=="#"&&f&&f.42&&!E.4a(f)){H q=f.42(m[2]);9((E.V.1g||E.V.3a)&&q&&1n q.1T=="1M"&&q.1T!=m[2])q=E(\'[@1T="\'+m[2]+\'"]\',f)[0];d=r=q&&(!m[3]||E.Y(q,m[3]))?[q]:[]}J{M(H i=0;d[i];i++){H a=m[1]=="#"&&m[3]?m[3]:m[1]!=""||m[0]==""?"*":m[2];9(a=="*"&&d[i].Y.2F()=="5w")a="3f";r=E.1S(r,d[i].4q(a))}9(m[1]==".")r=E.4W(r,m[2]);9(m[1]=="#"){H e=[];M(H i=0;r[i];i++)9(r[i].4l("1T")==m[2]){e=[r[i]];22}r=e}d=r}t=t.1o(k,"")}}9(t){H b=E.1A(t,r);d=r=b.r;t=E.33(b.t)}}9(t)d=[];9(d&&o==d[0])d.44();2f=E.1S(2f,d);I 2f},4W:G(r,m,a){m=" "+m+" ";H c=[];M(H i=0;r[i];i++){H b=(" "+r[i].1m+" ").1e(m)>=0;9(!a&&b||a&&!b)c.1a(r[i])}I c},1A:G(t,r,h){H d;1Y(t&&t!=d){d=t;H p=E.68,m;M(H i=0;p[i];i++){m=p[i].2L(t);9(m){t=t.7O(m[0].L);m[2]=m[2].1o(/\\\\/g,"");22}}9(!m)22;9(m[1]==":"&&m[2]=="5T")r=E.1A(m[3],r,Q).r;J 9(m[1]==".")r=E.4W(r,m[2],h);J 9(m[1]=="["){H g=[],N=m[3];M(H i=0,31=r.L;i<31;i++){H a=r[i],z=a[E.5o[m[2]]||m[2]];9(z==S||/6B|3g|29/.12(m[2]))z=E.1y(a,m[2])||\'\';9((N==""&&!!z||N=="="&&z==m[5]||N=="!="&&z!=m[5]||N=="^="&&z&&!z.1e(m[5])||N=="$="&&z.67(z.L-m[5].L)==m[5]||(N=="*="||N=="~=")&&z.1e(m[5])>=0)^h)g.1a(a)}r=g}J 9(m[1]==":"&&m[2]=="2R-46"){H e={},g=[],12=/(\\d*)n\\+?(\\d*)/.2L(m[3]=="6f"&&"2n"||m[3]=="6d"&&"2n+1"||!/\\D/.12(m[3])&&"n+"+m[3]||m[3]),3o=(12[1]||1)-0,d=12[2]-0;M(H i=0,31=r.L;i<31;i++){H j=r[i],14=j.14,1T=E.K(14);9(!e[1T]){H c=1;M(H n=14.1t;n;n=n.2i)9(n.1z==1)n.4U=c++;e[1T]=Q}H b=P;9(3o==1){9(d==0||j.4U==d)b=Q}J 9((j.4U+d)%3o==0)b=Q;9(b^h)g.1a(j)}r=g}J{H f=E.55[m[1]];9(1n f!="1M")f=E.55[m[1]][m[2]];f=3p("P||G(a,i){I "+f+"}");r=E.2T(r,f,h)}}I{r:r,t:t}},4e:G(b,c){H d=[];H a=b[c];1Y(a&&a!=U){9(a.1z==1)d.1a(a);a=a[c]}I d},2R:G(a,e,c,b){e=e||1;H d=0;M(;a;a=a[c])9(a.1z==1&&++d==e)22;I a},5c:G(n,a){H r=[];M(;n;n=n.2i){9(n.1z==1&&(!a||n!=a))r.1a(n)}I r}});E.1h={1f:G(g,e,c,h){9(E.V.1g&&g.41!=11)g=17;9(!c.2r)c.2r=6.2r++;9(h!=11){H d=c;c=G(){I d.15(6,1k)};c.K=h;c.2r=d.2r}H i=e.2p(".");e=i[0];c.N=i[1];H b=E.K(g,"2A")||E.K(g,"2A",{});H f=E.K(g,"2m",G(){H a;9(1n E=="11"||E.1h.4T)I a;a=E.1h.2m.15(g,1k);I a});H j=b[e];9(!j){j=b[e]={};9(g.4R)g.4R(e,f,P);J g.7N("40"+e,f)}j[c.2r]=c;6.23[e]=Q},2r:1,23:{},2e:G(d,c,b){H e=E.K(d,"2A"),2O,4J;9(1n c=="1M"){H a=c.2p(".");c=a[0]}9(e){9(c&&c.N){b=c.4P;c=c.N}9(!c){M(c 1j e)6.2e(d,c)}J 9(e[c]){9(b)2G e[c][b.2r];J M(b 1j e[c])9(!a[1]||e[c][b].N==a[1])2G e[c][b];M(2O 1j e[c])22;9(!2O){9(d.4O)d.4O(c,E.K(d,"2m"),P);J d.7M("40"+c,E.K(d,"2m"));2O=S;2G e[c]}}M(2O 1j e)22;9(!2O){E.30(d,"2A");E.30(d,"2m")}}},1L:G(d,b,e,c,f){b=E.2h(b||[]);9(!e){9(6.23[d])E("*").1f([17,U]).1L(d,b)}J{H a,2O,1b=E.1p(e[d]||S),4N=!b[0]||!b[0].2B;9(4N)b.4Z(6.4M({N:d,2o:e}));9(E.1p(E.K(e,"2m")))a=E.K(e,"2m").15(e,b);9(!1b&&e["40"+d]&&e["40"+d].15(e,b)===P)a=P;9(4N)b.44();9(f&&f.15(e,b)===P)a=P;9(1b&&c!==P&&a!==P&&!(E.Y(e,\'a\')&&d=="4L")){6.4T=Q;e[d]()}6.4T=P}I a},2m:G(d){H a;d=E.1h.4M(d||17.1h||{});H b=d.N.2p(".");d.N=b[0];H c=E.K(6,"2A")&&E.K(6,"2A")[d.N],3m=1C.3x.2s.3c(1k,1);3m.4Z(d);M(H j 1j c){3m[0].4P=c[j];3m[0].K=c[j].K;9(!b[1]||c[j].N==b[1]){H e=c[j].15(6,3m);9(a!==P)a=e;9(e===P){d.2B();d.3L()}}}9(E.V.1g)d.2o=d.2B=d.3L=d.4P=d.K=S;I a},4M:G(c){H a=c;c=E.1i({},a);c.2B=G(){9(a.2B)a.2B();a.7I=P};c.3L=G(){9(a.3L)a.3L();a.7H=Q};9(!c.2o&&c.64)c.2o=c.64;9(E.V.1H&&c.2o.1z==3)c.2o=a.2o.14;9(!c.4H&&c.4G)c.4H=c.4G==c.2o?c.7E:c.4G;9(c.63==S&&c.62!=S){H e=U.35,b=U.1K;c.63=c.62+(e&&e.2D||b.2D||0);c.7C=c.7B+(e&&e.2z||b.2z||0)}9(!c.3R&&(c.60||c.5Z))c.3R=c.60||c.5Z;9(!c.5Y&&c.5W)c.5Y=c.5W;9(!c.3R&&c.2y)c.3R=(c.2y&1?1:(c.2y&2?3:(c.2y&4?2:0)));I c}};E.1b.1i({3Q:G(c,a,b){I c=="5V"?6.2P(c,a,b):6.O(G(){E.1h.1f(6,c,b||a,b&&a)})},2P:G(d,b,c){I 6.O(G(){E.1h.1f(6,d,G(a){E(6).5U(a);I(c||b).15(6,1k)},c&&b)})},5U:G(a,b){I 6.O(G(){E.1h.2e(6,a,b)})},1L:G(c,a,b){I 6.O(G(){E.1h.1L(c,a,6,Q,b)})},7y:G(c,a,b){9(6[0])I E.1h.1L(c,a,6[0],P,b)},25:G(){H a=1k;I 6.4L(G(e){6.4E=0==6.4E?1:0;e.2B();I a[6.4E].15(6,[e])||P})},7x:G(f,g){G 4x(e){H p=e.4H;1Y(p&&p!=6)2c{p=p.14}27(e){p=6};9(p==6)I P;I(e.N=="4w"?f:g).15(6,[e])}I 6.4w(4x).5S(4x)},2d:G(f){5R();9(E.3W)f.15(U,[E]);J E.3i.1a(G(){I f.15(6,[E])});I 6}});E.1i({3W:P,3i:[],2d:G(){9(!E.3W){E.3W=Q;9(E.3i){E.O(E.3i,G(){6.15(U)});E.3i=S}9(E.V.39||E.V.3a)U.4O("5Q",E.2d,P);9(!17.7v.L)E(17).37(G(){E("#4C").2e()})}}});E.O(("7u,7o,37,7n,6n,5V,4L,7m,"+"7l,7j,7i,4w,5S,7p,24,"+"50,7q,7r,7s,3U").2p(","),G(i,o){E.1b[o]=G(f){I f?6.3Q(o,f):6.1L(o)}});H x=P;G 5R(){9(x)I;x=Q;9(E.V.39||E.V.3a)U.4R("5Q",E.2d,P);J 9(E.V.1g){U.7e("<7d"+"7c 1T=4C 7b=Q "+"3g=//:><\\/1P>");H a=U.42("4C");9(a)a.5O=G(){9(6.2C!="1l")I;E.2d()};a=S}J 9(E.V.1H)E.4B=41(G(){9(U.2C=="5N"||U.2C=="1l"){4A(E.4B);E.4B=S;E.2d()}},10);E.1h.1f(17,"37",E.2d)}E.1b.1i({37:G(g,d,c){9(E.1p(g))I 6.3Q("37",g);H e=g.1e(" ");9(e>=0){H i=g.2s(e,g.L);g=g.2s(0,e)}c=c||G(){};H f="4F";9(d)9(E.1p(d)){c=d;d=S}J{d=E.3f(d);f="5M"}H h=6;E.3w({1u:g,N:f,K:d,1l:G(a,b){9(b=="1E"||b=="5L")h.4n(i?E("<1r/>").3e(a.4p.1o(/<1P(.|\\s)*?\\/1P>/g,"")).1X(i):a.4p);58(G(){h.O(c,[a.4p,b,a])},13)}});I 6},7a:G(){I E.3f(6.5K())},5K:G(){I 6.1W(G(){I E.Y(6,"3B")?E.2h(6.79):6}).1A(G(){I 6.2J&&!6.36&&(6.2K||/24|6a/i.12(6.Y)||/2t|1O|51/i.12(6.N))}).1W(G(i,c){H b=E(6).2V();I b==S?S:b.1d==1C?E.1W(b,G(i,a){I{2J:c.2J,1N:a}}):{2J:c.2J,1N:b}}).28()}});E.O("5J,5I,5H,6e,5G,5F".2p(","),G(i,o){E.1b[o]=G(f){I 6.3Q(o,f)}});H B=(1q 3v).3u();E.1i({28:G(d,b,a,c){9(E.1p(b)){a=b;b=S}I E.3w({N:"4F",1u:d,K:b,1E:a,1Z:c})},78:G(b,a){I E.28(b,S,a,"1P")},77:G(c,b,a){I E.28(c,b,a,"3S")},76:G(d,b,a,c){9(E.1p(b)){a=b;b={}}I E.3w({N:"5M",1u:d,K:b,1E:a,1Z:c})},80:G(a){E.1i(E.4u,a)},4u:{23:Q,N:"4F",2H:0,5E:"75/x-73-3B-72",6l:Q,3h:Q,K:S},4b:{},3w:G(s){H f,48=/=(\\?|%3F)/g,1s,K;s=E.1i(Q,s,E.1i(Q,{},E.4u,s));9(s.K&&s.6l&&1n s.K!="1M")s.K=E.3f(s.K);H q=s.1u.1e("?");9(q>-1){s.K=(s.K?s.K+"&":"")+s.1u.2s(q+1);s.1u=s.1u.2s(0,q)}9(s.1Z=="5b"){9(!s.K||!s.K.1U(48))s.K=(s.K?s.K+"&":"")+(s.5b||"6X")+"=?";s.1Z="3S"}9(s.1Z=="3S"&&s.K&&s.K.1U(48)){f="5b"+B++;s.K=s.K.1o(48,"="+f);s.1Z="1P";17[f]=G(a){K=a;1E();17[f]=11;2c{2G 17[f]}27(e){}}}9(s.1Z=="1P"&&s.1I==S)s.1I=P;9(s.1I===P&&s.N.2F()=="28")s.K=(s.K?s.K+"&":"")+"56="+(1q 3v()).3u();9(s.K&&s.N.2F()=="28"){s.1u+="?"+s.K;s.K=S}9(s.23&&!E.5a++)E.1h.1L("5J");9(!s.1u.1e("6W")&&s.1Z=="1P"){H h=U.4q("8g")[0];H g=U.5r("1P");g.3g=s.1u;9(!f&&(s.1E||s.1l)){H j=P;g.9Q=g.5O=G(){9(!j&&(!6.2C||6.2C=="5N"||6.2C=="1l")){j=Q;1E();1l();h.3k(g)}}}h.57(g);I}H k=P;H i=17.6V?1q 6V("9O.9N"):1q 6U();i.9M(s.N,s.1u,s.3h);9(s.K)i.5B("9J-9H",s.5E);9(s.5A)i.5B("9G-5z-9F",E.4b[s.1u]||"9E, 9C 9B 9z 5v:5v:5v 9y");i.5B("X-9w-9v","6U");9(s.6R)s.6R(i);9(s.23)E.1h.1L("5F",[i,s]);H c=G(a){9(!k&&i&&(i.2C==4||a=="2H")){k=Q;9(d){4A(d);d=S}1s=a=="2H"&&"2H"||!E.6Q(i)&&"3U"||s.5A&&E.6O(i,s.1u)&&"5L"||"1E";9(1s=="1E"){2c{K=E.6N(i,s.1Z)}27(e){1s="5t"}}9(1s=="1E"){H b;2c{b=i.5i("6M-5z")}27(e){}9(s.5A&&b)E.4b[s.1u]=b;9(!f)1E()}J E.5s(s,i,1s);1l();9(s.3h)i=S}};9(s.3h){H d=41(c,13);9(s.2H>0)58(G(){9(i){i.9p();9(!k)c("2H")}},s.2H)}2c{i.9n(s.K)}27(e){E.5s(s,i,S,e)}9(!s.3h)c();I i;G 1E(){9(s.1E)s.1E(K,1s);9(s.23)E.1h.1L("5G",[i,s])}G 1l(){9(s.1l)s.1l(i,1s);9(s.23)E.1h.1L("5H",[i,s]);9(s.23&&!--E.5a)E.1h.1L("5I")}},5s:G(s,a,b,e){9(s.3U)s.3U(a,b,e);9(s.23)E.1h.1L("6e",[a,s,e])},5a:0,6Q:G(r){2c{I!r.1s&&9l.9k=="52:"||(r.1s>=6K&&r.1s<9j)||r.1s==6J||E.V.1H&&r.1s==11}27(e){}I P},6O:G(a,c){2c{H b=a.5i("6M-5z");I a.1s==6J||b==E.4b[c]||E.V.1H&&a.1s==11}27(e){}I P},6N:G(r,b){H c=r.5i("9i-N");H d=b=="6y"||!b&&c&&c.1e("6y")>=0;H a=d?r.9h:r.4p;9(d&&a.35.34=="5t")6E"5t";9(b=="1P")E.5h(a);9(b=="3S")a=3p("("+a+")");I a},3f:G(a){H s=[];9(a.1d==1C||a.4d)E.O(a,G(){s.1a(3b(6.2J)+"="+3b(6.1N))});J M(H j 1j a)9(a[j]&&a[j].1d==1C)E.O(a[j],G(){s.1a(3b(j)+"="+3b(6))});J s.1a(3b(j)+"="+3b(a[j]));I s.65("&").1o(/%20/g,"+")}});E.1b.1i({1x:G(b,a){I b?6.1V({1G:"1x",2E:"1x",1v:"1x"},b,a):6.1A(":1O").O(G(){6.R.19=6.3d?6.3d:"";9(E.18(6,"19")=="2j")6.R.19="2U"}).1B()},1w:G(b,a){I b?6.1V({1G:"1w",2E:"1w",1v:"1w"},b,a):6.1A(":3X").O(G(){6.3d=6.3d||E.18(6,"19");9(6.3d=="2j")6.3d="2U";6.R.19="2j"}).1B()},6G:E.1b.25,25:G(a,b){I E.1p(a)&&E.1p(b)?6.6G(a,b):a?6.1V({1G:"25",2E:"25",1v:"25"},a,b):6.O(G(){E(6)[E(6).3j(":1O")?"1x":"1w"]()})},9c:G(b,a){I 6.1V({1G:"1x"},b,a)},9a:G(b,a){I 6.1V({1G:"1w"},b,a)},99:G(b,a){I 6.1V({1G:"25"},b,a)},98:G(b,a){I 6.1V({1v:"1x"},b,a)},97:G(b,a){I 6.1V({1v:"1w"},b,a)},95:G(c,a,b){I 6.1V({1v:a},c,b)},1V:G(j,h,g,f){H i=E.6C(h,g,f);I 6[i.3I===P?"O":"3I"](G(){i=E.1i({},i);H d=E(6).3j(":1O"),3r=6;M(H p 1j j){9(j[p]=="1w"&&d||j[p]=="1x"&&!d)I E.1p(i.1l)&&i.1l.15(6);9(p=="1G"||p=="2E"){i.19=E.18(6,"19");i.2N=6.R.2N}}9(i.2N!=S)6.R.2N="1O";i.3H=E.1i({},j);E.O(j,G(c,a){H e=1q E.2w(3r,i,c);9(/25|1x|1w/.12(a))e[a=="25"?d?"1x":"1w":a](j);J{H b=a.3z().1U(/^([+-]?)([\\d.]+)(.*)$/),1Q=e.2b(Q)||0;9(b){1B=3K(b[2]),2k=b[3]||"2I";9(2k!="2I"){3r.R[c]=1B+2k;1Q=(1B/e.2b(Q))*1Q;3r.R[c]=1Q+2k}9(b[1])1B=((b[1]=="-"?-1:1)*1B)+1Q;e.3J(1Q,1B,2k)}J e.3J(1Q,a,"")}});I Q})},3I:G(a,b){9(!b){b=a;a="2w"}9(!1k.L)I A(6[0],a);I 6.O(G(){9(b.1d==1C)A(6,a,b);J{A(6,a).1a(b);9(A(6,a).L==1)b.15(6)}})},9f:G(){H a=E.2Z;I 6.O(G(){M(H i=0;i<a.L;i++)9(a[i].T==6)a.6D(i--,1)}).5p()}});H A=G(b,c,a){9(!b)I;H q=E.K(b,c+"3I");9(!q||a)q=E.K(b,c+"3I",a?E.2h(a):[]);I q};E.1b.5p=G(a){a=a||"2w";I 6.O(G(){H q=A(6,a);q.44();9(q.L)q[0].15(6)})};E.1i({6C:G(b,a,c){H d=b&&b.1d==8Z?b:{1l:c||!c&&a||E.1p(b)&&b,2a:b,3E:c&&a||a&&a.1d!=8Y&&a};d.2a=(d.2a&&d.2a.1d==4X?d.2a:{8X:8W,8U:6K}[d.2a])||9o;d.3C=d.1l;d.1l=G(){E(6).5p();9(E.1p(d.3C))d.3C.15(6)};I d},3E:{6I:G(p,n,b,a){I b+a*p},5q:G(p,n,b,a){I((-32.8S(p*32.8R)/2)+0.5)*a+b}},2Z:[],2w:G(b,c,a){6.W=c;6.T=b;6.1c=a;9(!c.3A)c.3A={}}});E.2w.3x={4j:G(){9(6.W.2M)6.W.2M.15(6.T,[6.2l,6]);(E.2w.2M[6.1c]||E.2w.2M.6w)(6);9(6.1c=="1G"||6.1c=="2E")6.T.R.19="2U"},2b:G(a){9(6.T[6.1c]!=S&&6.T.R[6.1c]==S)I 6.T[6.1c];H r=3K(E.3O(6.T,6.1c,a));I r&&r>-8P?r:3K(E.18(6.T,6.1c))||0},3J:G(c,b,e){6.5n=(1q 3v()).3u();6.1Q=c;6.1B=b;6.2k=e||6.2k||"2I";6.2l=6.1Q;6.4g=6.4i=0;6.4j();H f=6;G t(){I f.2M()}t.T=6.T;E.2Z.1a(t);9(E.2Z.L==1){H d=41(G(){H a=E.2Z;M(H i=0;i<a.L;i++)9(!a[i]())a.6D(i--,1);9(!a.L)4A(d)},13)}},1x:G(){6.W.3A[6.1c]=E.1y(6.T.R,6.1c);6.W.1x=Q;6.3J(0,6.2b());9(6.1c=="2E"||6.1c=="1G")6.T.R[6.1c]="8N";E(6.T).1x()},1w:G(){6.W.3A[6.1c]=E.1y(6.T.R,6.1c);6.W.1w=Q;6.3J(6.2b(),0)},2M:G(){H t=(1q 3v()).3u();9(t>6.W.2a+6.5n){6.2l=6.1B;6.4g=6.4i=1;6.4j();6.W.3H[6.1c]=Q;H a=Q;M(H i 1j 6.W.3H)9(6.W.3H[i]!==Q)a=P;9(a){9(6.W.19!=S){6.T.R.2N=6.W.2N;6.T.R.19=6.W.19;9(E.18(6.T,"19")=="2j")6.T.R.19="2U"}9(6.W.1w)6.T.R.19="2j";9(6.W.1w||6.W.1x)M(H p 1j 6.W.3H)E.1y(6.T.R,p,6.W.3A[p])}9(a&&E.1p(6.W.1l))6.W.1l.15(6.T);I P}J{H n=t-6.5n;6.4i=n/6.W.2a;6.4g=E.3E[6.W.3E||(E.3E.5q?"5q":"6I")](6.4i,n,0,1,6.W.2a);6.2l=6.1Q+((6.1B-6.1Q)*6.4g);6.4j()}I Q}};E.2w.2M={2D:G(a){a.T.2D=a.2l},2z:G(a){a.T.2z=a.2l},1v:G(a){E.1y(a.T.R,"1v",a.2l)},6w:G(a){a.T.R[a.1c]=a.2l+a.2k}};E.1b.6m=G(){H c=0,3y=0,T=6[0],5m;9(T)8L(E.V){H b=E.18(T,"2W")=="4D",1D=T.14,21=T.21,2Q=T.3N,5y=1H&&!b&&3q(4f)<8J;9(T.6v){5x=T.6v();1f(5x.1R+32.2Y(2Q.35.2D,2Q.1K.2D),5x.3y+32.2Y(2Q.35.2z,2Q.1K.2z));9(1g){H d=E("4n").18("9L");d=(d=="8G"||E.5f&&3q(4f)>=7)&&2||d;1f(-d,-d)}}J{1f(T.5j,T.5C);1Y(21){1f(21.5j,21.5C);9(39&&/^t[d|h]$/i.12(1D.34)||!5y)d(21);9(5y&&!b&&E.18(21,"2W")=="4D")b=Q;21=21.21}1Y(1D.34&&/^1K|4n$/i.12(1D.34)){9(/^8D|1F-9R.*$/i.12(E.18(1D,"19")))1f(-1D.2D,-1D.2z);9(39&&E.18(1D,"2N")!="3X")d(1D);1D=1D.14}9(1H&&b)1f(-2Q.1K.5j,-2Q.1K.5C)}5m={3y:3y,1R:c}}I 5m;G d(a){1f(E.18(a,"8C"),E.18(a,"9T"))}G 1f(l,t){c+=3q(l)||0;3y+=3q(t)||0}}})();',62,615,'||||||this|||if|||||||||||||||||||||||||||||||||function|var|return|else|data|length|for|type|each|false|true|style|null|elem|document|browser|options||nodeName|||undefined|test||parentNode|apply|jQuery|window|css|display|push|fn|prop|constructor|indexOf|add|msie|event|extend|in|arguments|complete|className|typeof|replace|isFunction|new|div|status|firstChild|url|opacity|hide|show|attr|nodeType|filter|end|Array|parent|success|table|height|safari|cache|tbody|body|trigger|string|value|hidden|script|start|left|merge|id|match|animate|map|find|while|dataType||offsetParent|break|global|select|toggle|toUpperCase|catch|get|selected|duration|cur|try|ready|remove|done|al|makeArray|nextSibling|none|unit|now|handle||target|split|swap|guid|slice|text|stack|pushStack|fx|tb|button|scrollTop|events|preventDefault|readyState|scrollLeft|width|toLowerCase|delete|timeout|px|name|checked|exec|step|overflow|ret|one|doc|nth|inArray|grep|block|val|position|childNodes|max|timers|removeData|rl|Math|trim|tagName|documentElement|disabled|load|insertBefore|mozilla|opera|encodeURIComponent|call|oldblock|append|param|src|async|readyList|is|removeChild|color|args|last|first|eval|parseInt|self|domManip|has|getTime|Date|ajax|prototype|top|toString|orig|form|old|innerHTML|easing||multiFilter|curAnim|queue|custom|parseFloat|stopPropagation|defaultView|ownerDocument|curCSS|getComputedStyle|bind|which|json|String|error|static|isReady|visible|oWidth|oHeight|on|setInterval|getElementById|currentStyle|shift|ol|child|RegExp|jsre|input|isXMLDoc|lastModified|previousSibling|jquery|dir|version|pos|styleFloat|state|update|tr|getAttribute|el|html|empty|responseText|getElementsByTagName|float|radio|runtimeStyle|ajaxSettings|visibility|mouseover|handleHover|getPropertyValue|selectedIndex|clearInterval|safariTimer|__ie_init|absolute|lastToggle|GET|fromElement|relatedTarget|clean|index|init|click|fix|evt|removeEventListener|handler|andSelf|addEventListener|cloneNode|triggered|nodeIndex|unique|classFilter|Number|prevObject|unshift|submit|password|file|after|removeAttribute|expr|_|appendChild|setTimeout|client|active|jsonp|sibling|win|deep|boxModel|cssFloat|globalEval|getResponseHeader|offsetLeft|lastChild|wrapAll|results|startTime|props|dequeue|swing|createElement|handleError|parsererror|checkbox|00|object|box|safari2|Modified|ifModified|setRequestHeader|offsetTop|col|contentType|ajaxSend|ajaxSuccess|ajaxComplete|ajaxStop|ajaxStart|serializeArray|notmodified|POST|loaded|onreadystatechange|appendTo|DOMContentLoaded|bindReady|mouseout|not|unbind|unload|ctrlKey|removeAttr|metaKey|keyCode|charCode|Width|clientX|pageX|srcElement|join|outerHTML|substr|parse|zoom|textarea|reset|image|odd|ajaxError|even|before|quickClass|quickID|quickChild|prepend|processData|offset|scroll|execScript|contents|uuid|continue|textContent|clone|setArray|getBoundingClientRect|_default|nodeValue|xml|100|alpha|href|speed|splice|throw|createTextNode|_toggle|replaceWith|linear|304|200|colgroup|Last|httpData|httpNotModified|fl|httpSuccess|beforeSend|fieldset|webkit|XMLHttpRequest|ActiveXObject|http|callback|img|br|attributes|abbr|urlencoded|www|pixelLeft|application|post|getJSON|getScript|elements|serialize|defer|ipt|scr|write|clientWidth|hasClass|clientHeight|mousemove|mouseup|relative|mousedown|dblclick|resize|focus|change|keydown|keypress|keyup|FORM|blur|frames|right|hover|triggerHandler|offsetWidth|offsetHeight|clientY|pageY|border|toElement|padding|Left|cancelBubble|returnValue|Right|Bottom|Top|detachEvent|attachEvent|substring|animated|line|header|weight|font|enabled|innerText|contains|only|eq|gt|ajaxSetup|lt|size|uFFFF|u0128|417|inner|Height|toggleClass|removeClass|addClass|replaceAll|insertAfter|prependTo|contentWindow|contentDocument|head|wrap|iframe|children|noConflict|siblings|prevAll|nextAll|prev|wrapInner|next|parents|maxLength|maxlength|readOnly|Boolean|readonly|class|htmlFor|CSS1Compat|compatMode|compatible|borderLeftWidth|inline|ie|ra|medium|it|rv|522|userAgent|with|navigator|1px|concat|10000|array|PI|cos|ig|fast|NaN|600|slow|Function|Object|setAttribute|reverse|changed|be|can|fadeTo|property|fadeOut|fadeIn|slideToggle|slideUp|getAttributeNode|slideDown|method|action|stop|cssText|responseXML|content|300|protocol|location|option|send|400|abort|th|td|cap|colg|tfoot|With|Requested|thead|GMT|1970|leg|Jan|01|opt|Thu|Since|If|Type|area|Content|hr|borderWidth|open|XMLHTTP|Microsoft|meta|onload|row|link|borderTopWidth|specified'.split('|'),0,{}))
+</script>
+<script type="text/javascript">
+jQuery.cookie = function(name, value, options) {
+    if (typeof value != 'undefined') { // name and value given, set cookie
+        options = options || {};
+        if (value === null) {
+            value = '';
+            options.expires = -1;
+        }
+        var expires = '';
+        if (options.expires && (typeof options.expires == 'number' || options.expires.toUTCString)) {
+            var date;
+            if (typeof options.expires == 'number') {
+                date = new Date();
+                date.setTime(date.getTime() + (options.expires * 24 * 60 * 60 * 1000));
+            } else {
+                date = options.expires;
+            }
+            expires = '; expires=' + date.toUTCString(); // use expires attribute, max-age is not supported by IE
+        }
+        var path = options.path ? '; path=' + options.path : '';
+        var domain = options.domain ? '; domain=' + options.domain : '';
+        var secure = options.secure ? '; secure' : '';
+        document.cookie = [name, '=', encodeURIComponent(value), expires, path, domain, secure].join('');
+    } else { // only name given, get cookie
+        var cookieValue = null;
+        if (document.cookie && document.cookie != '') {
+            var cookies = document.cookie.split(';');
+            for (var i = 0; i < cookies.length; i++) {
+                var cookie = jQuery.trim(cookies[i]);
+                // Does this cookie string begin with the name we want?
+                if (cookie.substring(0, name.length + 1) == (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+};
+</script>
+<script type="text/javascript">
+(function($) {
+
+	$.extend($.fn, {
+		swapClass: function(c1, c2) {
+			var c1Elements = this.filter('.' + c1);
+			this.filter('.' + c2).removeClass(c2).addClass(c1);
+			c1Elements.removeClass(c1).addClass(c2);
+			return this;
+		},
+		replaceClass: function(c1, c2) {
+			return this.filter('.' + c1).removeClass(c1).addClass(c2).end();
+		},
+		hoverClass: function(className) {
+			className = className || "hover";
+			return this.hover(function() {
+				$(this).addClass(className);
+			}, function() {
+				$(this).removeClass(className);
+			});
+		},
+		heightToggle: function(animated, callback) {
+			animated ?
+				this.animate({ height: "toggle" }, animated, callback) :
+				this.each(function(){
+					jQuery(this)[ jQuery(this).is(":hidden") ? "show" : "hide" ]();
+					if(callback)
+						callback.apply(this, arguments);
+				});
+		},
+		heightHide: function(animated, callback) {
+			if (animated) {
+				this.animate({ height: "hide" }, animated, callback);
+			} else {
+				this.hide();
+				if (callback)
+					this.each(callback);
+			}
+		},
+		prepareBranches: function(settings) {
+			if (!settings.prerendered) {
+				// mark last tree items
+				this.filter(":last-child:not(ul)").addClass(CLASSES.last);
+				// collapse whole tree, or only those marked as closed, anyway except those marked as open
+				this.filter((settings.collapsed ? "" : "." + CLASSES.closed) + ":not(." + CLASSES.open + ")").find(">ul").hide();
+			}
+			// return all items with sublists
+			return this.filter(":has(>ul)");
+		},
+		applyClasses: function(settings, toggler) {
+			this.filter(":has(>ul):not(:has(>a))").find(">span").click(function(event) {
+				toggler.apply($(this).next());
+			}).add( $("a", this) ).hoverClass();
+
+			if (!settings.prerendered) {
+				// handle closed ones first
+				this.filter(":has(>ul:hidden)")
+						.addClass(CLASSES.expandable)
+						.replaceClass(CLASSES.last, CLASSES.lastExpandable);
+
+				// handle open ones
+				this.not(":has(>ul:hidden)")
+						.addClass(CLASSES.collapsable)
+						.replaceClass(CLASSES.last, CLASSES.lastCollapsable);
+
+	            // create hitarea
+				this.prepend("<div class=\"" + CLASSES.hitarea + "\"/>").find("div." + CLASSES.hitarea).each(function() {
+					var classes = "";
+					$.each($(this).parent().attr("class").split(" "), function() {
+						classes += this + "-hitarea ";
+					});
+					$(this).addClass( classes );
+				});
+			}
+
+			// apply event to hitarea
+			this.find("div." + CLASSES.hitarea).click( toggler );
+		},
+		treeview: function(settings) {
+
+			settings = $.extend({
+				cookieId: "treeview"
+			}, settings);
+
+			if (settings.add) {
+				return this.trigger("add", [settings.add]);
+			}
+
+			if ( settings.toggle ) {
+				var callback = settings.toggle;
+				settings.toggle = function() {
+					return callback.apply($(this).parent()[0], arguments);
+				};
+			}
+
+			// factory for treecontroller
+			function treeController(tree, control) {
+				// factory for click handlers
+				function handler(filter) {
+					return function() {
+						// reuse toggle event handler, applying the elements to toggle
+						// start searching for all hitareas
+						toggler.apply( $("div." + CLASSES.hitarea, tree).filter(function() {
+							// for plain toggle, no filter is provided, otherwise we need to check the parent element
+							return filter ? $(this).parent("." + filter).length : true;
+						}) );
+						return false;
+					};
+				}
+				// click on first element to collapse tree
+				$("a:eq(0)", control).click( handler(CLASSES.collapsable) );
+				// click on second to expand tree
+				$("a:eq(1)", control).click( handler(CLASSES.expandable) );
+				// click on third to toggle tree
+				$("a:eq(2)", control).click( handler() );
+			}
+
+			// handle toggle event
+			function toggler() {
+				$(this)
+					.parent()
+					// swap classes for hitarea
+					.find(">.hitarea")
+						.swapClass( CLASSES.collapsableHitarea, CLASSES.expandableHitarea )
+						.swapClass( CLASSES.lastCollapsableHitarea, CLASSES.lastExpandableHitarea )
+					.end()
+					// swap classes for parent li
+					.swapClass( CLASSES.collapsable, CLASSES.expandable )
+					.swapClass( CLASSES.lastCollapsable, CLASSES.lastExpandable )
+					// find child lists
+					.find( ">ul" )
+					// toggle them
+					.heightToggle( settings.animated, settings.toggle );
+				if ( settings.unique ) {
+					$(this).parent()
+						.siblings()
+						// swap classes for hitarea
+						.find(">.hitarea")
+							.replaceClass( CLASSES.collapsableHitarea, CLASSES.expandableHitarea )
+							.replaceClass( CLASSES.lastCollapsableHitarea, CLASSES.lastExpandableHitarea )
+						.end()
+						.replaceClass( CLASSES.collapsable, CLASSES.expandable )
+						.replaceClass( CLASSES.lastCollapsable, CLASSES.lastExpandable )
+						.find( ">ul" )
+						.heightHide( settings.animated, settings.toggle );
+				}
+			}
+
+			function serialize() {
+				function binary(arg) {
+					return arg ? 1 : 0;
+				}
+				var data = [];
+				branches.each(function(i, e) {
+					data[i] = $(e).is(":has(>ul:visible)") ? 1 : 0;
+				});
+				$.cookie(settings.cookieId, data.join("") );
+			}
+
+			function deserialize() {
+				var stored = $.cookie(settings.cookieId);
+				if ( stored ) {
+					var data = stored.split("");
+					branches.each(function(i, e) {
+						$(e).find(">ul")[ parseInt(data[i]) ? "show" : "hide" ]();
+					});
+				}
+			}
+
+			// add treeview class to activate styles
+			this.addClass("treeview");
+
+			// prepare branches and find all tree items with child lists
+			var branches = this.find("li").prepareBranches(settings);
+
+			switch(settings.persist) {
+			case "cookie":
+				var toggleCallback = settings.toggle;
+				settings.toggle = function() {
+					serialize();
+					if (toggleCallback) {
+						toggleCallback.apply(this, arguments);
+					}
+				};
+				deserialize();
+				break;
+			case "location":
+				var current = this.find("a").filter(function() { return this.href.toLowerCase() == location.href.toLowerCase(); });
+				if ( current.length ) {
+					current.addClass("selected").parents("ul, li").add( current.next() ).show();
+				}
+				break;
+			}
+
+			branches.applyClasses(settings, toggler);
+
+			// if control option is set, create the treecontroller and show it
+			if ( settings.control ) {
+				treeController(this, settings.control);
+				$(settings.control).show();
+			}
+
+			return this.bind("add", function(event, branches) {
+				$(branches).prev()
+					.removeClass(CLASSES.last)
+					.removeClass(CLASSES.lastCollapsable)
+					.removeClass(CLASSES.lastExpandable)
+				.find(">.hitarea")
+					.removeClass(CLASSES.lastCollapsableHitarea)
+					.removeClass(CLASSES.lastExpandableHitarea);
+				$(branches).find("li").andSelf().prepareBranches(settings).applyClasses(settings, toggler);
+			});
+		}
+	});
+
+	var CLASSES = $.fn.treeview.classes = {
+		open: "open",
+		closed: "closed",
+		expandable: "expandable",
+		expandableHitarea: "expandable-hitarea",
+		lastExpandableHitarea: "lastExpandable-hitarea",
+		collapsable: "collapsable",
+		collapsableHitarea: "collapsable-hitarea",
+		lastCollapsableHitarea: "lastCollapsable-hitarea",
+		lastCollapsable: "lastCollapsable",
+		lastExpandable: "lastExpandable",
+		last: "last",
+		hitarea: "hitarea"
+	};
+
+	$.fn.Treeview = $.fn.treeview;
+
+})(jQuery);
+</script>
+<script type="text/javascript">
+		$(document).ready(function(){
+            $("#tree").treeview({
+                control: "#treecontrol",
+                animated: "fast",
+                collapsed: true,
+                toggle: function() {
+                    window.console && console.log("%o was toggled", this);
+                }
+            });
+
+            $("#content").css("padding-top", $("#header").height());
+        });
+	</script>
+
+            </head>
+<body>
+<div id="container">
+<div id="header">
+<div class="time">1 m 4 s</div>
+<h1>All in ga: <strong><span class="total">17 total, </span><span class="failed">4 failed, </span><span class="passed">13 passed</span></strong>
+</h1>
+<div id="treecontrol">
+<ul>
+<li>
+<a title="Collapse the entire tree below" href="#">Collapse</a>
+                  |
+                </li>
+<li>
+<a title="Expand the entire tree below" href="#">Expand</a>
+</li>
+</ul>
+</div>
+</div>
+<div id="content">
+<ul id="tree">
+<li xmlns="" class="level top open">
+<span><em class="time">
+<div class="time">11.91 s</div>
+</em>Exercise1</span>
+<ul>
+<li class="level suite open">
+<span><em class="time">
+<div class="time">1.01 s</div>
+</em>[f1, dim = 2]</span>
+<ul>
+<li class="level test">
+<span><em class="time">
+<div class="time">1.01 s</div>
+</em><em class="status">passed</em>test[f1, dim = 2]</span>
+<ul>
+<li class="text">
+<span class="stdout">[ 11135][ 1.8084597,  3.2901479] 0.692107 <br/>[ 11155][ 1.8287711,  3.3496866] 0.689652 <br/>[ 11157][ 1.8186729,  3.3203704] 0.686607 <br/>[ 11158][ 1.8251374,  3.3326389] 0.681080 <br/>[ 11180][ 1.8251384,  3.3324422] 0.681026 <br/>[ 11187][ 1.8252304,  3.3315379] 0.681006 <br/>[ 11188][ 1.8251627,  3.3321438] 0.680979 <br/>[ 11192][ 1.8157844,  3.2994138] 0.666052 <br/>[ 11199][ 1.7377526,  2.9917642] 0.622790 <br/>[ 11202][ 1.7568036,  3.1046900] 0.606354 <br/>[ 11204][ 1.7675951,  3.1139269] 0.600155 <br/>[ 11205][ 1.7638455,  3.1116156] 0.583482 <br/>[ 11237][ 1.6861387,  2.8718502] 0.553653 <br/>[ 11244][ 1.6926178,  2.8737567] 0.487466 <br/>[ 11250][ 1.6962081,  2.8773359] 0.484710 <br/>[ 11252][ 1.6953310,  2.8766910] 0.484132 <br/>[ 11257][ 1.5098249,  2.2680361] 0.273227 <br/>[ 11267][ 1.3595682,  1.8806685] 0.233250 <br/>[ 11271][ 1.3802051,  1.8904279] 0.165692 <br/>[ 11279][ 1.3844513,  1.9237190] 0.152722 <br/>[ 11302][ 1.3884823,  1.9262019] 0.151201 <br/>[ 11303][ 1.3880125,  1.9290786] 0.151179 <br/>[ 11310][ 1.3884029,  1.9292782] 0.151118 <br/>[ 11317][ 1.3407021,  1.7800893] 0.146329 <br/>[ 11319][ 1.3416766,  1.7832702] 0.145054 <br/>[ 11320][ 1.3467334,  1.7982841] 0.143961 <br/>[ 11321][ 1.3496767,  1.8235611] 0.122648 <br/>[ 11332][ 1.3460936,  1.8078884] 0.121445 <br/>[ 11333][ 1.3453313,  1.8109551] 0.119362 <br/>[ 11340][ 1.3419529,  1.8056803] 0.119277 <br/>[ 11341][ 1.3449132,  1.8090018] 0.118970 <br/>[ 11342][ 1.3427300,  1.8012804] 0.117734 <br/>[ 11346][ 1.3413223,  1.8023713] 0.117542 <br/>[ 11347][ 1.3419648,  1.8022775] 0.117138 <br/>[ 11348][ 1.3420177,  1.8021377] 0.117103 <br/>[ 11351][ 1.3421006,  1.8014172] 0.117036 <br/>[ 11352][ 1.3420371,  1.8016609] 0.117025 <br/>[ 11354][ 1.3420253,  1.8016816] 0.117023 <br/>[ 11359][ 1.3420793,  1.8010933] 0.117019 <br/>[ 11360][ 1.3404813,  1.7984858] 0.116182 <br/>[ 11366][ 1.3405743,  1.7984951] 0.116175 <br/>[ 11367][ 1.3406567,  1.7984873] 0.116174 <br/>[ 11382][ 1.3406604,  1.7978448] 0.116072 <br/>[ 11383][ 1.3406630,  1.7973289] 0.116052 <br/>[ 11385][ 1.3406620,  1.7973973] 0.116051 <br/>[ 11386][ 1.3406593,  1.7974001] 0.116049 <br/>[ 11391][ 1.3309116,  1.7681126] 0.110535 <br/>[ 11396][ 1.3309212,  1.7683308] 0.110421 <br/>[ 11397][ 1.3318074,  1.7731303] 0.110130 <br/>[ 11399][ 1.3313723,  1.7737770] 0.109958 <br/>[ 11400][ 1.3314038,  1.7732724] 0.109869 <br/>[ 11410][ 1.3314060,  1.7724277] 0.109834 <br/>[ 11426][ 1.2814169,  1.6248879] 0.108578 <br/>[ 11428][ 1.2786398,  1.6267835] 0.084260 <br/>[ 11432][ 1.2823368,  1.6428528] 0.079950 <br/>[ 11433][ 1.2792784,  1.6322874] 0.079816 <br/>[ 11434][ 1.2794326,  1.6337633] 0.079097 <br/>[ 11435][ 1.2793287,  1.6347354] 0.078403 <br/>[ 11436][ 1.2791759,  1.6347698] 0.078171 <br/>[ 11437][ 1.2771978,  1.6305937] 0.076880 <br/>[ 11441][ 1.2772596,  1.6311933] 0.076877 <br/>[ 11442][ 1.2765516,  1.6293745] 0.076485 <br/>[ 11446][ 1.2765555,  1.6294463] 0.076485 <br/>[ 11449][ 1.2765564,  1.6296219] 0.076484 <br/>[ 11473][ 1.2745805,  1.6232704] 0.075560 <br/>[ 11474][ 1.2722374,  1.6216430] 0.075046 <br/>[ 11477][ 1.2734358,  1.6223597] 0.074819 <br/>[ 11488][ 1.2669100,  1.6005623] 0.073265 <br/>[ 11489][ 1.2669509,  1.6079817] 0.072056 <br/>[ 11492][ 1.2678888,  1.6083798] 0.071835 <br/>[ 11495][ 1.2677602,  1.6083329] 0.071820 <br/>[ 11517][ 1.2677602,  1.6083329] 0.071820 <br/>[ 11535][ 1.2308942,  1.5122610] 0.054118 <br/>[ 11539][ 1.2316333,  1.5159675] 0.053745 <br/>[ 11545][ 1.2316054,  1.5175514] 0.053690 <br/>[ 11546][ 1.2316097,  1.5173856] 0.053670 <br/>[ 11576][ 1.1443638,  1.3130766] 0.022072 <br/>[ 11584][ 1.1471619,  1.3174807] 0.021882 <br/>[ 11592][ 1.1026071,  1.2068853] 0.018373 <br/>[ 11595][ 1.1333474,  1.2827894] 0.018066 <br/>[ 11601][ 1.1284994,  1.2714158] 0.016951 <br/>[ 11602][ 1.1287931,  1.2737246] 0.016608 <br/>[ 11612][ 1.1288056,  1.2745907] 0.016606 <br/>[ 11620][ 1.1288099,  1.2740449] 0.016595 <br/>[ 11626][ 1.1288153,  1.2741155] 0.016595 <br/>[ 11629][ 1.1288110,  1.2740925] 0.016594 <br/>[ 11631][ 1.1288128,  1.2742611] 0.016593 <br/>[ 11632][ 1.1288135,  1.2742120] 0.016593 <br/>[ 11638][ 1.1288132,  1.2742059] 0.016593 <br/>[ 11644][ 1.1212284,  1.2587585] 0.014954 <br/>[ 11648][ 1.1217385,  1.2577703] 0.014848 <br/>[ 11649][ 1.1215697,  1.2580723] 0.014782 <br/>[ 11651][ 1.1215704,  1.2580250] 0.014780 <br/>[ 11652][ 1.1215705,  1.2580026] 0.014780 <br/>[ 11654][ 1.1215701,  1.2579930] 0.014780 <br/>[ 11669][ 1.1215702,  1.2579622] 0.014779 <br/>[ 11671][ 1.1215703,  1.2578925] 0.014779 <br/>[ 11672][ 1.1215702,  1.2578988] 0.014779 <br/>[ 11673][ 1.1215704,  1.2579198] 0.014779 <br/>[ 11677][ 1.1214507,  1.2579096] 0.014757 <br/>[ 11680][ 1.1212640,  1.2579091] 0.014751 <br/>[ 11682][ 1.1212811,  1.2579085] 0.014750 <br/>[ 11683][ 1.1212900,  1.2579077] 0.014749 <br/>[ 11696][ 1.1212647,  1.2572735] 0.014705 <br/>[ 11697][ 1.1206872,  1.2554564] 0.014589 <br/>[ 11709][ 1.1207041,  1.2560235] 0.014570 <br/>[ 11710][ 1.1206979,  1.2558882] 0.014569 <br/>[ 11722][ 1.1206227,  1.2560391] 0.014556 <br/>[ 11723][ 1.1204698,  1.2560016] 0.014543 <br/>[ 11726][ 1.1204311,  1.2559641] 0.014539 <br/>[ 11743][ 1.0742306,  1.1524363] 0.005746 <br/>[ 11756][ 1.0746826,  1.1553881] 0.005597 <br/>[ 11757][ 1.0744748,  1.1541658] 0.005557 <br/>[ 11758][ 1.0743833,  1.1544823] 0.005536 <br/>[ 11819][ 1.0743141,  1.1544829] 0.005534 <br/>[ 11821][ 1.0743059,  1.1544829] 0.005534 <br/>[ 11822][ 1.0743065,  1.1544829] 0.005534 <br/>[ 11829][ 1.0742749,  1.1537436] 0.005527 <br/>[ 11830][ 1.0739556,  1.1540688] 0.005517 <br/>[ 11832][ 1.0740750,  1.1540368] 0.005503 <br/>[ 11878][ 1.0674870,  1.1371494] 0.005121 <br/>[ 11880][ 1.0508180,  1.1023464] 0.002933 <br/>[ 11886][ 1.0509587,  1.1057122] 0.002740 <br/>[ 11890][ 1.0429825,  1.0869572] 0.001921 <br/>[ 11891][ 1.0434843,  1.0886374] 0.001896 <br/>[ 11910][ 1.0435334,  1.0889745] 0.001895 <br/>[ 11923][ 1.0431064,  1.0884388] 0.001872 <br/>[ 11926][ 1.0348459,  1.0683449] 0.001870 <br/>[ 11929][ 1.0354604,  1.0724751] 0.001266 <br/>[ 11944][ 1.0354655,  1.0724756] 0.001266 <br/>[ 11946][ 1.0354661,  1.0724758] 0.001266 <br/>[ 11947][ 1.0354842,  1.0724794] 0.001265 <br/>[ 11948][ 1.0355463,  1.0724951] 0.001265 <br/>[ 11949][ 1.0355395,  1.0724794] 0.001265 <br/>[ 11952][ 1.0354935,  1.0723145] 0.001260 <br/>[ 11954][ 1.0354964,  1.0722895] 0.001260 <br/>[ 11956][ 1.0296186,  1.0587443] 0.001065 <br/>[ 11959][ 1.0297583,  1.0592394] 0.001021 <br/>[ 11961][ 1.0302377,  1.0616274] 0.000920 <br/>[ 11983][ 1.0091023,  1.0190992] 0.000149 <br/>[ 11987][ 1.0098039,  1.0191986] 0.000122 <br/>[ 11988][ 1.0081335,  1.0162690] 0.000067 <br/>[ 11996][ 1.0047988,  1.0099407] 0.000033 <br/>[ 12001][ 1.0049086,  1.0099674] 0.000026 <br/>[ 12008][ 1.0049202,  1.0099755] 0.000025 <br/>[ 12009][ 1.0050185,  1.0100253] 0.000025 <br/>[ 12011][ 1.0049802,  1.0099713] 0.000025 <br/>[ 12031][ 1.0049808,  1.0099916] 0.000025 <br/>[ 12033][ 1.0049807,  1.0099876] 0.000025 <br/>[ 12062][ 0.9990104,  0.9984899] 0.000023 <br/>[ 12069][ 0.9989773,  0.9975365] 0.000019 <br/>[ 12070][ 0.9990109,  0.9980939] 0.000001 <br/>[ 12071][ 0.9989266,  0.9978353] 0.000001 <br/>[ 12073][ 0.9989805,  0.9979834] 0.000001 <br/>[ 12074][ 0.9989802,  0.9979714] 0.000001 <br/>[ 12100][ 0.9993577,  0.9987895] 0.000001 <br/>Ended with 12100 iterations, error 0.000001 -&gt; [ 0.9993577,  0.9987895]<br/>Number of attempts: 1<br/></span>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="level suite open">
+<span><em class="time">
+<div class="time">165 ms</div>
+</em>[f3, dim = 5]</span>
+<ul>
+<li class="level test">
+<span><em class="time">
+<div class="time">165 ms</div>
+</em><em class="status">passed</em>test[f3, dim = 5]</span>
+<ul>
+<li class="text">
+<span class="stdout">[   144][ 1.0123816,  1.6722766,  3.2866863,  4.4386747,  5.3379285] 0.496376 <br/>[   146][ 0.9206920,  1.7608051,  3.3652093,  4.4078433,  5.3250331] 0.468864 <br/>[   150][ 0.9206920,  1.7608051,  2.9847489,  4.4078433,  5.3250331] 0.335719 <br/>[   153][ 0.9274042,  1.7460121,  2.9797864,  4.4200837,  5.2239957] 0.296833 <br/>[   155][ 0.9327949,  1.8390279,  3.3006431,  4.1730375,  5.1168987] 0.164422 <br/>[   158][ 0.8439353,  1.8948472,  3.3014212,  4.1354776,  5.0988652] 0.154397 <br/>[   161][ 0.9344305,  1.8303978,  3.1154823,  4.1791457,  5.0657803] 0.082821 <br/>[   163][ 0.9803058,  1.8420276,  2.8270281,  4.0257871,  5.0963545] 0.065212 <br/>[   166][ 0.9175760,  1.8419639,  3.0145311,  4.0534937,  5.0997840] 0.044799 <br/>[   167][ 0.9623500,  1.8406594,  3.0204830,  4.1070499,  5.0280969] 0.039476 <br/>[   168][ 0.9491865,  1.8407936,  3.0171311,  4.0664043,  5.0355589] 0.033896 <br/>[   173][ 0.9429330,  1.8343485,  3.0138202,  4.0175336,  5.0431865] 0.033061 <br/>[   175][ 0.9124615,  1.9539182,  2.9875978,  4.0169603,  5.0520204] 0.012934 <br/>[   177][ 0.9444604,  1.9701097,  3.0095126,  4.0249761,  5.0428739] 0.006531 <br/>[   179][ 0.9701943,  1.9502277,  3.0076102,  4.0225296,  5.0429236] 0.005774 <br/>[   181][ 0.9929298,  1.9478983,  3.0077818,  4.0221147,  5.0429320] 0.005157 <br/>[   182][ 0.9921086,  1.9635749,  3.0057982,  3.9737817,  5.0429487] 0.003955 <br/>[   187][ 0.9921086,  1.9846514,  3.0057982,  3.9737817,  5.0429487] 0.002863 <br/>[   188][ 0.9992374,  1.9583201,  3.0122209,  4.0040985,  4.9900180] 0.002004 <br/>[   194][ 1.0034839,  1.9654923,  2.9924913,  4.0229430,  4.9929077] 0.001836 <br/>[   196][ 1.0035709,  1.9631329,  3.0183393,  4.0062644,  4.9928014] 0.001799 <br/>[   210][ 0.9938154,  1.9647557,  3.0151857,  3.9935161,  4.9927844] 0.001605 <br/>[   213][ 0.9882606,  1.9805736,  3.0184723,  4.0162075,  5.0148969] 0.001341 <br/>[   218][ 0.9995291,  2.0178982,  3.0186287,  4.0166832,  5.0148172] 0.001165 <br/>[   219][ 0.9858699,  2.0001872,  3.0184498,  4.0141248,  5.0176585] 0.001051 <br/>[   222][ 0.9873013,  1.9967949,  3.0042545,  4.0139572,  5.0183911] 0.000723 <br/>[   241][ 0.9835680,  1.9979989,  3.0058108,  4.0135218,  5.0120280] 0.000635 <br/>[   254][ 0.9822210,  1.9973955,  3.0059684,  4.0046531,  5.0132623] 0.000556 <br/>[   301][ 0.9821884,  1.9949984,  3.0035368,  4.0013969,  5.0124708] 0.000512 <br/>[   310][ 0.9902405,  1.9860043,  3.0032407,  4.0032321,  4.9920892] 0.000375 <br/>[   311][ 0.9895092,  1.9889626,  3.0005677,  4.0032503,  5.0085240] 0.000315 <br/>[   331][ 1.0035743,  1.9933743,  2.9882254,  4.0024018,  5.0087466] 0.000278 <br/>[   332][ 1.0051932,  1.9890584,  2.9957636,  4.0050050,  4.9985033] 0.000192 <br/>[   334][ 0.9991751,  1.9948902,  2.9951332,  3.9936175,  4.9997748] 0.000091 <br/>[   356][ 0.9991631,  2.0005783,  2.9942830,  3.9942337,  4.9992658] 0.000068 <br/>[   431][ 0.9995041,  2.0004566,  2.9966508,  3.9931295,  4.9987219] 0.000061 <br/>[   453][ 0.9980752,  2.0002990,  2.9968413,  4.0046527,  4.9985835] 0.000037 <br/>[   681][ 0.9997766,  2.0003635,  2.9978755,  4.0046576,  4.9986570] 0.000028 <br/>[   731][ 1.0019375,  1.9992250,  2.9963735,  4.0021218,  5.0004648] 0.000022 <br/>[   750][ 1.0006658,  1.9999441,  2.9963801,  3.9988388,  5.0020393] 0.000019 <br/>[  1122][ 1.0002564,  1.9993813,  3.0038873,  3.9987464,  5.0010501] 0.000018 <br/>[  1166][ 0.9983179,  1.9984737,  2.9995476,  3.9995318,  4.9980714] 0.000009 <br/>[  1441][ 0.9984930,  2.0009860,  2.9990319,  3.9997581,  4.9980326] 0.000008 <br/>[  1545][ 0.9984246,  2.0001613,  3.0008613,  3.9993556,  4.9981631] 0.000007 <br/>[  1546][ 0.9984581,  2.0008600,  3.0001906,  3.9995590,  4.9980868] 0.000007 <br/>[  1951][ 0.9990524,  2.0008189,  3.0000806,  3.9988518,  4.9979723] 0.000007 <br/>[  2082][ 0.9989390,  2.0007823,  3.0001050,  3.9997278,  4.9997308] 0.000002 <br/>[  3589][ 0.9989440,  2.0005741,  3.0000226,  3.9997626,  5.0000511] 0.000002 <br/>[  3609][ 0.9994496,  2.0002207,  2.9993054,  3.9995897,  5.0001016] 0.000001 <br/>[  4126][ 0.9994496,  2.0002207,  2.9994514,  3.9995897,  5.0001016] 0.000001 <br/>Ended with 4126 iterations, error 0.000001 -&gt; [ 0.9994496,  2.0002207,  2.9994514,  3.9995897,  5.0001016]<br/>Number of attempts: 1<br/></span>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="level suite open">
+<span><em class="time">
+<div class="time">334 ms</div>
+</em>[f6, dim = 2]</span>
+<ul>
+<li class="level test">
+<span><em class="time">
+<div class="time">334 ms</div>
+</em><em class="status">passed</em>test[f6, dim = 2]</span>
+<ul>
+<li class="text">
+<span class="stdout">[     0][ 17.9340720,  17.7879810] 0.346181 <br/>[     6][ 18.3373762,  19.4191404] 0.346024 <br/>[    24][ 18.2196931,  20.6960345] 0.338737 <br/>[    25][ 18.2851273,  19.8616100] 0.332846 <br/>[    56][ 18.2782190,  19.7089664] 0.331784 <br/>[    58][ 17.5221688,  19.4401656] 0.326091 <br/>[    69][ 17.5590513,  19.4840671] 0.325757 <br/>[    70][ 16.0117125,  19.4490141] 0.313400 <br/>[    86][ 16.0144727,  18.9544272] 0.308604 <br/>[    95][ 15.6482373,  17.5508830] 0.292818 <br/>[   111][ 14.4958629,  17.6458798] 0.284019 <br/>[   118][ 14.7653035,  16.4966502] 0.276743 <br/>[   121][ 14.7790010,  16.3883340] 0.274981 <br/>[   123][ 14.7681725,  16.4923583] 0.274846 <br/>[   129][ 14.2916987,  16.5284487] 0.273852 <br/>[   133][ 14.9536505,  16.0323055] 0.272065 <br/>[   145][ 14.9250930,  14.5141162] 0.263840 <br/>[   159][ 13.9064363,  15.4999028] 0.261214 <br/>[   160][ 14.5907534,  14.2074214] 0.251468 <br/>[   178][ 14.3103647,  14.0468692] 0.245926 <br/>[   181][ 14.4287290,  12.7500763] 0.234960 <br/>[   188][ 13.6800877,  12.9542526] 0.228639 <br/>[   193][ 12.0793711,  13.6823667] 0.225385 <br/>[   195][ 12.5207377,  13.3951226] 0.221232 <br/>[   197][ 13.4057367,  11.0331229] 0.217864 <br/>[   199][ 11.5132227,  13.3585657] 0.209174 <br/>[   212][ 11.4705354,  13.2785608] 0.207877 <br/>[   214][ 11.2809167,  13.3205938] 0.207080 <br/>[   217][ 11.2852190,  11.2764769] 0.183648 <br/>[   249][ 9.7355283,  11.7369372] 0.173106 <br/>[   271][ 9.7359956,  11.7342697] 0.170854 <br/>[   280][ 8.4795964,  11.7769555] 0.167588 <br/>[   281][ 8.4961966,  11.7623354] 0.160583 <br/>[   283][ 8.2914756,  11.7755450] 0.160094 <br/>[   286][ 8.2971156,  11.7713114] 0.159556 <br/>[   288][ 7.9672818,  11.7290828] 0.153501 <br/>[   305][ 7.9422740,  10.3158114] 0.150826 <br/>[   306][ 7.3550136,  10.4552084] 0.132073 <br/>[   312][ 7.2448669,  9.7555492] 0.120396 <br/>[   327][ 7.4691220,  8.9074709] 0.113349 <br/>[   335][ 6.9101762,  9.0037324] 0.107727 <br/>[   340][ 5.7912190,  8.5655246] 0.098848 <br/>[   347][ 6.5460959,  7.7932337] 0.095614 <br/>[   349][ 6.2738044,  7.8162984] 0.091857 <br/>[   359][ 6.6850170,  7.6787990] 0.089809 <br/>[   364][ 6.5662085,  7.7807534] 0.089756 <br/>[   366][ 6.5826790,  7.7688381] 0.089693 <br/>[   367][ 6.5843308,  7.7664282] 0.089524 <br/>[   373][ 6.5559878,  7.5879480] 0.087796 <br/>[   378][ 6.5470137,  7.5937901] 0.087177 <br/>[   383][ 5.4478712,  7.6315013] 0.079295 <br/>[   386][ 4.2063673,  7.1743759] 0.064797 <br/>[   406][ 4.1718844,  7.1881330] 0.064005 <br/>[   407][ 4.1915499,  7.1775409] 0.063262 <br/>[   412][ 4.1924520,  5.7074951] 0.058213 <br/>[   414][ 3.2844693,  6.9955697] 0.055891 <br/>[   421][ 3.2872364,  5.4739870] 0.042954 <br/>[   432][ 3.2816508,  5.7619167] 0.041394 <br/>[   441][ 3.5720299,  5.3040821] 0.041006 <br/>[   444][ 2.3508288,  5.6765136] 0.038042 <br/>[   448][ 1.5104978,  5.6765136] 0.035430 <br/>[   453][ 3.1448765,  3.9174303] 0.034520 <br/>[   458][ 1.7581097,  5.6106392] 0.033008 <br/>[   462][ 2.3073083,  3.2261372] 0.015911 <br/>[   477][ 2.2979933,  3.2267345] 0.015560 <br/>[   484][ 2.2687989,  3.2491194] 0.015355 <br/>[   487][ 2.1866070,  3.3059124] 0.015353 <br/>[   490][ 2.2331794,  3.2742938] 0.015346 <br/>[   511][ 2.2331800,  3.2742127] 0.015345 <br/>[   521][ 2.2314869,  2.7588464] 0.012937 <br/>[   522][ 1.3436880,  3.2778113] 0.012593 <br/>[   535][ 1.3530207,  3.2750400] 0.012418 <br/>[   536][ 0.8788774,  3.4354547] 0.012410 <br/>[   537][ 1.3507750,  3.2760975] 0.012403 <br/>[   539][ 1.3472571,  3.2788866] 0.012333 <br/>[   542][ 1.3475274,  3.2787033] 0.012333 <br/>[   547][ 1.3481453,  1.1806852] 0.008046 <br/>[   549][ 1.4773652,  2.0204981] 0.006532 <br/>[   562][ 1.4831691,  2.0210492] 0.006227 <br/>[   566][ 1.4822342,  2.0212940] 0.006224 <br/>[   569][ 1.4833015,  0.9701596] 0.003127 <br/>[   585][ 1.3798017,  1.1121918] 0.003127 <br/>[   605][ 1.3937587,  1.0947732] 0.003127 <br/>[   608][ 1.3824441,  1.1090286] 0.003127 <br/>[   752][ 1.3778883,  1.1146829] 0.003127 <br/>[  2080][ 0.0621302,  0.0536927] 0.000052 <br/>[  2104][-0.0479850,  0.0534503] 0.000032 <br/>[  2105][ 0.0093969,  0.0541602] 0.000012 <br/>[  2106][ 0.0084767,  0.0529498] 0.000011 <br/>[  2108][ 0.0094475, -0.0267200] 0.000001 <br/>[  2109][ 0.0157796, -0.0198236] 0.000001 <br/>[  2110][ 0.0040968,  0.0132277] 0.000000 <br/>Ended with 2110 iterations, error 0.000000 -&gt; [ 0.0040968,  0.0132277]<br/>Number of attempts: 1<br/></span>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="level suite open">
+<span><em class="time">
+<div class="time">10.40 s</div>
+</em>[f7, dim = 2]</span>
+<ul>
+<li class="level test">
+<span><em class="time">
+<div class="time">10.40 s</div>
+</em><em class="status">passed</em>test[f7, dim = 2]</span>
+<ul>
+<li class="text">
+<span class="stdout">[  1197][ 0.0000009, -0.0000005] 0.001006 <br/>[  1198][ 0.0000002, -0.0000006] 0.000851 <br/>[  1379][ 0.0000002, -0.0000006] 0.000850 <br/>[  1380][ 0.0000002, -0.0000006] 0.000850 <br/>[  1383][ 0.0000002, -0.0000006] 0.000850 <br/>[  1429][ 0.0000003,  0.0000001] 0.000767 <br/>[  1431][ 0.0000002,  0.0000000] 0.000719 <br/>[  1524][ 0.0000000, -0.0000002] 0.000696 <br/>[  1966][-0.0000000, -0.0000002] 0.000693 <br/>[  1967][-0.0000000,  0.0000001] 0.000478 <br/>[  1970][-0.0000000, -0.0000000] 0.000425 <br/>[  1971][-0.0000000,  0.0000000] 0.000338 <br/>[  1972][-0.0000000, -0.0000000] 0.000335 <br/>[  1973][-0.0000000, -0.0000000] 0.000332 <br/>[  2085][-0.0000000, -0.0000000] 0.000327 <br/>[  2618][-0.0000000,  0.0000000] 0.000208 <br/>[  2620][-0.0000000, -0.0000000] 0.000167 <br/>[  2783][-0.0000000, -0.0000000] 0.000157 <br/>[  2788][-0.0000000, -0.0000000] 0.000149 <br/>[  2791][-0.0000000, -0.0000000] 0.000141 <br/>[  6310][-0.0000000,  0.0000000] 0.000129 <br/>[  6315][-0.0000000,  0.0000000] 0.000129 <br/>[  6320][-0.0000000,  0.0000000] 0.000127 <br/>[  6730][-0.0000000,  0.0000000] 0.000124 <br/>[  6732][-0.0000000,  0.0000000] 0.000085 <br/>[  6736][ 0.0000000,  0.0000000] 0.000078 <br/>[  6737][-0.0000000,  0.0000000] 0.000076 <br/>[  6741][ 0.0000000,  0.0000000] 0.000075 <br/>[  8857][-0.0000000,  0.0000000] 0.000066 <br/>[  8865][-0.0000000, -0.0000000] 0.000064 <br/>[  8866][-0.0000000,  0.0000000] 0.000062 <br/>[  8873][-0.0000000, -0.0000000] 0.000060 <br/>[  8876][-0.0000000,  0.0000000] 0.000060 <br/>[  8880][ 0.0000000, -0.0000000] 0.000007 <br/>[  8882][ 0.0000000, -0.0000000] 0.000007 <br/>[  8884][-0.0000000, -0.0000000] 0.000005 <br/>[  8887][-0.0000000, -0.0000000] 0.000004 <br/>[ 42337][ 0.0000000,  0.0000000] 0.000004 <br/>[ 42338][ 0.0000000,  0.0000000] 0.000003 <br/>[ 43223][ 0.0000000,  0.0000000] 0.000003 <br/>[ 46610][-0.0000000,  0.0000000] 0.000003 <br/>[ 60443][ 0.0000000,  0.0000000] 0.000002 <br/>[ 60444][-0.0000000,  0.0000000] 0.000002 <br/>[ 95208][ 0.0000000,  0.0000000] 0.000001 <br/>Ended with 95208 iterations, error 0.000001 -&gt; [ 0.0000000,  0.0000000]<br/>Number of attempts: 8<br/></span>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="level top failed open">
+<span><em class="time">
+<div class="time">40.33 s</div>
+</em>Exercise2</span>
+<ul>
+<li class="level suite open">
+<span><em class="time">
+<div class="time">15 ms</div>
+</em>[f6, dim = 1]</span>
+<ul>
+<li class="level test">
+<span><em class="time">
+<div class="time">15 ms</div>
+</em><em class="status">passed</em>test[f6, dim = 1]</span>
+<ul>
+<li class="text">
+<span class="stdout">[     0][-18.6667204] 0.264241 <br/>[     6][-11.6052607] 0.233027 <br/>[    11][ 16.5324815] 0.191627 <br/>[    51][ 15.9519542] 0.182285 <br/>[    60][ 15.8543454] 0.181384 <br/>[    64][ 15.8537421] 0.180806 <br/>[    65][ 15.8532387] 0.180681 <br/>[    67][ 15.8532949] 0.180678 <br/>[    76][ 14.7285769] 0.179743 <br/>[    83][ 15.4509239] 0.174737 <br/>[    86][ 15.4510098] 0.174640 <br/>[    88][ 15.4524030] 0.174336 <br/>[    89][ 15.2483602] 0.171644 <br/>[   103][ 14.9333089] 0.167345 <br/>[   115][ 13.8374079] 0.166407 <br/>[   117][ 14.2934636] 0.162069 <br/>[   118][ 13.4977461] 0.142622 <br/>[   129][ 12.6528859] 0.140159 <br/>[   132][ 13.0228011] 0.136514 <br/>[   134][ 12.4083806] 0.125193 <br/>[   157][ 10.7824245] 0.099108 <br/>[   177][ 9.8650683] 0.088795 <br/>[   184][ 9.8660675] 0.086852 <br/>[   192][ 9.8693490] 0.084998 <br/>[   196][ 7.9295913] 0.059327 <br/>[   216][ 7.7265557] 0.054828 <br/>[   220][ 6.3855436] 0.042370 <br/>[   222][ 6.6310547] 0.041351 <br/>[   224][ 5.6025711] 0.030662 <br/>[   229][ 5.3206074] 0.028278 <br/>[   252][ 5.3180487] 0.027176 <br/>[   257][ 5.3179151] 0.027157 <br/>[   261][ 5.3178905] 0.027154 <br/>[   263][ 5.3173035] 0.027119 <br/>[   338][ 3.5537553] 0.016236 <br/>[   348][ 3.5517539] 0.014680 <br/>[   349][ 3.5446637] 0.012335 <br/>[   352][ 3.5447334] 0.012334 <br/>[   354][ 3.5448459] 0.012333 <br/>[   358][ 3.5448337] 0.012333 <br/>[   362][ 3.5448402] 0.012333 <br/>[   387][ 3.5448374] 0.012333 <br/>[   388][ 3.5448385] 0.012333 <br/>[   390][ 3.0697321] 0.009294 <br/>[   408][ 3.0699069] 0.009293 <br/>[   428][ 3.0698972] 0.009293 <br/>[   430][ 3.0698991] 0.009293 <br/>[   431][ 1.7624458] 0.004335 <br/>[   432][ 1.7815876] 0.004206 <br/>[   443][ 1.7673789] 0.003430 <br/>[   444][ 1.7771922] 0.003425 <br/>[   445][ 1.7709191] 0.003151 <br/>[   446][ 1.7723866] 0.003127 <br/>[   449][ 1.7722979] 0.003127 <br/>[   456][-0.0647008] 0.000022 <br/>[   459][ 0.0437076] 0.000006 <br/>[   460][-0.0039848] 0.000000 <br/>Ended with 460 iterations, error 0.000000 -&gt; [-0.0039848]<br/></span>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="level suite open">
+<span><em class="time">
+<div class="time">48 ms</div>
+</em>[f6, dim = 3]</span>
+<ul>
+<li class="level test">
+<span><em class="time">
+<div class="time">48 ms</div>
+</em><em class="status">passed</em>test[f6, dim = 3]</span>
+<ul>
+<li class="text">
+<span class="stdout">[  2235][-0.0121664, -0.2174653,  0.0252098] 0.002357 <br/>[  2236][-0.0401050, -0.1139326,  0.1197187] 0.000865 <br/>[  2237][-0.0371870, -0.1271281,  0.1055368] 0.000851 <br/>[  2238][-0.0305636, -0.1563586,  0.0311839] 0.000721 <br/>[  2239][-0.0247498, -0.1361318, -0.0665082] 0.000579 <br/>[  2240][-0.0260466, -0.1273630, -0.0355338] 0.000348 <br/>[  2241][-0.0266423, -0.0674126,  0.0228969] 0.000039 <br/>[  2258][-0.0566245, -0.0490024,  0.0121706] 0.000039 <br/>[  2260][-0.0472105, -0.0534918, -0.0138920] 0.000033 <br/>[  2261][-0.0475353, -0.0520762,  0.0045084] 0.000030 <br/>[  2264][-0.0584940, -0.0210757, -0.0095524] 0.000020 <br/>[  2265][-0.0522149, -0.0348835, -0.0014153] 0.000020 <br/>[  2266][-0.0545768, -0.0289415, -0.0076105] 0.000019 <br/>[  2267][-0.0530454, -0.0312717, -0.0069618] 0.000019 <br/>[  2272][-0.0544350, -0.0204528, -0.0108193] 0.000016 <br/>[  2274][-0.0540233, -0.0224795, -0.0074452] 0.000016 <br/>[  2275][-0.0556239, -0.0015653, -0.0130406] 0.000014 <br/>[  2276][-0.0540236, -0.0089816, -0.0094224] 0.000013 <br/>[  2279][-0.0496435, -0.0064682,  0.0103644] 0.000009 <br/>[  2281][-0.0438495, -0.0080483,  0.0096293] 0.000006 <br/>[  2286][-0.0439784, -0.0053113,  0.0070923] 0.000006 <br/>[  2291][-0.0441419, -0.0056262, -0.0010308] 0.000006 <br/>[  2292][-0.0426733, -0.0040443,  0.0074087] 0.000005 <br/>[  2293][ 0.0224938, -0.0044892,  0.0049766] 0.000001 <br/>Ended with 2293 iterations, error 0.000001 -&gt; [ 0.0224938, -0.0044892,  0.0049766]<br/></span>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="level suite open">
+<span><em class="time">
+<div class="time">4.86 s</div>
+</em>[f6, dim = 6]</span>
+<ul>
+<li class="level test">
+<span><em class="time">
+<div class="time">4.86 s</div>
+</em><em class="status">passed</em>test[f6, dim = 6]</span>
+<ul>
+<li class="text">
+<span class="stdout">[  2047][ 5.1630188,  2.6247759,  5.2083956,  0.2954920,  12.2644185, -3.4452981] 0.165766 <br/>[  2053][ 5.1202141,  3.2932612,  5.7102112,  0.5059807,  10.7515944, -4.3082852] 0.165133 <br/>[  2060][ 5.7813056,  2.6531996,  5.0459265,  0.6095143,  11.3598071, -3.4777572] 0.162674 <br/>[  2061][ 4.8696838,  2.7573662,  5.1835356,  0.6249313,  11.2910533, -3.4300456] 0.157245 <br/>[  2062][ 5.7814885,  2.9534137,  5.0733009,  0.6248560,  10.6179784, -3.6955688] 0.157077 <br/>[  2065][ 5.3062174,  3.0643308,  5.1836771,  0.6351561,  9.9054846, -3.6168192] 0.144420 <br/>[  2074][ 3.6647542,  2.9492835,  5.2100632,  0.7610883,  10.9430390, -3.5499965] 0.142282 <br/>[  2083][ 3.0156686,  1.2309816,  4.8697577,  0.7788295,  10.6186638, -3.5532514] 0.134763 <br/>[  2084][ 3.5750590,  1.9050639,  5.0562885,  0.7741927,  10.6990925, -3.0793418] 0.132998 <br/>[  2088][ 4.7953493,  2.6793110,  5.0488986,  0.5864632,  8.9884506, -3.3091200] 0.127575 <br/>[  2099][ 3.9025560,  2.5675388,  5.1017126,  0.4345984,  9.1790965, -3.5007648] 0.119333 <br/>[  2127][ 3.5999952,  0.7005271,  4.9982599,  1.0311891,  8.7353120, -3.1413569] 0.105445 <br/>[  2137][ 2.9222723,  1.4364948,  4.9992010,  0.9903703,  8.3541550, -3.1455531] 0.099173 <br/>[  2139][ 3.9691129,  0.8115820,  5.0324293,  0.9618882,  7.0892932, -2.7802848] 0.099133 <br/>[  2144][ 4.0913486,  0.8520591,  5.0365721,  0.9455694,  7.8567782, -2.7640057] 0.096447 <br/>[  2173][ 3.8473657,  0.8830082,  5.1370648,  1.0147140,  7.5254146, -2.6907018] 0.094692 <br/>[  2174][ 3.9184233,  0.8861839,  5.1617857,  0.7002739,  6.6167046, -2.6646516] 0.089531 <br/>[  2189][ 3.9184233,  0.8861839,  5.1617857,  0.7793024,  6.6167046, -2.6646516] 0.082923 <br/>[  2192][ 4.1110140,  0.5743207,  5.2564836,  0.7509558,  5.9790971, -2.6102750] 0.078064 <br/>[  2205][ 4.2284830,  0.5494542,  5.2498817,  0.8349488,  5.9177674, -2.5508323] 0.077591 <br/>[  2206][ 3.3781776,  0.8164399,  5.1236324,  1.2399461,  5.9362829, -2.5564262] 0.073925 <br/>[  2210][ 3.6874797,  1.2174283,  4.7207389,  0.9578070,  6.1142500, -2.4469735] 0.073276 <br/>[  2227][ 3.8022311,  1.1642467,  4.1333381,  0.9358930,  6.1023072, -2.7387112] 0.070835 <br/>[  2239][ 3.4224599,  1.1718619,  4.2406096,  0.7078272,  6.3196350, -2.6523950] 0.070182 <br/>[  2251][ 2.9629681,  1.5543590,  4.5935767,  0.8122499,  6.2956109, -2.4392743] 0.070170 <br/>[  2257][ 3.9355227,  1.5388146,  3.4451893,  1.1702512,  6.2729592, -2.2250802] 0.067656 <br/>[  2258][ 3.4739458,  1.5189388,  3.4844288,  0.8854261,  6.2340029, -2.4685321] 0.065118 <br/>[  2263][ 1.6178135,  1.3718315,  2.9624590,  0.8677259,  6.5548644, -2.4200369] 0.057717 <br/>[  2269][ 2.0228513,  1.4139437,  3.1045707, -0.5253836,  6.3641800, -2.5167739] 0.057479 <br/>[  2270][ 1.7353856,  1.3739181,  2.8680937,  0.8678384,  6.4600173, -0.9369433] 0.055331 <br/>[  2279][ 1.7539142,  1.3740536,  2.9277364,  0.8678329,  6.4581864, -0.7816274] 0.055303 <br/>[  2282][ 1.7441699,  0.9298356,  2.9103131,  0.8766968,  6.5245173, -0.9205673] 0.052261 <br/>[  2286][ 1.5244783,  0.7269102,  1.4221407,  0.8736223,  5.7312722, -1.5630329] 0.045672 <br/>[  2288][ 1.4814755,  0.7153265,  2.2045016,  0.8427597,  5.4928922, -1.5624236] 0.040713 <br/>[  2289][ 1.5244783,  0.7269102,  1.4221407,  0.8736223,  5.7312722, -1.5308567] 0.038582 <br/>[  2297][ 1.3149757,  0.7898677,  1.9582881,  0.7855481,  5.5315291,  0.5763208] 0.036897 <br/>[  2298][ 1.5252892,  0.6175389,  2.1770890, -0.5571257,  4.7296103, -1.1205514] 0.030995 <br/>[  2306][ 1.4750437,  0.3916811,  2.1943341, -0.6296409,  2.6546752, -1.0974014] 0.022304 <br/>[  2307][ 2.2496496,  0.3304445,  2.1932000, -0.5738350,  3.3600055, -0.6239032] 0.021291 <br/>[  2319][ 1.0595132,  0.3638095,  2.2291626, -0.8500950,  3.4225412, -0.4443399] 0.018406 <br/>[  2323][ 1.3044414,  0.6359217,  1.2582371, -0.8458278,  3.3385583, -0.3363376] 0.017206 <br/>[  2333][ 1.3222586, -0.8465068,  1.0288368, -0.5250572,  2.9334962, -0.4009953] 0.012333 <br/>[  2365][ 1.2122574, -0.2866968,  1.4120680, -0.3338120,  2.3758005, -0.3917120] 0.010218 <br/>[  2371][ 1.1446529, -0.5834852,  1.3889888, -0.2574607,  2.3774382, -0.3915723] 0.010036 <br/>[  2373][ 1.0666931, -0.5563271,  1.3939002, -0.2632440,  2.4340025,  0.2208145] 0.009363 <br/>[  2408][ 0.9683183, -0.4193534,  1.5352988, -0.1072233,  2.4366818,  0.0763391] 0.009294 <br/>[  2463][ 0.9414773, -0.6898578,  1.5635746, -0.1207507,  1.5596126,  0.0292154] 0.006988 <br/>[  2464][ 0.7483593, -0.4214350,  1.5690474, -0.1180377,  1.7393795,  0.1624264] 0.006522 <br/>[  2475][ 0.7700727, -0.3773077,  0.9428456, -0.0528485,  2.1537196,  0.1250580] 0.006226 <br/>[  2492][ 0.7700727, -0.3773077,  0.6776244, -0.8342788,  1.1275339,  0.1250580] 0.004446 <br/>[  2502][ 0.1127722, -0.2922113, -0.0794114, -0.6936095,  0.8801545,  1.3233622] 0.003999 <br/>[  2510][ 0.6453125,  0.1238122,  0.9961010, -0.6402848,  0.0517897,  1.1536306] 0.003819 <br/>[  2518][ 0.6085849, -0.1046884,  0.7081105, -0.5542930,  0.6952387,  1.2062791] 0.003285 <br/>[  2519][ 0.1967009, -0.4783757,  0.6335687, -0.6276714,  0.8272137,  1.1821920] 0.003140 <br/>[  2532][ 0.1967009, -0.4783757,  0.6312139, -0.6276714,  0.8272137,  1.1821920] 0.003127 <br/>[  2703][-0.3995394, -0.4784213,  0.4003559, -0.6401918,  0.8786042,  1.1875277] 0.003127 <br/>[  3349][-0.4105212, -0.4738232,  0.3799804, -0.6279976,  0.8921535,  1.1888892] 0.003127 <br/>[  4028][-0.4108123, -0.4438077,  0.5547035, -0.3916411,  0.8964286,  1.2291027] 0.003127 <br/>[ 47400][-0.2997379,  0.4338935,  0.4864992, -0.4267424,  1.0119751,  1.1916826] 0.003127 <br/>[ 62666][ 0.0868512, -0.1385284,  0.4257707, -0.2508151,  1.0497557,  1.3297321] 0.003127 <br/>[ 64563][ 0.0357534, -0.1956602,  0.4207561, -0.2526778,  1.0511255,  1.3250602] 0.003127 <br/>[ 72407][ 0.0357534, -0.1956602,  0.4207561, -0.2526778,  1.0511258,  1.3250602] 0.003127 <br/>[ 94573][-0.1094166, -0.1416698, -0.0219938, -0.0455900,  0.0121486,  0.0648530] 0.001556 <br/>[ 94601][-0.0617342, -0.1411080, -0.0647721, -0.0475530,  0.0251572,  0.0737321] 0.001350 <br/>[ 94608][-0.0718823,  0.0171949,  0.0759338, -0.0857571,  0.0526517, -0.0136385] 0.000485 <br/>[ 94614][-0.0245760,  0.0182210,  0.0894354, -0.0060700,  0.0324982, -0.1071553] 0.000484 <br/>[ 94620][-0.0257635,  0.0183637, -0.0344558,  0.0048569,  0.0463231, -0.1102687] 0.000289 <br/>[ 94624][-0.0233400,  0.0051452,  0.0327612, -0.0098827,  0.0536668,  0.0138222] 0.000028 <br/>[ 94647][-0.0184622, -0.0099175,  0.0137573, -0.0160270,  0.0590777,  0.0131334] 0.000025 <br/>[ 94671][ 0.0040499, -0.0564595,  0.0187466,  0.0075668,  0.0094399, -0.0160300] 0.000020 <br/>[ 94745][ 0.0144360, -0.0287504,  0.0228629,  0.0150545,  0.0084213, -0.0273128] 0.000009 <br/>[ 94764][ 0.0032570, -0.0084338,  0.0136537,  0.0245010,  0.0311417, -0.0134254] 0.000006 <br/>[ 94814][ 0.0032570, -0.0084338,  0.0136537,  0.0245010, -0.0106355, -0.0134254] 0.000003 <br/>[ 94937][ 0.0026914, -0.0109817, -0.0153387,  0.0239929, -0.0105198, -0.0042728] 0.000002 <br/>[ 94943][ 0.0042344, -0.0110742, -0.0177033,  0.0155916, -0.0079679,  0.0094254] 0.000002 <br/>[ 94944][ 0.0029134, -0.0110666, -0.0157321,  0.0187779, -0.0103671, -0.0030075] 0.000002 <br/>[ 94949][ 0.0030211, -0.0126209,  0.0153609,  0.0174059, -0.0095415, -0.0000286] 0.000001 <br/>[ 95028][ 0.0049556, -0.0127859,  0.0165037,  0.0073852, -0.0098859,  0.0098256] 0.000001 <br/>[ 95083][-0.0089869, -0.0124217,  0.0163854,  0.0074195, -0.0014015,  0.0026372] 0.000001 <br/>Ended with 95083 iterations, error 0.000001 -&gt; [-0.0089869, -0.0124217,  0.0163854,  0.0074195, -0.0014015,  0.0026372]<br/></span>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="level suite failed open">
+<span><em class="time">
+<div class="time">10.61 s</div>
+</em>[f6, dim = 10]</span>
+<ul>
+<li class="level test failed open">
+<span><em class="time">
+<div class="time">10.61 s</div>
+</em><em class="status">failed</em>test[f6, dim = 10]</span>
+<ul>
+<li class="text">
+<span class="stdout">[  3279][ 1.8784049,  7.5358041,  1.9710350,  17.6043100,  3.5905479,  3.6815527,  1.5978224,  7.2575221,  7.8427956,  10.5388394] 0.312098 <br/>[  3289][ 1.3837125,  6.8979793,  2.0109475,  17.6818414,  4.2841660,  3.4232229,  1.6807790,  7.6809508,  5.2946695,  10.0619697] 0.307094 <br/>[  3296][ 1.3191379,  6.2824192,  2.6612322,  17.1796558,  2.4662838,  4.7285632,  3.3095281,  7.0490704,  6.9199968,  10.9345072] 0.307082 <br/>[  3297][ 1.7855814,  6.9303831,  2.0413461,  17.7726750,  3.9658247,  3.5398044,  1.8952684,  7.1647348,  4.0877200,  10.1892088] 0.299648 <br/>[  3313][ 1.8026720,  6.9876149,  2.1060392,  17.7668809,  3.7339199,  3.4488106,  1.9042331,  7.2382980,  4.0610395,  9.7479287] 0.297312 <br/>[  3315][ 1.7961345,  6.9791708,  1.1874056,  17.7693473,  3.8196685,  3.4507194,  1.9038869,  5.9262710,  2.5090357,  9.9816638] 0.292478 <br/>[  3316][ 1.8052532,  6.6005388,  1.4883720,  17.5482209,  3.7722117,  3.3629417,  2.1525785,  7.3572598,  2.7071935,  9.2429812] 0.287818 <br/>[  3339][ 2.0875900,  6.5388827,  1.5014699,  17.5334516,  3.8213052,  3.4098944,  2.1600175,  6.9256612,  2.6948163,  9.2105735] 0.286438 <br/>[  3350][ 2.0723240,  6.0716861,  1.5174720,  16.9660782,  3.7457592,  3.4308111,  2.0915754,  7.0632009,  2.8204211,  9.2934059] 0.283778 <br/>[  3356][ 1.9054175,  6.4856994,  1.6727121,  17.2111120,  3.7344176,  3.3069711,  1.8428479,  7.3349319,  1.9779670,  9.3629341] 0.283155 <br/>[  3357][ 2.0364972,  6.1252414,  1.4166480,  17.3009139,  3.7470183,  3.4011113,  2.5548586,  6.1547528,  2.5206747,  9.2961626] 0.279563 <br/>[  3360][ 2.0420837,  5.5768665,  1.1355913,  17.2297076,  2.6674206,  3.6177961,  2.3961027,  6.4695927,  2.6311363,  9.2194387] 0.278940 <br/>[  3363][ 2.1872277,  4.3046937,  0.5512557,  17.1296365,  3.4649700,  3.1653233,  2.1553455,  5.8523142,  2.3015409,  9.3815224] 0.269556 <br/>[  3367][ 2.1485744,  5.7570978,  0.9416909,  15.5913560,  2.7129253,  3.6376465,  1.8402131,  6.3328303,  2.5069566,  9.5375488] 0.265312 <br/>[  3384][ 2.1848995,  5.5811164,  0.0660528,  16.0220732,  2.1703164,  3.6244107,  1.7397132,  6.3141270,  2.6015450,  9.6030691] 0.263309 <br/>[  3386][ 2.9964240,  5.6940470,  0.8845835,  13.6184796,  2.4752479,  3.6237278,  0.9083736,  6.3200685,  2.9921586,  9.4753801] 0.239899 <br/>[  3397][ 2.9964240,  5.6940470,  0.8574187,  13.6184796,  2.4752479,  2.6366212,  0.9083736,  6.3200685,  2.9921586,  9.4753801] 0.238781 <br/>[  3407][ 4.1893898,  5.6911771,  0.3025682,  13.8113252,  2.8200992,  1.1961558,  0.9321593,  6.2660136,  1.7843026,  9.4754064] 0.238714 <br/>[  3410][ 3.6606121,  5.6252634,  0.3326681,  13.7959205,  3.0073566,  1.3323167,  1.1914805,  6.1888422,  1.8536016,  9.0144312] 0.233939 <br/>[  3413][ 3.8748918,  5.7246936,  0.3970033,  13.7261963,  1.5826829,  1.7740358,  1.0707851,  5.4658442,  2.3623289,  9.0959739] 0.232229 <br/>[  3417][ 3.8391224,  5.7432900,  0.3955926,  12.9998444,  2.7895213,  1.8966429,  1.0671877,  5.3741754,  3.6380750,  9.3106602] 0.230804 <br/>[  3418][ 3.8652341,  5.5082322,  0.3202531,  13.4606840,  2.2106986,  1.9604562,  0.9786692,  5.3076581,  2.5431247,  9.1675891] 0.229294 <br/>[  3423][ 3.9007504,  4.8032451,  0.0401832,  11.2358217,  1.9200837,  1.8430025,  0.5958513,  5.3967587,  2.3714470,  9.2371478] 0.209609 <br/>[  3430][ 4.2398622,  4.8122345,  0.0325589,  11.2370080,  1.9457999,  1.7864586,  0.7689551,  5.7608676,  2.4427698,  8.6601289] 0.205167 <br/>[  3438][ 4.1072362,  4.6324212, -0.0509238,  11.2940948,  1.7117344,  1.7979946,  0.7718091,  5.0528685,  2.4699924,  8.6827174] 0.197368 <br/>[  3454][ 4.3733018,  4.7492630,  0.4736224,  10.8423638,  1.6089687,  2.3135209, -0.3739931,  3.9925376,  2.5651313,  8.5861581] 0.194211 <br/>[  3457][ 4.4725721,  5.4094826,  0.0071928,  10.5622599,  1.4015190,  1.8926722,  1.1074910,  5.2532636,  2.4995740,  8.1009506] 0.189347 <br/>[  3459][ 3.8594045,  4.9653017,  0.0349684,  9.3009307,  2.8598369,  1.8888173,  0.1323904,  4.3171075,  2.5119927,  7.7630636] 0.165970 <br/>[  3464][ 3.8987758,  5.0043804, -0.1292774,  9.8071307,  1.8441852,  1.9244892,  0.6777543,  4.3928823,  2.5057065,  7.3117160] 0.165820 <br/>[  3468][ 3.9326546,  5.0053988, -0.0048740,  9.8052348,  1.8435343,  1.8523403,  0.2773904,  4.4358403,  2.5885531,  6.8385696] 0.164474 <br/>[  3470][ 4.9601499,  5.0326352, -1.2065748,  6.9125199,  0.5782553,  1.7443477,  0.3072476,  4.4898582,  2.6159379,  7.6645244] 0.154168 <br/>[  3473][ 4.8739795,  5.0198374, -0.9699452,  7.1607087,  1.3440747,  1.7209584,  0.3059110,  4.0352157,  2.6182436,  7.2915467] 0.153489 <br/>[  3475][ 4.4273741,  3.5800161, -0.6681664,  8.0701300,  1.0448088,  1.5620426,  0.2874579,  4.4661475,  2.5780683,  7.1298140] 0.141345 <br/>[  3495][ 4.4311646,  2.7897172, -0.6770434,  8.0515963,  1.0669537,  1.6057383,  0.1100401,  4.4726606,  2.5536979,  7.2741931] 0.140649 <br/>[  3497][ 4.3950890,  3.6160819, -0.3978019,  7.9889770,  1.0565417,  1.4691727,  0.8556417,  3.4861057,  1.6392879,  7.1586550] 0.133488 <br/>[  3510][ 2.7577612,  3.3793235, -0.2720616,  8.0911963,  0.9233935,  2.7846743,  0.6196197,  3.6103820,  1.6726781,  6.4264249] 0.131036 <br/>[  3515][ 3.5786024,  2.9480595,  0.6793529,  7.7749038,  1.1664874,  1.9696210,  0.4094051,  4.4205926,  0.9948660,  5.7495641] 0.117050 <br/>[  3519][ 3.3720614,  2.9509365,  0.1869972,  7.8380659,  0.4471928,  2.0045480,  0.3962171,  3.9835046,  1.1142350,  4.7621884] 0.107317 <br/>[  3522][ 3.3954788,  2.9525954,  0.2205989,  7.8379773,  0.4565227,  2.1145187,  0.2767778,  2.2796423,  0.0264716,  5.2615711] 0.101089 <br/>[  3538][ 1.3976758,  2.9525954,  0.2205989,  7.4780711,  0.4565227,  2.1145187,  0.2767778,  1.1659338,  0.0264716,  5.2615711] 0.093632 <br/>[  3540][ 1.6495984,  2.7961372,  0.3024431,  7.5949682,  0.4782108,  2.0808434,  0.4194143,  1.5438284,  0.4985072,  5.2853476] 0.092114 <br/>[  3547][ 1.9158872,  3.4862099, -1.0522084,  7.6808673,  1.3302594,  2.0837739,  0.3778742,  1.7210434,  0.6297377,  4.2534874] 0.090819 <br/>[  3551][ 1.9147261,  3.3658795, -0.8796158,  7.6775881,  1.3069215,  0.3005326,  0.4075963,  1.6708908,  0.5803449,  4.5479715] 0.088423 <br/>[  3554][ 1.9665699,  3.4813003,  0.0745394,  6.8537219,  1.5629301,  2.2081286,  0.3250138,  2.4447212,  0.4292610,  4.2102521] 0.083170 <br/>[  3568][ 2.3880512,  3.5982730, -0.0719902,  5.8846097,  1.5745597,  2.1620982,  0.3524091,  2.4113230,  0.5317064,  4.2598607] 0.075370 <br/>[  3578][ 2.3880512,  3.5982730,  0.1590558,  5.8846097,  1.5745597,  2.1620982,  0.3524091,  2.4113230,  0.5317064,  4.2598607] 0.075144 <br/>[  3584][ 2.3249675,  2.5982804, -0.1444316,  5.9292267,  0.9492080,  2.0991529,  0.3530369,  2.4031635,  0.5317109,  4.0753005] 0.068620 <br/>[  3595][ 1.3605161,  2.6078211,  0.0516588,  6.0012983,  1.4830754,  2.0771070,  0.3507103,  2.6043735, -0.2793514,  3.7548108] 0.065206 <br/>[  3598][ 2.2552009,  1.9349323, -0.7916090,  6.0692045,  1.2798689,  2.0469006,  0.6037557, -0.0993543,  0.0982436,  4.0794116] 0.063383 <br/>[  3602][ 2.0864931,  2.0021468, -0.2138069,  6.0556771,  1.6471956,  1.7120234,  0.4778411,  1.2683197, -0.1580940,  4.0641194] 0.062689 <br/>[  3603][ 2.1707352,  2.9028356, -0.6500662,  5.6835795,  1.2840323,  0.7397498,  0.2976993,  0.9573639, -0.1269577,  4.1151151] 0.061576 <br/>[  3609][ 2.2553161,  2.6896448, -0.5481742,  5.4550555,  0.9833472,  1.5145883,  0.6646923,  0.2424841,  0.1338451,  4.0874889] 0.058418 <br/>[  3617][ 2.1366240,  2.8012665, -0.4776289,  5.5932442,  0.3263829,  1.6378918,  0.4877501,  0.4647068,  0.1307707,  2.4895739] 0.049920 <br/>[  3634][ 2.2874725,  2.4553665,  2.0168606,  4.7311021, -0.6262086,  1.1028559, -0.6012906,  0.3500731,  0.4325598,  3.6621292] 0.049424 <br/>[  3637][ 0.6075587,  2.7894015,  0.7265937,  5.4515978,  0.0845260,  1.2727059, -0.1170859,  0.2350232,  0.7322099,  1.8098089] 0.046624 <br/>[  3639][ 0.9612311,  2.5408804,  1.0263561,  4.8253835, -0.2666495,  1.0709169, -0.2005869, -0.1354437,  0.5727498,  2.0800154] 0.037971 <br/>[  3647][ 0.9612311,  2.5408804,  1.0263561,  4.8253835, -0.3614161,  1.0709169, -0.2005869, -0.1354437,  0.5727498,  2.0800154] 0.035757 <br/>[  3673][ 0.9613730,  2.4747653,  0.8644057,  4.8277768, -0.6090411,  1.2239933, -0.2927582,  0.0360190,  0.8040822,  0.9484115] 0.035034 <br/>[  3677][ 2.1727472,  2.5091382,  0.6942975,  4.0694367, -0.4678396,  1.1653712, -0.2986773, -0.6964155, -0.2069864,  1.0504389] 0.033268 <br/>[  3685][ 2.1741935,  0.8127620,  0.5249774,  4.1298385, -0.2461401,  1.1678035,  0.3569868, -0.2270067, -0.1863456,  0.8355351] 0.029879 <br/>[  3687][ 2.1729316,  1.2051261,  1.1608276,  4.1240658, -0.4553200,  1.2043406,  0.6597480,  0.7877266, -0.0851589,  1.0361257] 0.029471 <br/>[  3693][ 1.9977019,  1.7244103,  1.6835723,  3.3885142,  0.8167575,  1.3003610,  1.4365671, -0.3395497, -0.0790449,  1.5599000] 0.027373 <br/>[  3696][ 2.0930959,  1.0598089,  1.6789923,  2.8660746, -0.9314725,  1.2905669,  1.0604769,  0.0837327, -0.0797844,  1.3306066] 0.021409 <br/>[  3704][ 1.2306879,  1.1342979,  0.1112565,  3.4604145, -0.1090467,  0.5136033,  0.7885875, -0.0541594, -1.5995196,  0.7453734] 0.020408 <br/>[  3710][ 1.2558405,  1.1410841,  0.1401784,  3.4590654, -0.3209671,  0.5147295,  0.8649145, -0.0541295, -1.4570929,  0.8500525] 0.018730 <br/>[  3713][ 1.3817497,  1.1178134,  0.1639365,  3.3688278, -0.4658565,  0.5754518,  1.0494101, -0.3356312, -1.4032229,  0.7668608] 0.018351 <br/>[  3714][ 0.8667427,  0.9203914,  0.0709064,  3.3695133, -0.2339758,  0.5006352,  1.0533997, -0.4161902, -0.9216394,  0.5411795] 0.015730 <br/>[  3743][ 0.4435712,  1.4433070, -0.2356351,  2.5147928, -0.3309331,  0.6205390,  1.2418892, -0.7757786, -0.6660193,  0.9220134] 0.012998 <br/>[  3758][-0.2272432,  0.8319638,  0.6705140,  2.3994571, -0.6788472,  0.6371678,  1.8442415,  0.8816391,  0.0351002,  0.7622154] 0.012484 <br/>[  3764][ 0.1668243,  1.4427440,  0.3127731,  2.3923602, -0.6630507,  0.6571686,  1.6684478,  0.4192494, -0.2425863,  0.8665152] 0.012361 <br/>[  3766][-0.1879051,  1.1178578,  0.6743496,  2.2319471, -0.6178225,  0.7723164,  1.8214709,  0.9000193, -0.0530150,  0.8556062] 0.012347 <br/>[  3775][-1.2110697, -0.0223294,  0.0950362,  2.0364672, -1.0652874, -0.3730981,  1.1870183,  0.8097565, -0.2495176,  0.6613104] 0.010671 <br/>[  3781][-0.9746637,  0.5035677,  1.1914277,  2.1356487, -0.7532688, -0.1548057, -0.4728936,  0.8677818, -0.4734320,  0.6966424] 0.010655 <br/>[  3812][-0.4238048,  0.8111786,  1.2433677,  2.1786830, -0.9087973, -0.3181173, -0.0169763,  0.6424987, -0.6277311,  0.7448421] 0.009317 <br/>[  3842][ 0.2752723,  0.7187005,  1.2346714,  1.5116262, -0.7679093, -0.7164436, -0.0075115,  0.6351484, -0.5818891, -0.2244536] 0.006431 <br/>[  3858][ 0.2207685,  0.7186836,  1.2324829,  1.5296051, -0.7646819, -0.7053303, -0.0068850,  0.6303624, -0.5826683, -0.1982963] 0.006224 <br/>[  3894][ 0.3173471,  0.4343695,  0.6088142,  0.5736736, -0.3319888, -0.3880833, -0.1727469,  0.6389879, -0.7062456,  0.9876673] 0.003577 <br/>[  3929][ 0.3936603,  0.8389695,  0.5171216,  0.6789254,  0.4900668, -0.3784903, -0.0987155,  0.7097263, -0.0996760,  0.8027596] 0.003134 <br/>[  3976][ 0.3932624,  0.8481073,  0.5340157,  0.6727629,  0.5654069, -0.0682802, -0.2955311,  0.7094864, -0.0996921,  0.7782456] 0.003128 <br/>[  4011][-0.1367389,  0.8086657,  0.4435540,  0.5091941,  0.5487184, -0.2000563,  0.0053325,  0.2847974,  0.4877397,  1.1626203] 0.003127 <br/>[  4094][ 0.2624892,  0.2794724,  0.5613948,  0.8083054,  0.1346993, -0.5060537, -0.3205316,  0.1126207,  0.5472764,  1.1559428] 0.003127 <br/>[  4472][ 0.2005152,  0.3857950,  0.6333380, -0.6209724,  0.0508502, -0.4942469, -0.3417304,  0.1110404,  0.5550353,  1.2171512] 0.003127 <br/>[  5577][ 0.1949119,  0.0407731,  0.5644973, -0.5246797,  0.0935058, -0.5300298, -0.2811306,  0.2283845,  0.6076823,  1.3104484] 0.003127 <br/>[  5987][-0.1875669,  0.0710521, -0.4313638, -0.4641481,  0.3621189, -0.1867344, -0.4319614,  0.6591794,  0.6640222,  1.2130066] 0.003127 <br/>[  7758][-0.1750421,  0.1713697, -0.4521364,  0.1182623,  0.5818472, -0.1896329, -0.4078224,  0.6439348,  0.6638020,  1.2110334] 0.003127 <br/>[  8365][-0.6479453,  1.1520642, -0.3761075, -0.1755253,  0.1831187, -0.1162465, -0.3490560, -0.1136422,  0.7592452,  0.6808172] 0.003127 <br/>[ 15227][-0.6479453,  1.1520642, -0.3760965, -0.1755253,  0.1831187, -0.1162465, -0.3490560, -0.1136422,  0.7592452,  0.6808172] 0.003127 <br/>[ 23667][-0.6479453,  1.1520642, -0.3760965, -0.1755253,  0.1831187, -0.1162465, -0.3490560, -0.1135225,  0.7592452,  0.6808172] 0.003127 <br/>[ 26856][-0.7139761,  1.0267614, -0.2215541,  0.0328625,  0.2533831, -0.2104603,  1.0227190,  0.2116656,  0.4154646,  0.3937721] 0.003127 <br/>[ 41591][-0.6125861,  1.0997062, -0.2132289, -0.0116085,  0.3337299, -0.1592582,  0.9765126,  0.0937071,  0.4079455,  0.4953341] 0.003127 <br/>[ 41991][-0.6125861,  1.0997062, -0.2132289, -0.0116085,  0.3337299, -0.1592727,  0.9765126,  0.0937071,  0.4079455,  0.4953341] 0.003127 <br/>Ended with 100000 iterations, error 0.003127 -&gt; [-0.6125861,  1.0997062, -0.2132289, -0.0116085,  0.3337299, -0.1592727,  0.9765126,  0.0937071,  0.4079455,  0.4953341]<br/></span>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="level suite open">
+<span><em class="time">
+<div class="time">24 ms</div>
+</em>[f7, dim = 1]</span>
+<ul>
+<li class="level test">
+<span><em class="time">
+<div class="time">24 ms</div>
+</em><em class="status">passed</em>test[f7, dim = 1]</span>
+<ul>
+<li class="text">
+<span class="stdout">[   472][ 0.3660147] 0.606770 <br/>[   480][-0.0401080] 0.366630 <br/>[   481][-0.0228433] 0.301299 <br/>[   482][-0.0213304] 0.269921 <br/>[   483][ 0.0004571] 0.041390 <br/>[   484][-0.0004187] 0.037160 <br/>[   487][ 0.0003141] 0.022384 <br/>[   488][ 0.0002434] 0.015628 <br/>[   489][ 0.0002017] 0.015496 <br/>[   491][ 0.0002218] 0.015150 <br/>[   496][ 0.0002204] 0.015149 <br/>[   498][ 0.0002211] 0.015149 <br/>[   508][-0.0000212] 0.005558 <br/>[   512][-0.0000067] 0.005138 <br/>[   513][ 0.0000062] 0.004916 <br/>[   516][ 0.0000050] 0.004174 <br/>[   518][ 0.0000036] 0.003132 <br/>[   519][-0.0000012] 0.001100 <br/>[   593][-0.0000000] 0.000266 <br/>[   679][ 0.0000000] 0.000099 <br/>[   799][-0.0000000] 0.000071 <br/>[   800][ 0.0000000] 0.000035 <br/>[   802][ 0.0000000] 0.000016 <br/>[   806][-0.0000000] 0.000010 <br/>[  1199][ 0.0000000] 0.000001 <br/>Ended with 1199 iterations, error 0.000001 -&gt; [ 0.0000000]<br/></span>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="level suite failed open">
+<span><em class="time">
+<div class="time">6.49 s</div>
+</em>[f7, dim = 3]</span>
+<ul>
+<li class="level test failed open">
+<span><em class="time">
+<div class="time">6.49 s</div>
+</em><em class="status">failed</em>test[f7, dim = 3]</span>
+<ul>
+<li class="text">
+<span class="stdout">[  6819][ 0.0000004,  0.0000012, -0.0000020] 0.002070 <br/>[  6821][ 0.0000002,  0.0000014, -0.0000018] 0.001979 <br/>[  7158][-0.0000005,  0.0000018,  0.0000010] 0.001808 <br/>[ 14695][-0.0000005,  0.0000015,  0.0000011] 0.001675 <br/>[ 14696][-0.0000007,  0.0000002,  0.0000012] 0.001269 <br/>[ 20454][-0.0000007, -0.0000002,  0.0000012] 0.001256 <br/>[ 20455][-0.0000007,  0.0000002,  0.0000012] 0.001254 <br/>[ 20628][ 0.0000002, -0.0000000,  0.0000012] 0.001123 <br/>[ 21653][ 0.0000000, -0.0000001,  0.0000012] 0.001120 <br/>[ 28128][-0.0000001, -0.0000001,  0.0000012] 0.001102 <br/>[ 28129][-0.0000001, -0.0000001,  0.0000012] 0.001098 <br/>[ 42668][-0.0000009, -0.0000002,  0.0000006] 0.001060 <br/>[ 45368][-0.0000006, -0.0000001,  0.0000001] 0.000839 <br/>[ 45369][-0.0000006, -0.0000001,  0.0000000] 0.000831 <br/>[ 55287][ 0.0000001, -0.0000001,  0.0000000] 0.000580 <br/>Ended with 100000 iterations, error 0.000580 -&gt; [ 0.0000001, -0.0000001,  0.0000000]<br/></span>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="level suite failed open">
+<span><em class="time">
+<div class="time">7.97 s</div>
+</em>[f7, dim = 6]</span>
+<ul>
+<li class="level test failed open">
+<span><em class="time">
+<div class="time">7.97 s</div>
+</em><em class="status">failed</em>test[f7, dim = 6]</span>
+<ul>
+<li class="text">
+<span class="stdout">Ended with 100000 iterations, error 6.669411 -&gt; [ 22.2960621, -7.1222348,  17.0327154,  8.7032829,  21.4369898,  24.5811554]<br/>Ended with 100000 iterations, error 8.807670 -&gt; [ 15.8209806,  14.3420360,  21.1793841,  50.5118324,  28.7620934,  41.6170892]<br/>Ended with 100000 iterations, error 8.239555 -&gt; [ 30.1911442,  43.1848345,  29.9696879, -1.4792227,  2.3055690,  30.4110905]<br/>Ended with 100000 iterations, error 11.311857 -&gt; [ 71.7447837,  5.4817297,  61.8578011,  65.9383814,  0.7909280,  54.9104107]<br/>Ended with 100000 iterations, error 9.398661 -&gt; [ 6.0593492,  20.3000637,  1.3623509,  78.5879356,  31.2515556,  14.0144298]<br/></span>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="level suite failed open">
+<span><em class="time">
+<div class="time">10.32 s</div>
+</em>[f7, dim = 10]</span>
+<ul>
+<li class="level test failed open">
+<span><em class="time">
+<div class="time">10.32 s</div>
+</em><em class="status">failed</em>test[f7, dim = 10]</span>
+<ul>
+<li class="text">
+<span class="stdout">Ended with 100000 iterations, error 11.311857 -&gt; [ 4.0001662,  33.1378873,  45.9759091,  11.1963165,  47.2612748,  35.0145361,  64.8126200,  45.8079986,  29.0050500,  49.1340007]<br/>Ended with 100000 iterations, error 10.650461 -&gt; [ 51.7956096,  27.2330135, -6.6680306,  60.9219427, -3.8591962,  40.5680672,  37.1978619,  41.6020580,  29.9978800, -2.5939419]<br/>Ended with 100000 iterations, error 11.311857 -&gt; [ 13.8244563,  30.7644250,  70.2508964,  34.0635821,  15.5568852,  22.5346873,  37.9199570,  29.6247830,  76.1255579, -16.5480538]<br/>Ended with 100000 iterations, error 10.650461 -&gt; [ 43.1491141,  16.2511847,  13.0927802,  31.5676163,  27.1414018,  57.8590347,  37.1204722,  3.0516002,  40.2432873,  49.7702010]<br/>Ended with 100000 iterations, error 12.707082 -&gt; [ 69.6190877,  27.4729951,  39.1100667,  29.1370424,  82.0571569,  72.5142710,  54.3212315,  10.3257040,  50.7412127,  21.4495029]<br/></span>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="level top open">
+<span><em class="time">
+<div class="time">3.85 s</div>
+</em>Exercise3</span>
+<ul>
+<li class="level test">
+<span><em class="time">
+<div class="time">1.96 s</div>
+</em><em class="status">passed</em>Exercise3.test6</span>
+<ul>
+<li class="text">
+<span class="stdout">PARAM VAL: false<br/>MEDIAN: 0.0<br/>HIT RATE: 1.0<br/>PARAM VAL: true<br/>MEDIAN: 0.0<br/>HIT RATE: 1.0<br/>false, true<br/>0.000000000000000000, 0.000000000000000000<br/>0.000000000000000000, 0.000000000000000000<br/>0.000000000000000000, 0.000000000000000000<br/>0.000000000000000000, 0.000000000000000000<br/>0.000000000000000000, 0.000000000000000000<br/></span>
+</li>
+</ul>
+</li>
+<li class="level test">
+<span><em class="time">
+<div class="time">1.89 s</div>
+</em><em class="status">passed</em>Exercise3.test7</span>
+<ul>
+<li class="text">
+<span class="stdout">PARAM VAL: false<br/>MEDIAN: 1.113764259047679E-5<br/>HIT RATE: 0.2<br/>PARAM VAL: true<br/>MEDIAN: 0.0<br/>HIT RATE: 0.6<br/>false, true<br/>0.000004979120467503, 0.015204880432005320<br/>0.000030154535288821, 0.015204880432005320<br/>0.000011137642590477, 0.000000000000000000<br/>0.000000681543485982, 0.000000000000000000<br/>4.877265428568527000, 0.000000000000000000<br/></span>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="level top open">
+<span><em class="time">
+<div class="time">5.98 s</div>
+</em>Exercise4</span>
+<ul>
+<li class="level test">
+<span><em class="time">
+<div class="time">1.29 s</div>
+</em><em class="status">passed</em>Exercise4.testMutation</span>
+<ul>
+<li class="text">
+<span class="stdout">PARAM VAL: 0.05<br/>MEDIAN: 0.49129933780440943<br/>HIT RATE: 0.0<br/>PARAM VAL: 0.1<br/>MEDIAN: 0.48174034491091106<br/>HIT RATE: 0.03<br/>PARAM VAL: 0.2<br/>MEDIAN: 1.4767071510046748E-8<br/>HIT RATE: 0.16<br/>PARAM VAL: 0.3<br/>MEDIAN: 5.694484828122626E-9<br/>HIT RATE: 0.39<br/>PARAM VAL: 0.6<br/>MEDIAN: 3.769515621865338E-8<br/>HIT RATE: 0.21<br/>PARAM VAL: 0.9<br/>MEDIAN: 0.0073293053161362365<br/>HIT RATE: 0.16<br/>0.05, 0.1, 0.2, 0.3, 0.6, 0.9<br/>0.377225789800700300, 0.006224216099575797, 0.003126604048687809, 0.003126608437910294, 0.000000564919252100, 0.000050690900031958<br/>0.350113481924384960, 0.326491765761086300, 0.000000000103200781, 0.031921681939529930, 0.427846733782055570, 0.000141994464448347<br/>0.067653883299191480, 0.211597027208596970, 0.000638184107801310, 0.492750652680299900, 0.000000104206808960, 0.000000486752416540<br/>0.235548860037815600, 0.463972598490501650, 0.018360568382358167, 0.489752373951661550, 0.000059001385349200, 0.015405399985875146<br/>0.021286204467790170, 0.474092111095770650, 0.314710125044096400, 0.006908516495051642, 0.000005165374373561, 0.000005286314973596<br/>0.399111869406151700, 0.419313619299849560, 0.429669080971348260, 0.024536620964817735, 0.000018028582084328, 0.003153502904526262<br/>0.041241699906342020, 0.003127348019676068, 0.000000008946035523, 0.036078184984687900, 0.093746841072558540, 0.006358731258819750<br/>0.471263172907521500, 0.196585576804885980, 0.469672345916277160, 0.000000001780365744, 0.000000388650255201, 0.000000718384172538<br/>0.487630026250777900, 0.015345360546551445, 0.308188695645834400, 0.000000005268024073, 0.048607111347942045, 0.000000202761597790<br/>0.282298812539436000, 0.445293536047099400, 0.101483703878050610, 0.000000003244283953, 0.000000227580122969, 0.000001852309267247<br/>0.324832687560932250, 0.054743702426691354, 0.362576526927546940, 0.003171054768630555, 0.000183026644491546, 0.038701396984099970<br/>0.016492152852040365, 0.032862663417415950, 0.030055214980656940, 0.007640553301168640, 0.000000072147283148, 0.000086094379056212<br/>0.449972730220133230, 0.446933027301925400, 0.017338975457866113, 0.427789550237863250, 0.000099143729773210, 0.000006474924347522<br/>0.098772920411263120, 0.166944358946129630, 0.486964954667449300, 0.089680169443909270, 0.097579590263180200, 0.000000817360147842<br/>0.365755945384476100, 0.489310646459784000, 0.000000005581436036, 0.385025722728611350, 0.010099379625753802, 0.003148257632146156<br/>0.348525028866024040, 0.122851123929056780, 0.003584087825921067, 0.000000000046998627, 0.352107490272367900, 0.000937154832765130<br/>0.006224216099575797, 0.271937570666620550, 0.289337630988366460, 0.486872239939904140, 0.000014157554484528, 0.000015075701893852<br/>0.430247124678632240, 0.035669393853127510, 0.000000000116574139, 0.455945318988393100, 0.480657299656125140, 0.000164226300782833<br/>0.006224216099575797, 0.185435223525079800, 0.457959293592865360, 0.438798799949476100, 0.030036250850463353, 0.000001698203982381<br/>0.006224216099575797, 0.015345220462702536, 0.241843078416300650, 0.000000163071655124, 0.003235402873999316, 0.000035131969600810<br/>0.018331457136667506, 0.421655917010890400, 0.247974070651509840, 0.000000006076674663, 0.000009519511317391, 0.000010385522659695<br/>0.009292952342307703, 0.000000000340486472, 0.041247066022524480, 0.323624586651450300, 0.005702364400700266, 0.000000439174981437<br/>0.466805237759908340, 0.489424692420639130, 0.021100716841405687, 0.212318012972242120, 0.187427525650688650, 0.491913988380362270<br/>0.006224216099633806, 0.030811013553949107, 0.052089565852482200, 0.000000005432504835, 0.008178593251854605, 0.000011814315221126<br/>0.282219983935692100, 0.298455006035206470, 0.003126603178085774, 0.484601865685565240, 0.309536355935277950, 0.000048760252223889<br/>0.136477385188618680, 0.015347154693863885, 0.286417191987454740, 0.476155983208677250, 0.000000341755602928, 0.000006564029911837<br/>0.490276383122955200, 0.094572183194648830, 0.023445013957384630, 0.000000009269106593, 0.244002079878018920, 0.000033702722560591<br/>0.226405268615005040, 0.330249807023377700, 0.000000000352350982, 0.000000003467546361, 0.003133900313643134, 0.000000885133269457<br/>0.489874918772919200, 0.000000000057348515, 0.481132462923603800, 0.000000024538053645, 0.000000556662970663, 0.485828498422059100<br/>0.368387024870460930, 0.451459193620303070, 0.399631674919452500, 0.000001350980263881, 0.000000133834466287, 0.000000024015976041<br/>0.133812669390288960, 0.433422545978076900, 0.210141500882769840, 0.000000096162589946, 0.000047043073585162, 0.000001610297165666<br/>0.305462934663299550, 0.003350333371190228, 0.177685990882229750, 0.000000027262838487, 0.341601242784584400, 0.000000680401963826<br/>0.482998394291207060, 0.489288923490887650, 0.239355120590729940, 0.301603396576210700, 0.024272151741835170, 0.000000760709423120<br/>0.222651072017290790, 0.238903485338253120, 0.444153246099077000, 0.000004214740293218, 0.052130521591188084, 0.211937039340070020<br/>0.003126603133863037, 0.024215821748026000, 0.493229377255472000, 0.000000377549173813, 0.460044347327145500, 0.000005276351253025<br/>0.230653872322278800, 0.003126603136228867, 0.091418722111223150, 0.084626558121872810, 0.000000775460508362, 0.000000084707614478<br/>0.032845083169215580, 0.365080503618776860, 0.438184965196841700, 0.000000006840265909, 0.000007306562231579, 0.032852130620010300<br/>0.486213071112619400, 0.000000000318290283, 0.015345256654424433, 0.003127848745399953, 0.000008959207897619, 0.000041467987755228<br/>0.233927906719644300, 0.007761192718499399, 0.223020419388067380, 0.138537578321571000, 0.000005047153297355, 0.000055753656982294<br/>0.170840439664193100, 0.395213476162583300, 0.000000000716548154, 0.075355741337420730, 0.003675657922064368, 0.133408056526988280<br/>0.024631988912279967, 0.003126603133863204, 0.421506592082025500, 0.000000039437642096, 0.024982577394670247, 0.000001753165233709<br/>0.149775204738652200, 0.252710176804292300, 0.003126620146674697, 0.078758074889363930, 0.099013858667134970, 0.000000312674487524<br/>0.105239218476545600, 0.239145491953547670, 0.098017273963336100, 0.006225289602163564, 0.431992113411944900, 0.000028597361043992<br/>0.413506780135680900, 0.488691341810126900, 0.003127939503942023, 0.106385420300999230, 0.000013172114308568, 0.000036850491260898<br/>0.256896994888250900, 0.003126623527917538, 0.297657896937525300, 0.000371811938369160, 0.003340208988175775, 0.079662189974141260<br/>0.472541769424180500, 0.003126603146529461, 0.473463117349448240, 0.003126982612487783, 0.272269559023315400, 0.000055333842388983<br/>0.237547057485610840, 0.050021758599964940, 0.290860956508432630, 0.000000015900770645, 0.000029627237971175, 0.083812284578163640<br/>0.003126603133863093, 0.127714293797588530, 0.003156416198058731, 0.000000065917830527, 0.000257307095458403, 0.000001416356167350<br/>0.485777433049433000, 0.042446456679009760, 0.000000000532887845, 0.000006242743237295, 0.003710210976731854, 0.000053304809547960<br/>0.006224216099575797, 0.257458241209709500, 0.006234841502857302, 0.000000113617357300, 0.000001058851439917, 0.338011981895805170<br/>0.491299337804409430, 0.481740344910911060, 0.000000014767071510, 0.000000005694484828, 0.000000037695156219, 0.007329305316136236<br/>0.105450360955749060, 0.003126608335022263, 0.009293625068527767, 0.006275081198699739, 0.222763643566233350, 0.000000525414148855<br/>0.080012943996310930, 0.488766950812401800, 0.000000002609784555, 0.044194193395769740, 0.000001448636764934, 0.000027458030973759<br/>0.223845851619603900, 0.225185180572168520, 0.003126603444355613, 0.459346287811990330, 0.000017696924281219, 0.000012099612624106<br/>0.062557155025367630, 0.313039606653846700, 0.389157899526408600, 0.455777528264398430, 0.000000300068919712, 0.053626557655955030<br/>0.327187271120903840, 0.006224495741458058, 0.152127620787994740, 0.009909446354240015, 0.000001978707647510, 0.000015879229724070<br/>0.461184738419031300, 0.381629683320062140, 0.015425436849538510, 0.144647295314403230, 0.081258307047587960, 0.187168587602353000<br/>0.072662054251622480, 0.003126603133875749, 0.000000001078453715, 0.000000000069717787, 0.000009113336030542, 0.352841321157583200<br/>0.335122162949905800, 0.006224216099584623, 0.221928409410568680, 0.000000003858184217, 0.118456501108317850, 0.000000164511642142<br/>0.459851334595420700, 0.468477070478095300, 0.072681531074111180, 0.138465589675831170, 0.000016930642515955, 0.000004405575619260<br/>0.003126603133863093, 0.233607264766483140, 0.006224416126751620, 0.009455721140217810, 0.085071904157664080, 0.246477046966074980<br/>0.308876365168862700, 0.003126603133863093, 0.000000012267860006, 0.041302401308055126, 0.001961981700765725, 0.006475762856590350<br/>0.009293561533775918, 0.471039067128102300, 0.311659507682398500, 0.054814471298852250, 0.072768847953067040, 0.049455512266715185<br/>0.231421684913003580, 0.047176205154617570, 0.024550455185011420, 0.000000779724559696, 0.029661857475735520, 0.000010455056125680<br/>0.465105260738020050, 0.021937243183948796, 0.486858413974432200, 0.000004429818605212, 0.196128236911228270, 0.000226292940642692<br/>0.003126603133863093, 0.196068102447948140, 0.003289415782581184, 0.000000004059204917, 0.131360223484799600, 0.000005115471621686<br/>0.293038930852749240, 0.367947897111630450, 0.334635312148687900, 0.187712491898742670, 0.046715600286913406, 0.000106072809139157<br/>0.257964293606756400, 0.167743607907083480, 0.000000001406011085, 0.108095096478658170, 0.000001604950910838, 0.003208605837007439<br/>0.258783729163180800, 0.488301057555109000, 0.049528276509975990, 0.000000051291245751, 0.003148010785688049, 0.000050200712204240<br/>0.465495553732490500, 0.436217057337870530, 0.466267696836477600, 0.000000014614907229, 0.245009475435238880, 0.140488239184109300<br/>0.361276218486503760, 0.431399124030226500, 0.000000021819265006, 0.004226671824515471, 0.003387052912566857, 0.185343110568913620<br/>0.327486605653101560, 0.134529805674922230, 0.000000001209472522, 0.000000123341722225, 0.000000693140237151, 0.000002283273046078<br/>0.015437214629223706, 0.012333169906816100, 0.009846484108277930, 0.000000000064656891, 0.004779873752918717, 0.458450584053710200<br/>0.003126603133863093, 0.112431658035880230, 0.003126718178141696, 0.023609862767626110, 0.000000085184316323, 0.009299995312999187<br/>0.012333169677994249, 0.445645497559991400, 0.418099501558493200, 0.264189838341178100, 0.003152433352053896, 0.038519253608471030<br/>0.488617474070923430, 0.224007762892334820, 0.003126770735622009, 0.449538402469192360, 0.330796469237049640, 0.000000082969841886<br/>0.003126603133863093, 0.136372044477791000, 0.250324088897818650, 0.147971963732214550, 0.000000331753098215, 0.000002953999379496<br/>0.032041598368318550, 0.319992772170462500, 0.072995019098152980, 0.000000005137754888, 0.003135553882909925, 0.000000154432060806<br/>0.217295986535628540, 0.495634434758494400, 0.407586717408717700, 0.057369831787990990, 0.041256247747749664, 0.146143827553183170<br/>0.075133568761353460, 0.009467284567257261, 0.251097762234248500, 0.000000666702431706, 0.000000290007118320, 0.062860963323261520<br/>0.412581556544513230, 0.418555543913847750, 0.333408077602745050, 0.000000003950069827, 0.193340557750000090, 0.003411663804623710<br/>0.130563495682045840, 0.082421023562035960, 0.006234000353874225, 0.000000046132873077, 0.032846048963587450, 0.000006086187262389<br/>0.488327589068851430, 0.089512411210507180, 0.399694990822010000, 0.000000001182098475, 0.256550711995700000, 0.000094053793249782<br/>0.462668743044884500, 0.419813626102734900, 0.000000000922633248, 0.296881748027471700, 0.283132236437620300, 0.000001807833745593<br/>0.366667207097876500, 0.042285547704362600, 0.003128515358443384, 0.000000049457496154, 0.001818720236283100, 0.000002185336803462<br/>0.185473469106454800, 0.054754143457765800, 0.012307464867521933, 0.105679743727535140, 0.000000138943539008, 0.003163131385586992<br/>0.054742440559982175, 0.067671936640764040, 0.094575519183083880, 0.226336452621764940, 0.000000608985769035, 0.000060445952278831<br/>0.472791401897402150, 0.006224216100136626, 0.006803433458727359, 0.472216264358746530, 0.000002873881943199, 0.000066489273840398<br/>0.091979857272306060, 0.133467450543280130, 0.024352390803413780, 0.000000087463445264, 0.000007911253509574, 0.000001476911591969<br/>0.486460015690490700, 0.305663637718110200, 0.485582034439030700, 0.000000025996083841, 0.000000326776284254, 0.286564833537783060<br/>0.054741404379171520, 0.071262299330680620, 0.417524476305495700, 0.000001546946498454, 0.000002915904496081, 0.000000877600197180<br/>0.076277122046953200, 0.105403845755892730, 0.000001414475131800, 0.394415025369904800, 0.331493217012077230, 0.000027567545066776<br/>0.479055266456099000, 0.006224216112796721, 0.003126607749155741, 0.203301017536589360, 0.479464287021214200, 0.000020331154914288<br/>0.096443921418885300, 0.227690473584540300, 0.003158319538787091, 0.000000000024538760, 0.024745924877097314, 0.003159848002081522<br/>0.340326967474614100, 0.003126603139598894, 0.000000172357171146, 0.054295307514797775, 0.000003510955962738, 0.019251998627936973<br/>0.442946461361674200, 0.046970645041597090, 0.292599635419763750, 0.259953561416861660, 0.222150379862821320, 0.000065559379729241<br/>0.351637365448585540, 0.355075103715151600, 0.471875612666177700, 0.097119924114281330, 0.000000398457982609, 0.416738212113874300<br/>0.082421757074633000, 0.068054420906958180, 0.016263694531973405, 0.000000015771887907, 0.000000146540629742, 0.000015716140158273<br/>0.392087200645141800, 0.025592082323266430, 0.484476171797056600, 0.000000810512036820, 0.000082917151390360, 0.000016959840494046<br/>0.494833241496874850, 0.012333177484143976, 0.108010878061339240, 0.000000003257846048, 0.000000090709980083, 0.459506173727830400<br/></span>
+</li>
+</ul>
+</li>
+<li class="level test">
+<span><em class="time">
+<div class="time">4.70 s</div>
+</em><em class="status">passed</em>Exercise4.testPopCnt</span>
+<ul>
+<li class="text">
+<span class="stdout">PARAM VAL: 3<br/>MEDIAN: 0.4775340324271664<br/>HIT RATE: 0.01<br/>PARAM VAL: 5<br/>MEDIAN: 0.4807802865212941<br/>HIT RATE: 0.09<br/>PARAM VAL: 10<br/>MEDIAN: 4.884981308350689E-15<br/>HIT RATE: 0.3<br/>PARAM VAL: 15<br/>MEDIAN: 0.0192522667041653<br/>HIT RATE: 0.27<br/>PARAM VAL: 20<br/>MEDIAN: 0.08481327748380668<br/>HIT RATE: 0.24<br/>PARAM VAL: 30<br/>MEDIAN: 0.08642133374665562<br/>HIT RATE: 0.04<br/>PARAM VAL: 50<br/>MEDIAN: 0.01047938524595965<br/>HIT RATE: 0.0<br/>PARAM VAL: 100<br/>MEDIAN: 0.17241507378239823<br/>HIT RATE: 0.0<br/>PARAM VAL: 200<br/>MEDIAN: 0.04525770207907959<br/>HIT RATE: 0.0<br/>3, 5, 10, 15, 20, 30, 50, 100, 200<br/>0.485187483574829000, 0.486417918669557700, 0.000000000000018430, 0.416370643005304460, 0.065277319357732400, 0.202142454562455900, 0.113252146202248660, 0.076217345922251710, 0.023689028943197300<br/>0.488439524044872340, 0.307979706511426700, 0.106475567845597590, 0.000000000004655387, 0.003127281924518277, 0.327850910055178970, 0.237817105922595700, 0.060405995265198964, 0.103768618218146650<br/>0.006716889217265987, 0.214591383726695060, 0.451760077313022650, 0.172221577430538620, 0.219973938768008580, 0.003126603142230400, 0.367100053826511500, 0.019028490196340564, 0.024479946354277915<br/>0.498725966970192700, 0.000000000036251890, 0.009292952342307870, 0.006224217753917849, 0.000971749351559914, 0.241368064558663100, 0.038766188792646206, 0.034229267530478946, 0.097720728331406380<br/>0.485090660717116760, 0.242216690818426060, 0.003126603133863204, 0.354969948645839970, 0.000000000000110578, 0.015855979028480850, 0.139289910156964570, 0.007501519212409880, 0.040082296434196696<br/>0.332603370586588400, 0.495061685970339800, 0.003126603133863093, 0.003126603133871753, 0.000000412012584994, 0.235503142103102640, 0.278366075595074700, 0.074235841830613270, 0.032868693917759260<br/>0.489637389890972400, 0.316391607926904600, 0.035711632402932900, 0.003126603133871586, 0.000000000048031024, 0.404274432651220000, 0.243380860482836700, 0.434079933072434400, 0.083938689646739730<br/>0.046745866267215720, 0.478116027028305100, 0.000000000086537610, 0.003126603133900840, 0.320270371320553600, 0.401353513361633100, 0.061482287323004870, 0.063072701892082360, 0.120739586665230820<br/>0.487518333609564400, 0.338055848404285930, 0.003126603134058992, 0.003126603200238387, 0.009294599399977233, 0.329652740028032460, 0.422196262848076650, 0.142867098193727340, 0.024575692508662428<br/>0.032859366673338886, 0.493697292414804870, 0.000000000000019762, 0.000000000000041522, 0.000000000000031308, 0.000000000009773626, 0.383478916227241100, 0.122660406342401330, 0.202055933098688970<br/>0.307656856315169650, 0.075991171354814760, 0.241163250184721500, 0.000000000000000000, 0.000000000026637859, 0.445805515817461000, 0.327860928684426840, 0.024654767163110490, 0.094234702754299070<br/>0.484476317678759700, 0.017724984416083944, 0.000000000000019096, 0.003279336361440288, 0.071887305856740080, 0.003126603294143826, 0.372951368570856530, 0.114838690456106230, 0.026983725929807245<br/>0.116316337654531590, 0.489969884290405800, 0.000000000000775824, 0.000000000001600942, 0.122417844874026020, 0.006252897548644443, 0.264726038863298930, 0.034675537748998010, 0.085593543587283600<br/>0.497537590500800540, 0.015347604059838482, 0.003126603133863093, 0.000000000000000000, 0.003126603658518301, 0.024527946227464180, 0.027118617515490107, 0.243812054220790830, 0.029566594564002790<br/>0.167455527088029300, 0.495299798684859960, 0.080048466426569760, 0.003126603133867811, 0.000000000000082379, 0.044422583871338570, 0.340694076575941000, 0.225004309507380930, 0.016095870684211366<br/>0.483788326991509400, 0.477116213852987900, 0.003126604366310903, 0.000000000000003331, 0.006224218558968320, 0.018696253288296105, 0.291924926075713740, 0.090593287918637410, 0.072265032686120170<br/>0.435830342460282740, 0.474347830302671000, 0.000000000000000888, 0.219817001098660920, 0.000000000000016875, 0.175991656236990600, 0.304178503929855240, 0.059314131634938205, 0.256533171936585000<br/>0.498018032215675800, 0.015345560038998896, 0.489084324749339550, 0.000000000000086597, 0.307245760974514500, 0.003151112344189799, 0.222704783548107900, 0.199882965708821080, 0.058334677698299030<br/>0.006676111080822000, 0.009901077747332065, 0.003126603133863148, 0.003126603142701745, 0.000000000000000222, 0.275985912839429400, 0.012347253772207967, 0.079321702786791850, 0.083820071251335780<br/>0.413196832641591570, 0.334004666297951840, 0.000000000000721423, 0.021286204136230447, 0.385959064200361970, 0.171823601380070360, 0.295611121559981900, 0.039004821199242090, 0.152127173958418570<br/>0.003126604379748932, 0.003126603710511544, 0.000000000000010436, 0.469310943460572340, 0.058073804842572296, 0.218654463036410000, 0.021663217216986440, 0.205458854420456530, 0.089862372835935730<br/>0.495376815088282960, 0.003126603133866424, 0.463174273252532960, 0.006224216104076752, 0.035675507157630904, 0.041283545251862620, 0.060945743354861026, 0.203139408830997070, 0.024239331354036053<br/>0.496975873308125540, 0.225129206267991100, 0.003126603133864203, 0.035669392941145350, 0.003126603143000117, 0.043018375272052600, 0.070308955179356200, 0.073453119108173810, 0.042483375926212150<br/>0.036090676705348660, 0.219620946457463330, 0.000000000003134826, 0.000000000000008660, 0.155242618125298000, 0.234170545729128200, 0.263015124146462500, 0.233217963958114280, 0.033377754580936390<br/>0.457917413245582000, 0.000000002913463359, 0.032845087373535640, 0.009300862749310135, 0.000000000000287104, 0.003126657629719976, 0.051719439478995600, 0.089534024660640370, 0.075193053475487830<br/>0.494342166622121200, 0.000000000000000444, 0.003126603133863148, 0.489357673652290550, 0.265137622104606560, 0.247810606481512370, 0.038994122795417085, 0.061398997321442770, 0.084893923783499410<br/>0.041241707680237216, 0.236513480926929030, 0.264372647563011930, 0.000000000030274505, 0.000000000308422010, 0.101559228437825670, 0.100797042702627130, 0.030542720587128090, 0.150058178866220640<br/>0.497324915760632260, 0.003126603135772288, 0.185434852995170100, 0.003126603136181405, 0.052413776583516980, 0.009627056068087336, 0.064149443629909210, 0.126892180138504230, 0.038960226712038690<br/>0.456773971236375640, 0.495111999183825540, 0.000000000235164777, 0.075133582536886790, 0.000000000000000444, 0.035685703927682500, 0.051157381434015550, 0.123623403887799080, 0.016752839233530437<br/>0.495616428434972600, 0.174937509849304560, 0.423975227405563600, 0.003126613845706783, 0.066240208160806890, 0.003127590533174462, 0.062059397276347240, 0.107770623114641030, 0.064983456231933020<br/>0.459493018870823500, 0.497294162620929460, 0.003126603133866701, 0.015410777681303056, 0.227949847970465970, 0.360496484089506400, 0.055136078249958254, 0.110331942439148400, 0.150213764516255500<br/>0.484332382231675460, 0.003126603189216315, 0.000000000000670131, 0.000000000000313305, 0.068691276432294110, 0.018448034527387358, 0.245939577735861280, 0.035692319531200610, 0.072942494178724060<br/>0.475999969973480760, 0.419195861761529000, 0.007995409392184072, 0.018869233163249677, 0.003126603134869899, 0.150957162022809680, 0.029998952675495294, 0.125091362845459350, 0.037571192333641645<br/>0.385246740003099330, 0.003126603133863204, 0.003126603133863037, 0.186350096215305960, 0.003126603133933370, 0.003126603194804622, 0.023841291099164552, 0.011268863504492632, 0.083058231360177310<br/>0.003127320391076549, 0.003126620533333124, 0.000000000000003775, 0.146023041554460160, 0.143045122475527420, 0.098712677990664410, 0.180991392829438600, 0.177127978890128600, 0.008350570544094770<br/>0.497577349053593470, 0.003126603968833630, 0.129834979217504480, 0.093264326261092160, 0.164483905825114070, 0.146070548147367250, 0.016667797415426733, 0.116512700765456830, 0.177451290911442020<br/>0.489960438714944300, 0.493780516674262900, 0.003126603133863093, 0.000000000000001332, 0.041495878166876110, 0.280334147057847760, 0.133729276380851970, 0.029189942807182900, 0.049910725776518505<br/>0.495097061494530750, 0.498222948547618170, 0.000000000114849796, 0.003126603133874195, 0.000000000015359714, 0.060371110382421490, 0.288852576985298870, 0.140412188180557170, 0.119562731841360850<br/>0.106781891649395000, 0.041241700153281050, 0.000000000000000000, 0.000000000000493605, 0.003677108523745698, 0.065854432666378360, 0.315547644364215060, 0.009037453477271307, 0.189275820571916280<br/>0.258165071703838600, 0.498476890822977200, 0.425599746928754300, 0.300809488980879200, 0.000000000024713953, 0.000110939517981135, 0.157012714326275950, 0.013341567366745744, 0.129552236938549170<br/>0.119312285011851930, 0.130563563721857570, 0.479957049917261240, 0.000000000000521139, 0.138907110244666230, 0.124715943766945230, 0.092436566604162000, 0.090619356765091700, 0.116270316324765640<br/>0.496745463647705700, 0.475251518149470600, 0.012333169677994471, 0.171919119396858900, 0.003126603134122163, 0.218587225686342030, 0.034122753535343050, 0.142262473318135900, 0.202486851351096670<br/>0.425316373767105400, 0.030060807685604096, 0.477967632888137600, 0.036886191097446450, 0.038499507159621416, 0.363628914316896370, 0.111249454742714910, 0.076675444834381100, 0.015601446574420474<br/>0.003126609298615357, 0.003126603142374618, 0.003126603135193917, 0.000000000374133169, 0.000000000001329381, 0.082837417143865280, 0.016506116797114834, 0.032872609289752440, 0.060906270254851735<br/>0.038468162848786290, 0.038535725259482456, 0.095521769907417840, 0.003126694453611190, 0.000000000028481606, 0.003127925274361953, 0.166744314716451570, 0.003244068907618136, 0.078534749660171540<br/>0.370107812842959960, 0.461713966227407000, 0.000000000010775936, 0.182742688012006220, 0.003126603147371676, 0.201931686771987200, 0.144096339965067880, 0.094142811810595530, 0.050911369875625110<br/>0.489990418570895540, 0.462066769830471850, 0.000000000000227152, 0.003126603161509811, 0.021312830259887006, 0.304461262182520100, 0.076545165069977940, 0.111572206271444600, 0.033512676300776870<br/>0.400770665500873700, 0.103481021749740390, 0.103436241973224540, 0.110367903156688650, 0.003126603133868588, 0.220864213396902430, 0.274323153719592760, 0.060183886869770500, 0.122723209310839350<br/>0.493538965337302200, 0.456818496319911950, 0.003126607833181305, 0.277724134820938200, 0.093812148309423580, 0.235108502152723050, 0.052132212980075030, 0.022403561667869220, 0.123095048958053840<br/>0.062700905235979710, 0.199433985492437800, 0.003126603133863759, 0.000000000003605782, 0.064441652308353750, 0.027145739730459140, 0.224321794835311120, 0.082791130099253930, 0.237729750825575680<br/>0.477534032427166400, 0.480780286521294100, 0.000000000000004885, 0.019252266704165300, 0.084813277483806680, 0.086421333746655620, 0.010479385245959650, 0.172415073782398230, 0.045257702079079590<br/>0.496361622872493700, 0.489843263260539560, 0.003126603133863315, 0.274876144988276340, 0.018329723799706876, 0.228931699276268100, 0.121045459273603000, 0.046412598324042430, 0.116598628100160030<br/>0.492127763700094400, 0.180859635742550700, 0.012337932592589584, 0.003126603133863093, 0.409736672824286500, 0.298707966184116050, 0.009327125339452902, 0.051042646006251800, 0.074386958249533730<br/>0.491963939341678040, 0.470615035585523900, 0.015345220451791708, 0.000000000000009548, 0.147964637030081280, 0.022114933508978030, 0.035629044787922504, 0.021864784285115070, 0.103812807419807640<br/>0.400712182150899000, 0.496874958832219940, 0.067665032873923840, 0.488075400739084560, 0.000000000142899248, 0.049445439673188760, 0.153433754237656980, 0.031832538658435220, 0.076645933574528980<br/>0.350082016373136130, 0.009292972229142882, 0.490791223064203100, 0.108972475911181870, 0.033191000458860140, 0.050201600185247885, 0.044283655409752210, 0.256134029231554500, 0.128643472539521020<br/>0.006227527783240205, 0.003666764156525615, 0.027127650647230660, 0.332139699601358600, 0.362008425877869850, 0.020384354790693004, 0.052129464776569656, 0.164294972682298700, 0.070968010868143860<br/>0.495128397214268930, 0.481169329297519400, 0.052089571719837190, 0.000000000000325073, 0.003126603287565977, 0.003126612632438519, 0.131123623777379740, 0.106711947008725100, 0.062810978501376960<br/>0.070170462894763640, 0.000000000005047518, 0.003126603133863093, 0.019995062019820653, 0.003126603154470164, 0.003599957563403589, 0.266111316200714700, 0.083073155590333790, 0.128425649856208580<br/>0.494926157587770900, 0.003126603133863093, 0.304782756183650800, 0.005144763304053834, 0.029337227123501453, 0.003126603142227735, 0.093419351615503350, 0.160280812582868360, 0.045957533475938670<br/>0.003128939336187853, 0.281314537590734000, 0.000000045410843141, 0.000000000000006217, 0.003126603140526540, 0.101543401014387910, 0.191142800371527640, 0.019275958497628254, 0.081171826844173400<br/>0.412725114681412300, 0.366035749712398940, 0.407451399142203000, 0.207850121867396380, 0.171792411011566450, 0.021748296468565630, 0.114109158337870330, 0.137870715307043530, 0.106204281686588520<br/>0.433913057538458660, 0.046915977474548010, 0.054741404381162206, 0.000000053098101527, 0.110203594581884610, 0.343985384524450600, 0.071105731204907820, 0.209155941620870420, 0.203903720806197500<br/>0.497989509953383040, 0.003126654755758185, 0.034319311955629870, 0.000279152770000624, 0.003126603863708055, 0.056862164154788064, 0.169740116130705940, 0.269850852196501400, 0.087580868756461200<br/>0.491495009770506530, 0.387257184241140400, 0.202634750611396960, 0.000000000000005329, 0.456771719752314730, 0.011509547722900138, 0.290492005945221950, 0.097285196721839440, 0.031549066642412416<br/>0.492489948875703500, 0.157299553976265550, 0.000000000027869151, 0.003126603164497255, 0.271507597427055050, 0.329161674803853330, 0.025529658690945310, 0.191032397751656540, 0.118129397615793220<br/>0.484339354112798160, 0.191614730905834300, 0.003126603134200823, 0.005359769522088720, 0.095474330169610160, 0.003126603133908057, 0.148410275892538750, 0.130992046026575000, 0.084816160910428370<br/>0.003133301781455433, 0.000000000158497437, 0.000000011401403266, 0.191596296219604780, 0.256754264553751550, 0.049556651737617860, 0.278578450416303250, 0.062327417639033270, 0.126344159692074800<br/>0.049569032459017840, 0.006237912306739535, 0.000000000000011546, 0.021528316673837422, 0.000000000000000444, 0.024265586873985500, 0.009867151998511403, 0.146875877756955040, 0.080412875126737670<br/>0.497858117467890800, 0.495724547531072760, 0.000000000272193046, 0.000000078906562173, 0.392647318388191600, 0.000000000496469310, 0.114072681260023460, 0.033209917237602080, 0.134240516041768730<br/>0.494920743852837600, 0.000000018124645507, 0.029994931227891375, 0.003126603133863315, 0.324524245609429400, 0.012119555706729124, 0.016175705533271023, 0.061203458932420240, 0.085422809023254050<br/>0.485171113838996700, 0.484467277735466000, 0.070195801045380150, 0.003126603135707617, 0.138765426678514050, 0.163874591460425500, 0.035051541864400570, 0.072297953679489380, 0.003164786450572499<br/>0.491611888185959130, 0.479315727765888660, 0.000000003399874549, 0.000000566195242746, 0.003126603332526900, 0.003126603135664319, 0.018514298221986802, 0.112883600582808390, 0.137218589145287900<br/>0.101071195958329140, 0.452827321815304900, 0.065260105652234950, 0.000000000016703139, 0.073033013026437720, 0.000000000483550977, 0.242228776215025030, 0.034940161151151505, 0.049591114997525720<br/>0.006224217730664339, 0.271935746596491800, 0.000000000776157305, 0.312824166223581830, 0.003126682789249213, 0.003127281086891309, 0.063174962463018680, 0.163182568328611220, 0.023394253343054616<br/>0.487648506774433940, 0.260954102617647840, 0.000000000000000000, 0.259956713930655170, 0.000000000706319780, 0.320561451574353500, 0.004300810189563131, 0.088020008858707140, 0.091822393511001910<br/>0.162287554439497220, 0.003126603133983108, 0.375417032862318300, 0.003126603134045780, 0.000000000031265324, 0.065121913424855630, 0.330885522597791900, 0.195512315521848830, 0.095237951442671220<br/>0.487918756122816430, 0.006224522057442117, 0.094764317900201340, 0.217667183839379550, 0.077624427156800620, 0.172123930407524000, 0.415949381404055240, 0.085781963915747380, 0.225614310216677880<br/>0.019467672824280746, 0.003126655396048950, 0.003126603133868255, 0.371343453766172600, 0.021894099036950387, 0.003126603135521211, 0.095185715731340710, 0.339781471648481800, 0.091892679478604580<br/>0.498171045650798800, 0.494637697314821000, 0.003126603133876749, 0.000000000012390033, 0.118606958404372850, 0.015677052987091378, 0.142471203826152750, 0.301940900113222400, 0.144679481503557420<br/>0.497877501848946140, 0.485518060664599200, 0.018329451368674920, 0.099587854943321120, 0.113013651416950020, 0.024408322459325726, 0.264062278460034160, 0.056527379291571810, 0.137885001459086830<br/>0.003126648095353846, 0.493228932618789900, 0.003126603140350181, 0.095108306325995200, 0.000000000000015765, 0.148031964121011270, 0.298416534714198500, 0.034453220724154965, 0.078075743747336390<br/>0.016247808989671098, 0.032850961648913546, 0.000000000000001110, 0.000000000000371481, 0.458964035735200670, 0.072325737250581000, 0.042623596679523260, 0.247808370790742580, 0.090692369105662800<br/>0.067657691835637690, 0.440574812894619030, 0.449907379891178070, 0.468853352464525140, 0.351312777770223500, 0.123797483125471560, 0.182045432931604970, 0.035245461562920300, 0.064982589706219450<br/>0.491081193961427000, 0.003126603134467332, 0.018688862653066240, 0.420708003233151200, 0.027122963363113206, 0.143157466766071940, 0.049179258648362756, 0.025070225117269196, 0.055706928243337450<br/>0.353962445690715100, 0.387924090849179400, 0.003126603133877970, 0.049499401188114744, 0.228888356147000260, 0.040643218510931670, 0.098971427390393000, 0.104256169732614700, 0.157468392060522430<br/>0.489942323956635560, 0.481780260363090100, 0.483177147136079700, 0.003126603133865313, 0.000000000018013924, 0.063611923115790610, 0.281302761946658700, 0.048482594161870396, 0.170571998099984800<br/>0.486162179599104900, 0.482163508109984150, 0.346310866872984900, 0.202446725423194750, 0.103898665879693100, 0.232439837103127600, 0.087294693958274270, 0.060557773793553430, 0.039401069905350030<br/>0.494727863273198800, 0.225131412468192630, 0.000000000000307532, 0.042021312109175035, 0.283982713764574200, 0.000000112133082986, 0.243690601568949450, 0.137303762976288930, 0.033317021753904610<br/>0.498052563677875900, 0.306223605779517350, 0.000000000426355840, 0.025258188611391730, 0.469713351627262300, 0.031236811567925016, 0.084817831160718450, 0.040090730409564510, 0.119504893006083130<br/>0.003126875939483298, 0.489682352575153000, 0.032845092595681800, 0.085737472550293070, 0.000000000043047843, 0.015390071494364277, 0.110823908287675130, 0.012424717586514422, 0.121485355839159810<br/>0.057573112179770960, 0.275758168527035550, 0.003126603133863426, 0.055006905106776416, 0.003127459779807162, 0.003126603506174774, 0.170065458558548820, 0.125094975650527460, 0.032344343134025344<br/>0.419318422038278460, 0.488268965161016800, 0.120576943333994320, 0.000000000000037526, 0.209586600198355070, 0.311730248032038750, 0.045136566763104350, 0.129104489155558780, 0.061043893671458790<br/>0.474653947562438900, 0.323230665740719000, 0.000000000000180078, 0.000000023901043089, 0.000000000053887117, 0.114073022789430380, 0.266625013134579760, 0.194742888643497150, 0.106608017390310780<br/>0.287561877076696000, 0.000000000000443645, 0.129887623996043870, 0.134576908625787580, 0.000000000000070388, 0.013601743088741736, 0.155327464300632770, 0.130847322097233700, 0.058835520693176935<br/>0.276846724227335530, 0.447054812577028450, 0.395001878628884800, 0.029995193290536626, 0.037648923729290020, 0.358682713863065300, 0.296015688694267100, 0.126210748246949280, 0.186197485735736470<br/>0.353848214872347500, 0.009292952702948554, 0.009415513523929442, 0.029995050626451636, 0.030237738761550337, 0.342704619543140500, 0.260742283376363850, 0.060996655401430900, 0.090866535437958580<br/>0.000000000097828856, 0.000000000725966620, 0.044157185085886286, 0.439566056484236600, 0.003126603141398065, 0.099501858491573110, 0.162346248671359220, 0.055319086484544144, 0.152326446055922940<br/>0.493988615340955950, 0.000000003965969331, 0.316883487744141000, 0.012377935431712672, 0.003126603140362949, 0.124580017061412420, 0.101006699699224990, 0.208057823734584920, 0.057630799571520450<br/>0.035720864853855616, 0.474892631006492700, 0.000000000000054623, 0.003126603133877470, 0.033213905007453914, 0.152195627957758480, 0.097062627231995660, 0.152133084149773060, 0.009672187519463415<br/></span>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="level top open">
+<span><em class="time">
+<div class="time">1.68 s</div>
+</em>Exercise5</span>
+<ul>
+<li class="level test">
+<span><em class="time">
+<div class="time">1.68 s</div>
+</em><em class="status">passed</em>Exercise5.testTournamentK</span>
+<ul>
+<li class="text">
+<span class="stdout">PARAM VAL: 3<br/>MEDIAN: 0.04962747347360791<br/>HIT RATE: 0.16<br/>PARAM VAL: 4<br/>MEDIAN: 0.226576079982501<br/>HIT RATE: 0.16<br/>PARAM VAL: 5<br/>MEDIAN: 0.08093616589063046<br/>HIT RATE: 0.12<br/>PARAM VAL: 10<br/>MEDIAN: 0.4952468012613623<br/>HIT RATE: 0.05<br/>PARAM VAL: 15<br/>MEDIAN: 0.044206124972599015<br/>HIT RATE: 0.0<br/>PARAM VAL: 20<br/>MEDIAN: 0.47309462559408977<br/>HIT RATE: 0.01<br/>PARAM VAL: 30<br/>MEDIAN: 0.3421284136586765<br/>HIT RATE: 0.0<br/>PARAM VAL: 50<br/>MEDIAN: 0.4941176707842015<br/>HIT RATE: 0.0<br/>3, 4, 5, 10, 15, 20, 30, 50<br/>0.000015255041692863, 0.000001861730502595, 0.145119411470708060, 0.006225632921036783, 0.065435458365589280, 0.421924255416395330, 0.437097575139010300, 0.496787764029980370<br/>0.357383960836123200, 0.007592612597279502, 0.000047674368167938, 0.116010061084525220, 0.000001234838132635, 0.240636356769945000, 0.376050655153011840, 0.168934091452199900<br/>0.000011539438145580, 0.000021816716106071, 0.003503812240798765, 0.003165852408567982, 0.000013330880304419, 0.038760997484602044, 0.103189739125053080, 0.373923095784446500<br/>0.000042215983680205, 0.000030102229444662, 0.000005408957811703, 0.024373586283204296, 0.232296628598178500, 0.036384165681680736, 0.400040945382866200, 0.408770947643512000<br/>0.000009397257404675, 0.297521700469733400, 0.001250123631993838, 0.160944773755999800, 0.000001848645613867, 0.499632618454787350, 0.377907727259938800, 0.409721557022522000<br/>0.000085374268256055, 0.000028673964871273, 0.469143880491945700, 0.000000563793761177, 0.000159793233317385, 0.421503121330896850, 0.359314700656918840, 0.497193159817503700<br/>0.000001870490256184, 0.000028151500389539, 0.000008744644296510, 0.000159758271125909, 0.095641561955815800, 0.030398208515080294, 0.172508179734432830, 0.484054162054922630<br/>0.000001055808109773, 0.000006025485926098, 0.000000088608796966, 0.000000559077250994, 0.003207671747611551, 0.410513111809009200, 0.122456072359901860, 0.473266165848588800<br/>0.000000375072742143, 0.000001466044919407, 0.186204225235229060, 0.047448293118295460, 0.447200450435209950, 0.408872938364632730, 0.485716828752236150, 0.497804165627684300<br/>0.000003648439317105, 0.000001715644951439, 0.000000794200389731, 0.001232001265335680, 0.306615428358625300, 0.006330134169581281, 0.306847651557858760, 0.464541770932209300<br/>0.173667251492905900, 0.000006771380216486, 0.000002757545227716, 0.326476680400488600, 0.288063690186419800, 0.293275972270466200, 0.398800732277335260, 0.105409015187099610<br/>0.000040977653160024, 0.000080556109107899, 0.000013091689615496, 0.000011512542642478, 0.242116743605917450, 0.004095859882118136, 0.369602216555742200, 0.458595501456699860<br/>0.000172873538869966, 0.000004570870489884, 0.023590662207319923, 0.000016474673620814, 0.347023354808018270, 0.495201141954993650, 0.334469400702029240, 0.475756333021802400<br/>0.000001267865484822, 0.338661706693260340, 0.067662682069615840, 0.006833569984167454, 0.000146140609717405, 0.067027230161622040, 0.387240575076059360, 0.440034859350220740<br/>0.000000005926487578, 0.000083075930530419, 0.031423507836451425, 0.445295045369135000, 0.001940978869056087, 0.000002966256927250, 0.464401905677619850, 0.416221869882149000<br/>0.000001845755794427, 0.000129645215057372, 0.000005782476185878, 0.000369977504764141, 0.371793665237839000, 0.496138345186144400, 0.496893716507411100, 0.478141300829984800<br/>0.000018561746852941, 0.000000895194957717, 0.073369019892370100, 0.392498372764159900, 0.003353429640730043, 0.212357181453311780, 0.246031128891291640, 0.437509751159262100<br/>0.000004080267786477, 0.076370749103541190, 0.387428802008311100, 0.496686545958532700, 0.459647619511775500, 0.203756009025475140, 0.495099168084772800, 0.216971704076046930<br/>0.000020559669290376, 0.000005620228458070, 0.000002235373587678, 0.465131803878269800, 0.269260622064014900, 0.086985817170957100, 0.025793942020541694, 0.465277894554216800<br/>0.000008147702162120, 0.000005503445419830, 0.000078898499167812, 0.310411491473029930, 0.481262859912781700, 0.422287957426977670, 0.421317998879946750, 0.480768965458146700<br/>0.120421707911246840, 0.007430808867610383, 0.356605347537872000, 0.174239155436851150, 0.050937024491798990, 0.498393932107691500, 0.434323972023386900, 0.332314874357664550<br/>0.381011036847794470, 0.021441678537274855, 0.000013570639365634, 0.429612983044002860, 0.452305046137297700, 0.428829159432550600, 0.034370013050854686, 0.496176068361114160<br/>0.033496751767043365, 0.483691879868536350, 0.000002156966574796, 0.093263499047893160, 0.016369541625793960, 0.317758237678875230, 0.456559070489770000, 0.273300896474427070<br/>0.007629960710563599, 0.000001120385439812, 0.253488928526332000, 0.004882347963510780, 0.462822551570409360, 0.456012064581733050, 0.419740996213271430, 0.494020052915095430<br/>0.000000492299292609, 0.000000266276557637, 0.000012789508930189, 0.000001295892204767, 0.185572406460788600, 0.449872726140248370, 0.400428458822516930, 0.123328429917635370<br/>0.000053551358779103, 0.362386661162621640, 0.003136576101912258, 0.464152213568898630, 0.214721119754792700, 0.003147217887048415, 0.294775847681009730, 0.498645479493011750<br/>0.000431831745006772, 0.003258233499790208, 0.065295150560212510, 0.245001573878220580, 0.498051200159980940, 0.417064354708097300, 0.479337424186815500, 0.463284938917391530<br/>0.000023362440633834, 0.000022978901258242, 0.000000905999715806, 0.030063497553989404, 0.098314654079818150, 0.423861701099677900, 0.497653925069618500, 0.224244705743380400<br/>0.000011843106678511, 0.000004851922459692, 0.000006941137196681, 0.000013724222257261, 0.113944028296923180, 0.109773243932658690, 0.449408254501560130, 0.487163087048060500<br/>0.029882909264783930, 0.000013419045622354, 0.000126230696940843, 0.000000318541334754, 0.108828829016751900, 0.042256660853118080, 0.392855926044083900, 0.489816213933878750<br/>0.000049855627788531, 0.000001139367373781, 0.007414270179775417, 0.227819632152147800, 0.206375050257346540, 0.482890264735830300, 0.433073970213613900, 0.035884939558137210<br/>0.202240457074238600, 0.000000618841416611, 0.000004369419631889, 0.117527571658027460, 0.207300152041069000, 0.489914872032272960, 0.405457707579890860, 0.411604835778679960<br/>0.000003868896021331, 0.000026866097573686, 0.000019883374879459, 0.289552993982731770, 0.036157735411389780, 0.497815370237153660, 0.136116542236471570, 0.463333210977918600<br/>0.000002231626510640, 0.000010219247391030, 0.000011600451987892, 0.062169099974478170, 0.014275927063864102, 0.015480874317695625, 0.485609472747591000, 0.052902310169319120<br/>0.000002028638853291, 0.000001952439289243, 0.000043453567378893, 0.232303476740731040, 0.000031249779398113, 0.495346324040403460, 0.299296547019422000, 0.420401160047311600<br/>0.169649770125714750, 0.000006991412062674, 0.000042228571902836, 0.006877928512170672, 0.455603291042442300, 0.403453750634121700, 0.444860707556800460, 0.465643343678640740<br/>0.000005032766936863, 0.000001229158215710, 0.000005792438740715, 0.029995040126670480, 0.022282467654104132, 0.057987758195619190, 0.007054822630008561, 0.481573200301975600<br/>0.000000277986314190, 0.000000139269117017, 0.076393797044822020, 0.263926057709200300, 0.048698966333253324, 0.457099407876293800, 0.012506724103832967, 0.359443514336925230<br/>0.000459237024584169, 0.060149188058328140, 0.368379796980300660, 0.040367804205266370, 0.036908204932691424, 0.041905518147823060, 0.430896014979159500, 0.156873747739887660<br/>0.032845086760120320, 0.000002538547797026, 0.000002380296882654, 0.007092032749574428, 0.475787409604319370, 0.300687044172268300, 0.483356282885693160, 0.457405533484899650<br/>0.416030238472183000, 0.000000020230595865, 0.000000077524759445, 0.000001278543421634, 0.437152721361892900, 0.104262828189381100, 0.080166833192593660, 0.391276908923791300<br/>0.000038164128798146, 0.000649655899504720, 0.000008271874088361, 0.000052066785770521, 0.036019626114428660, 0.290990681685209400, 0.324936184086779050, 0.106553205131749540<br/>0.000000523363765270, 0.000029937961439019, 0.000000881749563808, 0.496655730395364650, 0.126599930306544320, 0.340257935640773450, 0.345782422291161500, 0.288987611023809270<br/>0.000000021490907054, 0.107783420204035750, 0.000042891644863707, 0.444679249425935730, 0.048010177792915554, 0.488968931522523700, 0.124795677952546200, 0.098556714510778410<br/>0.000031896671972564, 0.000000200428205699, 0.000060389915867820, 0.105911466068382810, 0.492512681419689070, 0.492651482199452650, 0.207368998458794860, 0.111324345292915300<br/>0.000002991338106662, 0.130679982617557200, 0.000018506041023214, 0.395432129770966530, 0.450748880037069700, 0.261949550186621800, 0.495891979596245760, 0.127585366242653100<br/>0.000016303465726730, 0.000001793826008567, 0.000001148617647162, 0.000012479741341553, 0.018747136592757174, 0.348782821483549800, 0.463068097819377600, 0.312907318385324040<br/>0.000001022984080279, 0.000000028926414153, 0.100965162631769740, 0.000036294638671441, 0.000013941533014816, 0.482386528975013330, 0.380288659975687060, 0.387931603794558430<br/>0.000866280857660939, 0.000001188935693952, 0.001668371879998298, 0.055214875198971280, 0.494153758402108300, 0.364054054751040250, 0.295372700906076260, 0.456233237919438260<br/>0.000000587396626506, 0.000012419847632950, 0.000006738172984855, 0.004789877835171152, 0.366219642818124800, 0.155458981768288540, 0.386053133296771400, 0.269752545276317900<br/>0.049627473473607910, 0.226576079982501000, 0.080936165890630460, 0.495246801261362300, 0.044206124972599015, 0.473094625594089770, 0.342128413658676500, 0.494117670784201500<br/>0.000019465886732684, 0.255619763261177630, 0.000001309378555969, 0.012471035034376077, 0.038468416424901564, 0.047711530207444510, 0.134911483414401500, 0.427105990993978900<br/>0.000006312964038357, 0.321948707917893650, 0.000047718056088164, 0.494924669180696830, 0.000073025788360326, 0.154609367997540380, 0.424304424555844830, 0.243389642957070000<br/>0.000001996244045011, 0.000001622959154735, 0.000006986302882761, 0.385617892193936500, 0.153742616449197120, 0.086708173117683250, 0.318019042541383250, 0.370250143750214500<br/>0.000046329533117284, 0.000001011464123013, 0.190560988660029400, 0.290097890055527050, 0.051699325006526910, 0.416936279710318770, 0.367803652536870400, 0.221330338417841330<br/>0.000000682889467918, 0.000001064927154237, 0.012607352512678471, 0.000001062888523917, 0.003414083968540815, 0.389603871759164330, 0.069800051412502670, 0.014596635045664552<br/>0.426928917025316660, 0.000004802939591375, 0.000432661854491145, 0.030215422557981153, 0.014679897138924092, 0.278210593276339000, 0.364492350223950430, 0.453909779729413800<br/>0.000073088391209342, 0.000078046163886125, 0.000000268914189250, 0.022624769112198960, 0.033643565002204390, 0.077939177546490880, 0.170923278378235500, 0.467554865937588660<br/>0.000001952564515351, 0.000001836810496758, 0.000052889451381322, 0.035671169894261110, 0.313435758970327300, 0.128120832031190800, 0.107810146260837070, 0.483341067251970740<br/>0.000011568696241027, 0.000264877188650092, 0.000028067304270296, 0.452657176799352900, 0.345425861997306400, 0.374484021467419800, 0.082613087884147950, 0.381882543781712270<br/>0.200845274866994660, 0.003200595226328651, 0.000000399088478320, 0.000035575337474059, 0.465260858329185600, 0.484155034620034560, 0.294507376604311100, 0.000330805978857263<br/>0.000008211759159826, 0.000002638885007122, 0.468331621021168100, 0.006225922071884105, 0.055348594440603860, 0.096483993179608760, 0.487274707926016100, 0.494078576022311140<br/>0.329706640411931400, 0.000000265009013622, 0.000000262127750617, 0.463640294491010500, 0.015614579253102500, 0.142534205800222970, 0.095273490707113100, 0.472087490665564900<br/>0.087177410995073920, 0.000036626153837871, 0.000001801644360144, 0.185821370597822720, 0.496280036933346940, 0.000000977356955090, 0.058972028766900110, 0.452548889456546800<br/>0.000000739852417553, 0.000016943785509038, 0.000201875420017206, 0.485421925605360960, 0.431234522330889440, 0.494001776820217560, 0.218989608781958060, 0.106648876520379300<br/>0.000004299867084667, 0.000000181042031533, 0.060253863572900690, 0.000039438897596278, 0.424250129756619800, 0.131172581640635500, 0.386993407054495250, 0.125472291371315100<br/>0.405004509095533870, 0.000000323943052272, 0.413813114139101770, 0.024949040881833084, 0.498286613592006700, 0.116982815308921460, 0.435261165724757540, 0.497985915351033600<br/>0.000010358255459753, 0.000051624412824469, 0.002081541375593132, 0.005589331256296570, 0.241592882097431850, 0.009406133857370602, 0.326295032166529550, 0.324790628344573840<br/>0.000178359360744562, 0.000101032298649439, 0.087202251197543270, 0.000000123579531830, 0.018576927341033000, 0.479563203554500770, 0.450353489840477740, 0.353219575569221700<br/>0.016879071768339138, 0.000009940427737887, 0.004455162485965336, 0.472738883085457000, 0.015660209815586523, 0.291939692739662640, 0.068504041193400200, 0.392943725202671070<br/>0.000005957784739496, 0.000003178020628269, 0.318956501874197330, 0.000462786992453501, 0.036848795193127504, 0.092726253340895240, 0.083538016723283930, 0.453934523048130700<br/>0.000003799343435806, 0.023411715952693313, 0.000013240330500264, 0.000000947650387551, 0.000053469078127033, 0.120510301957181430, 0.009426972922102261, 0.049717516761476010<br/>0.000004038932825801, 0.000001141056219123, 0.003202823916256592, 0.459099754898234740, 0.277838873773810950, 0.374050431101328700, 0.497909989145249200, 0.018575044459875567<br/>0.000025634019231002, 0.000025246685050495, 0.000001413686476159, 0.361928010162778100, 0.159452975903556120, 0.344505455467371300, 0.417064358626435650, 0.191415774506237150<br/>0.000002876361318072, 0.000000755129059393, 0.000032308592553154, 0.003164926765871823, 0.100622068235603160, 0.027209889429923250, 0.016294058216011265, 0.378477547611005800<br/>0.000034251859297951, 0.000016987206682251, 0.303306973878871800, 0.006242723914180848, 0.161032944212564480, 0.344259067980488500, 0.494080359996641800, 0.466645396428702560<br/>0.000002472371147144, 0.000000406243514772, 0.001053922667716811, 0.003531971952440316, 0.000006121442622298, 0.146093055763771680, 0.301622589506430450, 0.112329680282474750<br/>0.000043592085845090, 0.000001491866200520, 0.003613041908695602, 0.032415556980943280, 0.496793477209346200, 0.363862681106872030, 0.342957069886493000, 0.027460826220409906<br/>0.000015094239574798, 0.000595118691972707, 0.000002197679805860, 0.055228036458473684, 0.333737857129556670, 0.231372725451345900, 0.497678405590440000, 0.480034930264176930<br/>0.101043249527232090, 0.000001589838854121, 0.010164221306751930, 0.376463945783027800, 0.053430621552845670, 0.498406425509393400, 0.075892662494215950, 0.489294209137782700<br/>0.000029759972550225, 0.000001510003180327, 0.000003762525614626, 0.003285109182796730, 0.058922873708263600, 0.106245190382788230, 0.404962593410283900, 0.485244151362890340<br/>0.412658628833317830, 0.000000664911066317, 0.000000584563074613, 0.001443659596173874, 0.469174316233612550, 0.406806148215984600, 0.081120153172099030, 0.196473421319350470<br/>0.000000901936546560, 0.154872773168698570, 0.295804427242562600, 0.000006886914090121, 0.018598383668664453, 0.437489309107570500, 0.056611122411540590, 0.462987823608242800<br/>0.000000471944754610, 0.000000243194304084, 0.343651607539430360, 0.378819538509021300, 0.010041222809259287, 0.003235251711363407, 0.158278516469588130, 0.230325634134950500<br/>0.000000393635010976, 0.000030637600626604, 0.416280483822288550, 0.335481459043274870, 0.468803284102617460, 0.334545539644137000, 0.486111385815388100, 0.107960171552539620<br/>0.000002674599656305, 0.103584361618199120, 0.000000937305237758, 0.495318685599646760, 0.281314524033827300, 0.316634545277251540, 0.223052335848457070, 0.485569245285954460<br/>0.000000053984194504, 0.000184019520641565, 0.000001463525243550, 0.000009079207223817, 0.462533939403299840, 0.425671388815474060, 0.429709982948487400, 0.035717648089586770<br/>0.000005624047228481, 0.000003399710584162, 0.000021401580947988, 0.447805350763386230, 0.011697512894257633, 0.003021117616905766, 0.180807868089475300, 0.010963743722700314<br/>0.000000302304719924, 0.000000180176585318, 0.000007629652239605, 0.033823454553898735, 0.022145939967820160, 0.000005272463135142, 0.498413494813746400, 0.497197844721510400<br/>0.000000258771115424, 0.085234848630491190, 0.000000225753981620, 0.000016569146030543, 0.443017807093611160, 0.349819049333844560, 0.298186439347581800, 0.478369680102984860<br/>0.105093227594264760, 0.000000727848236515, 0.000000798576922645, 0.117104173131761800, 0.003746664931348398, 0.009660724383129815, 0.265272737842871400, 0.033782093899385970<br/>0.000009181739817898, 0.000001131559966394, 0.000001065296416969, 0.003355027553697376, 0.006503131661355799, 0.001884885099707967, 0.065672166926165680, 0.435818990317880350<br/>0.000000756207074626, 0.000003799220552714, 0.000051336975901262, 0.477899593765573100, 0.315028504551270600, 0.373509319403155900, 0.488587676854224100, 0.424467683591475400<br/>0.003138638079905220, 0.000003224297839055, 0.000011034136193078, 0.179141708918680030, 0.009624824026845002, 0.494342125777035350, 0.447397666097299360, 0.495982838969739700<br/>0.046765559853713390, 0.000073782564745717, 0.010567704924943078, 0.006221774983706740, 0.494090206919333750, 0.489563455137638160, 0.301672773927258330, 0.003129670749927871<br/>0.000020664536693249, 0.000112449599152409, 0.000013069793421749, 0.000066586511432820, 0.258567774633281840, 0.003230288275072768, 0.497452544714465400, 0.472898241914694540<br/>0.024992272081434120, 0.000002128232052145, 0.000033940018894785, 0.006410768165019010, 0.004353774888231188, 0.017153609400373304, 0.456062831308351200, 0.190479260914580170<br/>0.000001988013840326, 0.006733800520401789, 0.012420276723190960, 0.000004020100777768, 0.442358084195165700, 0.006646218107072832, 0.249553019464129940, 0.299792909743394000<br/>0.000025986807598910, 0.000006835770771541, 0.000091113460327974, 0.483610705405820740, 0.468887945736813250, 0.461944758675804800, 0.498966443622942600, 0.469248774953657800<br/>0.068878946874286970, 0.000014150912814315, 0.000008050146442118, 0.003165684182743100, 0.049535679941353550, 0.444175757889791970, 0.487362982937111440, 0.246038823390672300<br/></span>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<div id="footer">
+<p>Generated by IntelliJ IDEA on 1/8/16 8:21 AM</p>
+</div>
+</body>
+</html>

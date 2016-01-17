@@ -23,7 +23,8 @@ public class Exercise1 {
         argsHolder.functionIdx = mFunctionIdx;
         argsHolder.desiredDim = mDesiredDim;
         argsHolder.isBinary = mIsBinary;
-        argsHolder.mutationProba = 0.1;
+        argsHolder.mutationProba = 0.05;
+        argsHolder.bitCount =28;
 
         for (int i = 0; i < 10; i++) {
             if(GeneticAlgorithm.run(argsHolder)<=Math.pow(10,-6)){
@@ -45,7 +46,7 @@ public class Exercise1 {
     @Parameterized.Parameters(name="f{0}, dim = {1}")
     public static Collection params(){
 
-        boolean isBinary = false;
+        boolean isBinary = true;
         return Arrays.asList(new Object[][] {
                 { 1,2, isBinary},
                 { 3,5, isBinary},

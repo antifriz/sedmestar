@@ -7,7 +7,6 @@ import org.junit.Test;
  * Created by ivan on 1/3/16.
  */
 public class CustomExercise {
-    @Test
     public void test() throws Exception {
         ArgsHolder argsHolder = new ArgsHolder();
         argsHolder.functionIdx = 7;
