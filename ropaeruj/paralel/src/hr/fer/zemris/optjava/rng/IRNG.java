@@ -57,7 +57,7 @@ public interface IRNG {
      * @return slučajno generirani cijeli broj
      */
     default int nextInt(int min, int max){
-        return nextInt() *(max-min) +min;
+        return Math.abs(nextInt() %(max-min)) +min;
     }
 
     /**
@@ -66,7 +66,9 @@ public interface IRNG {
      *
      * @return slučajno generirani boolean
      */
-    boolean nextBoolean();
+    default boolean nextBoolean(){
+        return nextInt()<0;
+    }
 
     /**
      * Vraća decimalni broj iz normalne distribucije s parametrima (0,1).
