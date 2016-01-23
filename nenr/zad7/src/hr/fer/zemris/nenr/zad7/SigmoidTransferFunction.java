@@ -6,6 +6,6 @@ package hr.fer.zemris.nenr.zad7;
 public class SigmoidTransferFunction implements ITransferFunction {
     @Override
     public double valueAt(double x) {
-        return 1.0/(1.0+Math.exp(-x));
+        return 1.0/(1.0+StrictMath.exp(-x));
     }
 }

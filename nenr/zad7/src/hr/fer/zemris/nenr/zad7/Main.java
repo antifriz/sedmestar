@@ -10,14 +10,13 @@ import java.io.IOException;
 public class Main {
 
     public static void main(String[] args) throws IOException {
-        IReadOnlyDataset dataset = ParseableReadOnlyDataset.createFromFile(args[0]);
+        IReadOnlyDataset dataset = ParseableReadOnlyDataset.createFromFile("data.txt");
 
-        int[] layers = {2, 3,3};
+        int[] layers = {2,8,4,3};
+        FunkyNeuralNetwork funkyNeuralNetwork = new FunkyNeuralNetwork(layers);
 
-        FFANN ffann = FFANN.createSigmoidal(layers, dataset);
 
-
-        IFANNTrainer trainer = new GATrainer(ffann,10,10000,0.8,0.1,1);
+        IFANNTrainer trainer = new GATrainer(funkyNeuralNetwork,dataset,25,10000000,0.9,0.1,1);
         trainer.trainFFANN();
     }
 }

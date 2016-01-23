@@ -9,15 +9,17 @@ import java.util.stream.IntStream;
  */
 public class GATrainer implements IFANNTrainer {
 
-    private FFANN ffann;
+    private final FunkyNeuralNetwork funkyNeuralNetwork;
+    private final IReadOnlyDataset dataset;
     private int popSize;
     private int maxIterCount;
     private double v1;
     private double sigma1;
     private double sigma2;
 
-    public GATrainer(FFANN ffann, int popSize, int maxIterCount, double v1, double sigma1, double sigma2) {
-        this.ffann = ffann;
+    public GATrainer(FunkyNeuralNetwork funkyNeuralNetwork, IReadOnlyDataset dataset, int popSize, int maxIterCount, double v1, double sigma1, double sigma2) {
+        this.funkyNeuralNetwork = funkyNeuralNetwork;
+        this.dataset = dataset;
         this.popSize = popSize;
         this.maxIterCount = maxIterCount;
         this.v1 = v1;
@@ -27,86 +29,84 @@ public class GATrainer implements IFANNTrainer {
 
     @Override
     public double[] trainFFANN() {
-        int weightsCount = ffann.getWeightsCount();
+        int weightsCount = funkyNeuralNetwork.getWeightsCount();
         Random random = new Random();
         List<Chromosome> population = IntStream.range(0, popSize).mapToObj(i -> new Chromosome(random, weightsCount)).collect(Collectors.toList());
 
-        List<Chromosome> nextPopulation = new ArrayList<>(population.size());
+        population.parallelStream().forEach(c -> c.mse = funkyNeuralNetwork.evaluate(c.values,dataset));
 
         Chromosome best = population.get(0);
         for (int i = 0; i < maxIterCount; i++) {
-            population.parallelStream().forEach(c -> c.fitness = -ffann.evaluate(c.values));
 
-            population.sort(Comparator.<Chromosome>comparingDouble(c -> c.fitness).reversed());
+            population.sort(Comparator.<Chromosome>comparingDouble(c -> c.mse));
 
             best = population.get(0);
-            System.out.printf("[%5d] Best: %f\n", i, -best.fitness);
-
-            for (int j = 0; j < popSize; j++) {
-                int kTournament = 3;
-                List<Chromosome> cs = new ArrayList<>();
-                for (int k = 0; k < kTournament; k++) {
-                    Chromosome chromosome;
-                    do {
-                        chromosome = population.get(random.nextInt(population.size()));
-                    } while (cs.contains(chromosome));
-                    cs.add(chromosome);
-                }
-
-                cs.sort(Comparator.<Chromosome>comparingDouble(c -> c.fitness).reversed());
-
-                Chromosome mama = cs.get(0);
-                Chromosome papa = cs.get(1);
-
-                Chromosome child = mama.duplicate();
-                switch (random.nextInt(3)) {
-                    case 0:
-                        int breakPoint = random.nextInt(weightsCount);
-                        System.arraycopy(papa.values, 0, child.values, 0, breakPoint);
-                        break;
-                    case 1:
-                        for (int k = 0; k < weightsCount; k++) {
-                            if (random.nextBoolean()) {
-                                child.values[k] = papa.values[k];
-                            }
-                        }
-                        break;
-                    default:
-                        for (int k = 0; k < weightsCount; k++) {
-                            double a = mama.values[k];
-                            double b = papa.values[k];
-                            double min = Math.min(a, b);
-                            double max = Math.max(a, b);
-                            child.values[k] = min + (max - min) * random.nextDouble();
-                        }
-                        break;
-                }
-
-                if (random.nextDouble() <= v1) {
-                    for (int k = 0; k < weightsCount; k++) {
-                        if (random.nextBoolean()) {
-                            child.values[k] += random.nextGaussian() * sigma1;
-                        }
-                    }
-                } else {
-                    for (int k = 0; k < weightsCount; k++) {
-                        if (random.nextBoolean()) {
-                            child.values[k] = random.nextGaussian() * sigma2;
-                        }
-                    }
-                }
-                nextPopulation.add(child);
+            if(i%10000==0){
+                System.out.printf("[%5d] Best: %f %s\n", i, best.mse, Arrays.toString(best.values));
             }
-            List<Chromosome> k = nextPopulation;
-            nextPopulation = population;
-            population = k;
+//            nextPopulation.add(best);
+            int kTournament = popSize/2;
+            List<Chromosome> cs = new ArrayList<>();
+            for (int k = 0; k < kTournament; k++) {
+                Chromosome chromosome;
+                do {
+                    chromosome = population.get(random.nextInt(population.size()));
+                } while (cs.contains(chromosome));
+                cs.add(chromosome);
+            }
+
+            cs.sort(Comparator.<Chromosome>comparingDouble(c -> c.mse));
+
+            Chromosome mama = cs.get(0);
+            Chromosome papa = cs.get(1);
+
+            Chromosome child = mama.duplicate();
+            switch (random.nextInt(3)) {
+                case 0:
+                    int breakPoint = random.nextInt(weightsCount);
+                    System.arraycopy(papa.values, 0, child.values, 0, breakPoint);
+                    break;
+                case 1:
+                    for (int k = 0; k < weightsCount; k++) {
+                        if (random.nextBoolean()) {
+                            child.values[k] = papa.values[k];
+                        }
+                    }
+                    break;
+                default:
+                    for (int k = 0; k < weightsCount; k++) {
+                        double a = mama.values[k];
+                        double b = papa.values[k];
+                        double min = Math.min(a, b);
+                        double max = Math.max(a, b);
+                        child.values[k] = min + (max - min) * random.nextDouble();
+                    }
+                    break;
+            }
+
+            if (random.nextDouble() <= v1) {
+                for (int k = 0; k < weightsCount; k++) {
+                    if (random.nextBoolean()) {
+                        child.values[k] += random.nextGaussian() * sigma1;
+                    }
+                }
+            } else {
+                for (int k = 0; k < weightsCount; k++) {
+                    if (random.nextBoolean()) {
+                        child.values[k] = random.nextGaussian() * sigma2;
+                    }
+                }
+            }
+            child.mse = funkyNeuralNetwork.evaluate(child.values,dataset);
+            population.remove(cs.get(cs.size()-1));
+            population.add(child);
         }
         return best.values;
     }
 
     class Chromosome {
         double[] values;
-        double fitness;
+        double mse;
 
         Chromosome(Random random, int n) {
             values = random.doubles(n).map(d -> 2 * d - 1).toArray();
