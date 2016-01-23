@@ -16,7 +16,7 @@ public class Main {
         FunkyNeuralNetwork funkyNeuralNetwork = new FunkyNeuralNetwork(layers);
 
 
-        IFANNTrainer trainer = new GATrainer(funkyNeuralNetwork,dataset,25,10000000,0.9,0.1,1);
+        IFANNTrainer trainer = new GATrainer(funkyNeuralNetwork,dataset,50,1000000,0.8,0.1,0.2, 0.02);
         trainer.trainFFANN();
     }
 }

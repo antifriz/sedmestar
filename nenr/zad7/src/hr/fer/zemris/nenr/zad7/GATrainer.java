@@ -11,13 +11,14 @@ public class GATrainer implements IFANNTrainer {
 
     private final FunkyNeuralNetwork funkyNeuralNetwork;
     private final IReadOnlyDataset dataset;
-    private int popSize;
-    private int maxIterCount;
-    private double v1;
-    private double sigma1;
-    private double sigma2;
+    private final int popSize;
+    private final int maxIterCount;
+    private final double v1;
+    private final double sigma1;
+    private final double sigma2;
+    private final double mutationPerc;
 
-    public GATrainer(FunkyNeuralNetwork funkyNeuralNetwork, IReadOnlyDataset dataset, int popSize, int maxIterCount, double v1, double sigma1, double sigma2) {
+    public GATrainer(FunkyNeuralNetwork funkyNeuralNetwork, IReadOnlyDataset dataset, int popSize, int maxIterCount, double v1, double sigma1, double sigma2, double mutationPerc) {
         this.funkyNeuralNetwork = funkyNeuralNetwork;
         this.dataset = dataset;
         this.popSize = popSize;
@@ -25,6 +26,7 @@ public class GATrainer implements IFANNTrainer {
         this.v1 = v1;
         this.sigma1 = sigma1;
         this.sigma2 = sigma2;
+        this.mutationPerc = mutationPerc;
     }
 
     @Override
@@ -42,10 +44,9 @@ public class GATrainer implements IFANNTrainer {
 
             best = population.get(0);
             if(i%10000==0){
-                System.out.printf("[%5d] Best: %f %s\n", i, best.mse, Arrays.toString(best.values));
+                System.out.printf("[%5d] Best: %f \n", i, best.mse);
             }
-//            nextPopulation.add(best);
-            int kTournament = popSize/2;
+            int kTournament =3;
             List<Chromosome> cs = new ArrayList<>();
             for (int k = 0; k < kTournament; k++) {
                 Chromosome chromosome;
@@ -86,13 +87,13 @@ public class GATrainer implements IFANNTrainer {
 
             if (random.nextDouble() <= v1) {
                 for (int k = 0; k < weightsCount; k++) {
-                    if (random.nextBoolean()) {
+                    if (random.nextDouble()<=mutationPerc) {
                         child.values[k] += random.nextGaussian() * sigma1;
                     }
                 }
             } else {
                 for (int k = 0; k < weightsCount; k++) {
-                    if (random.nextBoolean()) {
+                    if (random.nextDouble()<=mutationPerc) {
                         child.values[k] = random.nextGaussian() * sigma2;
                     }
                 }

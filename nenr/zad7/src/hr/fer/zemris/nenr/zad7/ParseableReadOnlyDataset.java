@@ -36,9 +36,7 @@ public class ParseableReadOnlyDataset implements IReadOnlyDataset {
             double[] strs = Arrays.stream(x.trim().split("\t")).mapToDouble(Double::valueOf).toArray();
             double[] str1 = Arrays.copyOfRange(strs, 0, 2);
             double[] str2 = Arrays.copyOfRange(strs,2,5);
-            double[][] doubles = {str1, str2};
-            System.out.println(Arrays.deepToString(doubles));
-            return doubles;
+            return new double[][]{str1, str2};
         }).collect(Collectors.toList());
         return new ParseableReadOnlyDataset(dataset);
     }
