@@ -44,7 +44,11 @@ public class GATrainer implements IFANNTrainer {
 
             best = population.get(0);
             if(i%10000==0){
-                System.out.printf("[%5d] Best: %f \n", i, best.mse);
+                System.out.printf("[%5d] Best: %10.8f \n", i, best.mse);
+            }
+            if(best.mse<=10e-7){
+                System.out.printf("[%5d] Best: %10.8f | END\n", i, best.mse);
+                break;
             }
             int kTournament =3;
             List<Chromosome> cs = new ArrayList<>();
@@ -120,7 +124,6 @@ public class GATrainer implements IFANNTrainer {
         Chromosome duplicate() {
             return new Chromosome(this);
         }
-
     }
 
 }

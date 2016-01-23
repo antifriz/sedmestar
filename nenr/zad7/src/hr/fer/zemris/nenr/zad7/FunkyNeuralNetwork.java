@@ -1,5 +1,7 @@
 package hr.fer.zemris.nenr.zad7;
 
+import java.util.Arrays;
+
 /**
  * Created by ivan on 11/16/15.
  */
@@ -7,14 +9,14 @@ public final class FunkyNeuralNetwork {
 
     private int mWeightsCount = -1;
     private final int[] mLayers;
-    private final double[] mNeuronOutputs;
+    public  final double[] mNeuronOutputs;
 
     public FunkyNeuralNetwork(int[] layers) {
         int mNeuronsCount = 0;
         for (int layer : layers) {
             mNeuronsCount += layer;
         }
-        mLayers = layers;
+        mLayers = Arrays.copyOf(layers,layers.length);
         mNeuronOutputs = new double[mNeuronsCount];
     }
 
@@ -26,11 +28,11 @@ public final class FunkyNeuralNetwork {
         for (int i = 0; i < mLayers[1]; i++) {
             int refIdx = 4 * i;
             double w0 = weights[refIdx];
-            double w1 = weights[refIdx + 1];
-            double s0 = weights[refIdx + 2];
+            double s0 = weights[refIdx + 1];
+            double w1 = weights[refIdx + 2];
             double s1 = weights[refIdx + 3];
 
-            mNeuronOutputs[2 + i] = 1 / (1 + Math.abs(outputs[0] - w0) / Math.abs(s0) + Math.abs(outputs[1] - w1) / Math.abs(s1));
+            mNeuronOutputs[2 + i] = 1.0 / (1.0 + Math.abs(mNeuronOutputs[0] - w0) / Math.abs(s0) + Math.abs(mNeuronOutputs[1] - w1) / Math.abs(s1));
         }
 
         int weightCntr = 4*mLayers[1];
