@@ -7,7 +7,7 @@ import java.util.stream.IntStream;
 /**
  * Created by ivan on 1/23/16.
  */
-public class GATrainer implements IFANNTrainer {
+public class GATrainer{
 
     private final FunkyNeuralNetwork funkyNeuralNetwork;
     private final IReadOnlyDataset dataset;
@@ -29,16 +29,16 @@ public class GATrainer implements IFANNTrainer {
         this.mutationPerc = mutationPerc;
     }
 
-    @Override
-    public double[] trainFFANN() {
+    public int trainFFANN() {
         int weightsCount = funkyNeuralNetwork.getWeightsCount();
         Random random = new Random();
         List<Chromosome> population = IntStream.range(0, popSize).mapToObj(i -> new Chromosome(random, weightsCount)).collect(Collectors.toList());
 
         population.parallelStream().forEach(c -> c.mse = funkyNeuralNetwork.evaluate(c.values,dataset));
 
-        Chromosome best = population.get(0);
-        for (int i = 0; i < maxIterCount; i++) {
+        Chromosome best;
+        int i = 0;
+        for (; i < maxIterCount; i++) {
 
             population.sort(Comparator.<Chromosome>comparingDouble(c -> c.mse));
 
@@ -47,7 +47,7 @@ public class GATrainer implements IFANNTrainer {
                 System.out.printf("[%5d] Best: %10.8f \n", i, best.mse);
             }
             if(best.mse<=10e-7){
-                System.out.printf("[%5d] Best: %10.8f | END\n", i, best.mse);
+                System.out.printf("[%5d] Best: %10.8f %s| END\n", i, best.mse, Arrays.toString(best.values));
                 break;
             }
             int kTournament =3;
@@ -106,7 +106,7 @@ public class GATrainer implements IFANNTrainer {
             population.remove(cs.get(cs.size()-1));
             population.add(child);
         }
-        return best.values;
+        return i;
     }
 
     class Chromosome {
