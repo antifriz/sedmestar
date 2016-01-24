@@ -29,11 +29,10 @@ public class Test {
         FunkyNeuralNetwork funkyNeuralNetwork = new FunkyNeuralNetwork(layers);
 
 
-        GATrainer trainer = new GATrainer(funkyNeuralNetwork, dataset, 10, 1000000, 0.9, 0.1, 0.2, 0.02);
+        GATrainer trainer = new GATrainer(funkyNeuralNetwork, dataset, 10, 1000000, 0.9, 0.1, 0.2, 0.01);
         trainer.trainFFANN();
     }
 
-    @org.junit.Test
     public void testT() throws Exception {
         IReadOnlyDataset dataset = ParseableReadOnlyDataset.createFromFile("data.txt");
         double[] vec = new double[]{0.95,1.0,0.001,0.01};
