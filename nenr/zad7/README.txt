@@ -1,0 +1,1 @@
+Otvoriti projekt u IntelliJ-u te pokrenuti testove

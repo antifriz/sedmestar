@@ -18,7 +18,7 @@ public class Exercise1 {
         System.out.println(B);
         System.out.println(x0);
 
-        DiffMethod.createRungeKutta(A, B, x0, 0.1, 10, 1).run();
+        DiffMethod.createRungeKutta(A, B, x0, 0.1, 1, 1).run();
     }
     @Test
     public void testTrapezoidal() throws Exception {
@@ -30,6 +30,6 @@ public class Exercise1 {
         System.out.println(B);
         System.out.println(x0);
 
-        DiffMethod.createTrapezoidalMethod(A, B, x0, 0.1, 10, 1).run();
+        DiffMethod.createTrapezoidalMethod(A, B, x0, 0.1, 1, 1).run();
     }
 }

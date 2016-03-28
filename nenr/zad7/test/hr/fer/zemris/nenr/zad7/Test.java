@@ -3,6 +3,9 @@ package hr.fer.zemris.nenr.zad7;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
+import java.util.function.IntUnaryOperator;
+import java.util.stream.IntStream;
 
 /**
  * Created by ivan on 1/23/16.
@@ -23,13 +26,30 @@ public class Test {
         test(new int[]{2, 6, 4, 3});
     }
 
+    @org.junit.Test
+    public void randomTest() throws Exception{
+        for (int i = 0; i < 100; i++) {
+
+        final int d1 = ThreadLocalRandom.current().nextInt(100)+1;
+        final int d2 = ThreadLocalRandom.current().nextInt(d1)+1;
+        final int[] d1a = IntStream.range(0, d1).toArray();
+
+        String message = "" + d1 + " " + d2;
+        System.out.println(message);
+            IntUnaryOperator intUnaryOperator = x -> (int) ( x / (float) d2 * d1 + 0.5);
+            String message1 = Arrays.toString(IntStream.range(0, d2).map(intUnaryOperator).toArray());
+            System.out.println(message1);
+            org.junit.Assert.assertEquals(message1, (IntStream.range(0, d2).map(intUnaryOperator).reduce((a, b) -> a == b ? 1 : 0).getAsInt()), 0);
+        }
+    }
+
     private void test(int[] layers) throws IOException {
         IReadOnlyDataset dataset = ParseableReadOnlyDataset.createFromFile("data.txt");
 
         FunkyNeuralNetwork funkyNeuralNetwork = new FunkyNeuralNetwork(layers);
 
 
-        GATrainer trainer = new GATrainer(funkyNeuralNetwork, dataset, 10, 1000000, 0.9, 0.1, 0.2, 0.01);
+        GATrainer trainer = new GATrainer(funkyNeuralNetwork, dataset, 10, 1000000, 0.99, 0.1, 0.2, 0.04);
         trainer.trainFFANN();
     }
 
